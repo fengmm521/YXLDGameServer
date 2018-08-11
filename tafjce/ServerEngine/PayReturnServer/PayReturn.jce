@@ -1,0 +1,20 @@
+
+module ServerEngine
+{
+
+	enum PayReturnState
+	{	
+		en_PayReturnState_None = 0,
+		en_PayReturnState_OK = 1,	
+		en_PayReturnState_Fail = 2,		
+	};
+	
+	interface PayReturn
+	{
+	
+		int payReturnMoneyAddVIP(string strAccount, out int state, out int iMoney, out int VipLevel);
+		
+	};
+
+};
+

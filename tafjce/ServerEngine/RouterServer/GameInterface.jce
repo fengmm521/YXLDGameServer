@@ -1,0 +1,98 @@
+#include "../../Dal/MO/DalMoDef.jce"
+module ServerEngine
+{
+    const short LOGINOFF_CODE_MULTILOGIN           = 1;      // 同一号码多个客户端中重复登陆，收到这种通知时GS处理完下线操作后，还需要回调RS接口通知其处理
+    const short LOGINOFF_CODE_CONNLOST             = 2;      // RS连接断掉，收到这种通知时GS处理完下线操作后，不需要回调RS接口
+    const short LOGINOFF_CODE_TIMEOUT             = 3;
+
+	struct GameQueryStatus
+	{
+		0 require int iMemberCount;  // 在线人数	
+	};
+
+	interface Game
+	{
+	    /**
+	     * GameServer处理RouterServer透传包的统一处理接口
+	     * @param iConnId,      连接id
+	     * @param iUin,         QQ号
+	     * @param sMsgPack,     传给业务侧的包(可能是不同的编码方式，业务自己处理)
+	     * @param sRsObjAddr,   GameServer下行消息时的push地址
+	     * @param mClientParam, 透传给GameServer的一些额外参数，GameServer可以相应进行特殊处理。
+	     * @return int,         0成功,其他失败
+	    */  
+   		int doRequest(long iConnId, string strAccount, int iWorldID, string sMsgPack, string sRsObjAddr, map<string,string> mClientParam);
+	    /**
+	     * GameServer处理RouterServer主动发起的下线通知统一处理接口(主要指同一号码多个客户端中登陆的情况)
+	     * GameServer收到该通知的处理流程:在GameServer处理用户下线，然后再根据nLoginOffCode决定是否要通过RouterServer的Push接口通知客户端下线。
+	     * @param iConnId,      连接id
+	     * @param iUin,         QQ号
+	     * @param iLoginOffCode,下线通知的原因代码,详见上面的jce常量定义
+	     * @param sRsObjAddr,   GameServer下行消息时的push地址
+	     * @return int,         0成功,其他失败
+	    */  
+   		int doNotifyLoginOff(string strAccount,short nLoginOffCode,string sRsObjAddr,long iConnId);
+
+		/**
+		 * 获取GameServer状态,主要是在线信息
+		 * @param status out 获取服务器状态
+		*/
+   		void getGameStatus(out GameQueryStatus gameStatus);
+
+ 		/**
+ 		 *同步推充值回调
+ 		 *@
+ 		 */
+		int TbT_AddMoney(string strAccount, int iWorldID, int iCount);
+
+		/**
+		* 平台通用充值接口
+		*/
+		int Comm_Pay_AddMoney(string strAccount, int iWorldID, int iCount, string strChannel);
+		
+		/**
+		*	棱镜充值回调
+		*/
+		int LJSDK_Pay_AddMoney(string strAccount, int iWorldID, int iCount, string strChannel, string strOrderId);
+
+
+		/*
+		*
+		*	运营平台获取玩家角色基本信息
+		*/
+		int getRoleBaseData(ServerEngine::PKRole pkRole, out string strJson);
+
+		/*
+		*
+		*	运营平台获取玩家角色物品
+		*/
+		int getRoleBagData(ServerEngine::PKRole pkRole, out string strJson);
+
+		
+		/*
+		*
+		*	运营平台获取玩家卡牌信息
+		*/
+		int getRoleHeroData(ServerEngine::PKRole pkRole, out string strJson);
+
+		/*
+		*
+		*	运营平台获取玩家卡牌信息
+		*/
+		int sendRoleMail(ServerEngine::PKRole pkRole, map<string,string> mailMap);
+
+		/*
+		 * 根据军团名字查询军团成员
+		 */
+
+		int getLegionMember(string strLegionName, out string strJson);
+
+		/*
+		 * 跑马灯消息
+		 */
+
+		int GMOnlneRollMessage(string strMsg);
+		
+	};
+};
+

@@ -1,0 +1,32 @@
+module ServerEngine
+{
+	// RoleDbaccess数据
+	struct PKRole
+	{
+		0 require string  strAccount;/*帐号*/
+		1 require byte rolePos;/*角色位置，0，1，2*/
+		2 require short worldID;/*世界id*/
+	};
+	key[PKRole, strAccount,worldID,rolePos];
+	
+	struct PIRole
+	{
+		0 require string  strAccount;/*帐号*/
+		1 require byte rolePos;		// 角色位置
+		2 require short worldID;	// 世界ID
+		3 require string roleData;			// 角色数据
+	};
+
+	// FightDBAccess 数据
+	struct PKFight
+	{
+		0 require int iWorldID;
+		1 require long u64LowUUID;
+		2 require long u64HighUUID;
+	};
+
+	struct PIFamilyName
+	{
+		0 require string strBlob;
+	};
+};

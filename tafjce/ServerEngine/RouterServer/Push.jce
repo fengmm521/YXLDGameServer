@@ -1,0 +1,21 @@
+
+module ServerEngine
+{
+	interface Push
+	{
+		/*
+		* 来自GS的push消息
+		* @param  iConnId,  RS调用GS的doRequest接口时候传过来的连接id
+		* @param  sMsgPack, 下发的包
+		* @return int,      0成功，其他失败
+		*/
+		int doPush(long iConnId,string sMsgPack);
+
+	    /**
+		* 来自GS的通知用户断线
+		* @param  iConnId,  RS调用GS的doRequest接口时候传过来的连接id
+		* @param  sMsgPack, 下发的包
+		*/
+	    int doNotifyLoginOff(long iConnId,string sMsgPack);
+	};
+};

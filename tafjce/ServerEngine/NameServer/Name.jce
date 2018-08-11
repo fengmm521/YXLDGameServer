@@ -1,0 +1,24 @@
+module ServerEngine
+{
+	enum NameRetCode
+	{
+		en_NameRet_OK = 0,
+		en_NameRet_Duplicate = 1, // 重复名字
+		en_NameRet_NameNotExist = 2, // 名字不存在
+		en_NameRet_SysError = 3, //
+	};
+
+	struct NameDesc
+	{
+		0 require unsigned short wWolrdID;
+		1 require string sAccount;
+		2 require int iRolePos;
+	};
+
+	interface Name
+	{
+		int doAddWorldName(string strName, int iWorldID, string strAccount, int iRolsPos);
+		int delWorldName(string strName);
+		int getNameDesc(string strName, out NameDesc descInfo);
+	};
+};

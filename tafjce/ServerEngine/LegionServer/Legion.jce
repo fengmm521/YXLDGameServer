@@ -1,0 +1,37 @@
+#include "../../Dal/MO/DalMoDef.jce"
+
+module ServerEngine
+{
+	enum enLegionDataRetCode
+	{
+		en_DataRet_OK,
+		en_DataRet_NotExist,
+		en_DataRet_SysError,
+		en_DataRet_Dunplicated,
+	};
+
+	struct LegionList
+	{
+		0 require vector<string> legionList;
+	};
+
+	interface Legion
+	{
+		// 获取军团列表
+		int getLegionList(out LegionList legionList);
+
+		int newLegion(string strLegionName, string data);
+
+		int getLegion(string strKey, out string strValue);
+
+		int updateLegion(string strKey, string strValue);
+
+		int delLegion(string strKey);
+
+		int setGlobalData(string strKey, string strValue);
+
+		int getGlobalData(string strKey, out string strValue);
+
+		int delGlobalData(string strKey);
+	};
+};

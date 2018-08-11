@@ -1,0 +1,12 @@
+module Aegis 
+{ 
+    //DAL层DCache操作接口统一对外返回码
+    enum DALRet
+    {
+	    RET_DAL_NODATA        =  1,    //欲查询的数据不存在
+	    RET_DAL_SUCC          =  0,    //成功
+	    RET_DAL_SYSERR        = -1,    //系统错误
+	    RET_DAL_EXCEPTION     = -2,    //系统抛出异常
+	    RET_DAL_DCVERMISMATCH = -3     //DCACHE数据版本不匹配
+	};
+}; 

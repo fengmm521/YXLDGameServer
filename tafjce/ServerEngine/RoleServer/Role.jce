@@ -1,0 +1,24 @@
+#include "../../Dal/MO/DalMoDef.jce"
+
+module ServerEngine
+{
+	enum enRoleRetCode
+	{
+		en_RoleRet_OK,
+		en_RoleRet_NameDunplicated,
+		en_RoleRet_PosConflict,
+		en_RoleRet_NotExist,
+		en_RoleRet_SysError,
+	};
+
+	interface Role
+	{
+		int newRole(string strAccount, int nPos, int nWorldID, string strName, PIRole roleInfo);
+
+		int updateRole(PKRole keyData, PIRole roleInfo);
+
+		int delRole(PKRole keyData);    
+
+		int getRole(PKRole keyData, out PIRole roleInfo);
+	};
+};

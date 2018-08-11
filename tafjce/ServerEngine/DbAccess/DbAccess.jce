@@ -1,0 +1,21 @@
+module ServerEngine
+{
+	enum eOpResult
+    {
+        eDbSucc,                //成功
+        eDbRecordNotExist,          //记录不存在
+        eDbError,                   //数据库操作错误
+        eDbNotImplement,            //接口没有实现
+        eDbJceDecodeError,          //jce解码失败
+        eDbUnknownError             //未知错误
+    };
+
+
+    interface DbAccess
+    {
+    	int setString(string strKey, string strValue);
+    	int delString(string strKey);
+    	int getString(string strKey, out string strValue);
+    };
+};
+

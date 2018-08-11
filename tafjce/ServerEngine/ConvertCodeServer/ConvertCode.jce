@@ -1,0 +1,26 @@
+
+module ServerEngine
+{
+	enum ConvertCodeRet
+	{
+		en_ConvertCodeRet_OK = 0,  // 操作成功
+		en_ConvertCodeRet_NoData= 1,  // 没有数据
+		en_ConvertCodeRet_Fail = 2,   // 操作失败
+	};
+	
+	enum ConvertCodeState
+	{	
+		en_ConvertCodeState_None = 0,
+		en_ConvertCodeState_CanConvert = 1,	//已经被兑换
+		en_ConvertCodeState_HaveConvert = 2,		//能兑换
+	};
+	
+
+	interface ConvertCode
+	{
+		int updateConvertCode(string convertCode, out int state, int updateState);
+		int getConvertCode(string convertCode,out int state);
+	};
+
+};
+

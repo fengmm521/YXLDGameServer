@@ -1,0 +1,36 @@
+
++module ServerEngine
+{
+	enum QQYYBPayRetCode
+	{
+		en_QQYYBPayRet_OK = 0,
+		en_QQYYBPayRet_ERROR = 1, // 错误
+		en_QQYYBPayRet_EXCEPTION = 2, // 异常
+		en_QQYYBPayRet_NEEDCOIN = 3, // 余额不足
+		en_QQYYBPayRet_INVALIDLOGIN = 4, // 登录验证失败
+		en_QQYYBPatRet_INVALIDCHANNEL = 5, // 渠道错误
+	};
+
+	struct QQYYBPayQueryKey
+	{
+		0 require string strOpenID;
+		1 require string strOpenKey;
+		2 require string strPayToken;
+		3 require string strPf;
+		4 require string strPfKey;
+		5 require int iZoneID;
+		6 optional string strChannel; // 渠道，不同渠道支付不同
+	};
+
+	
+	interface QQYYBPay
+	{
+		// iCurCoin 当前元宝
+		// iSendCoin 赠送元宝
+		// bFirstSave 是否首次充值
+		// iSumCoin 累计充值
+		int queryYuanBao(QQYYBPayQueryKey queryKey, out int iCurCoin, out int iSendCoin, out bool bFirstSave, out int iSumCoin);
+
+		int payYuanBao(QQYYBPayQueryKey queryKey, int iCostNum);
+	};
+};

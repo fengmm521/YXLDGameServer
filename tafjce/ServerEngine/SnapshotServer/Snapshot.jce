@@ -1,0 +1,24 @@
+
+module ServerEngine
+{
+	enum SnapshotRet
+	{
+		en_SnapshotRet_OK = 0,  // 操作成功
+		en_SnapshotRet_NoData= 1,  // 没有数据
+		en_SnapshotRet_Fail = 2,   // 操作失败
+	};
+
+	struct RoleSnapshot
+	{
+		0 require vector<int> worldList; // 标记有角色的服务器列表
+	};
+
+
+	interface Snapshot
+	{
+		int addWorld(string strAccount, int iWorldID);
+		int getRoleWorldDesc(string strAccount, out RoleSnapshot snapDesc);
+	};
+
+};
+

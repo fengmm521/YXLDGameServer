@@ -1,0 +1,19 @@
+#include "../../Dal/MO/DalMoDef.jce"
+
+module ServerEngine
+{
+	enum enFightDataRetCode
+	{
+		en_FightDataRet_OK,
+		en_FightDataRet_NotExist,
+		en_FightDataRet_SysError,
+	};
+
+	interface FightData
+	{
+		int saveFightData(PKFight keyData, string strBattleData);
+		int getFightData(PKFight keyData, out string strBattleData);
+		int delFightData(PKFight keyData);
+	};
+};
+

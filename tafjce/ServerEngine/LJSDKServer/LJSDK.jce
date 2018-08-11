@@ -1,0 +1,47 @@
+module ServerEngine
+{
+	
+	enum VerifyKeyRetCode
+	{
+		en_OK = 0,
+		en_ERROR = 1, // 错误
+		en_EXCEPTION = 2, // 异常
+		en_NEEDCOIN = 3, // 余额不足
+		en_INVALIDLOGIN = 4, // 登录验证失败
+		en_INVALIDCHANNEL = 5, // 渠道错误
+	};
+	
+	enum IOSVerifyRetcode
+	{
+		en_IOS_VERIFY_OK			= 0,	//校验成功
+		en_IOS_VERIFY_VERIFY_FALSE	= 1,	//校验未通过
+		en_IOS_VERIFY_NET_ERROR		= 2		//网络错误
+	};
+	
+	
+	struct VerifyKey
+	{
+		0 require string strUserId;
+		1 require string strToken;
+		2 require string strChannelId;
+		3 require string strProductCode;
+		4 require string strChannelLabel;
+	};
+
+	
+	interface LJSDK
+	{
+		void verifyUserLogin(VerifyKey verifyKey, out int iState);
+		void getPhoneStream(string strUrl);
+		void VIVOPostPerPay(string strPostContext, out string strAccessKey, out string strOrderNumber, out int price);
+		void iosPay(int worldID, 
+					string account, 
+					int cPrice, 
+					string receipt, 
+					out string stransID, 
+					out string productID, 
+					out int sPrice,
+					out int quantity,
+					out IOSVerifyRetcode retCode);
+	};
+};
