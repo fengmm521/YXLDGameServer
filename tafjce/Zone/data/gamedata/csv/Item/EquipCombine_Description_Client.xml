@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<EquipCombine>
+  <DataRes xmlName="m_ID" excelName="消耗ID" DataType="ID"/>
+  <DataRes xmlName="m_materialID" excelName="材料ID" DataType="int"/>
+  <DataRes xmlName="m_materialCount" excelName="材料数量" DataType="int"/>
+  <DataRes xmlName="m_createID" excelName="产出ID" DataType="int"/>
+  <DataRes xmlName="m_drawingID" excelName="装备图纸" DataType="int"/>
+  <DataRes xmlName="m_drawingCount" excelName="图纸数量" DataType="int"/>
+  <DataRes xmlName="m_costTongbi" excelName="消耗铜币" DataType="int"/>
+</EquipCombine>
+
+</client>

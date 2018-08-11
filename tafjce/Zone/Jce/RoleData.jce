@@ -1,0 +1,810 @@
+#include "../../Dal/MO/DalMoDef.jce"
+
+module ServerEngine
+{
+	// 角色数据存储内容
+	struct RoleBase
+	{
+		0 require map<int,int> roleIntPropset;
+		1 require map<int, string> roleStringPropset;
+		2 require map<int, float> roleFloatPropset;
+	};
+		
+	struct RoleSaveData
+	{
+		0 require RoleBase basePropData;
+		1 optional map<int, string> subsystemData;
+	};
+	
+	// 实体创建现场数据(不存储，其实可以非jce，不过jce方便，这里就用了吧)
+	struct ActorCreateContext
+	{
+		0 require string strAccount;
+		1 require string strRsAddress;
+		2 require long ddCon;
+		3 require RoleSaveData data;
+	};
+
+	// 怪物和NPC创建现场
+	struct MNCreateContext
+	{
+		0 require int nBaseId;
+		1 require unsigned int dwEntityID;	// 玩家实体句柄，创建怪物需要这个现场信息
+		2 require int iFixLevel;			// 世界BOSS等特殊怪物是指定等级的,有这个数据在，不按照创建者处理
+	};
+
+	struct NpcCreateContext
+	{
+		0 require int nBaseId;
+	};
+
+
+	/*struct SkillSystemSaveData
+	{
+		0 require vector<int> skillList;
+	};*/
+
+	// 定时清除的数值结构
+	struct TimeResetValue
+	{
+		0 require unsigned int dwLastChgTime;
+		1 require int iValue;
+	};
+
+
+	
+
+	struct HeroSystemData
+	{
+		0 require vector<RoleSaveData> heroList;
+		1 optional TimeResetValue heroConvertData;  // 记录英雄转换信息(按照天计算)
+		
+	};
+	
+	
+	struct TallentData
+	{
+		0 require int iTallentID;
+		1 require int iLevel;
+	};
+	
+	struct HeroTallentSystemData
+	{
+		0 require vector<TallentData> tallentList;
+		1 optional map<int, int> favoriteIDList;
+	};
+
+
+	struct FormationItem
+	{
+		0 require string strUUID;
+	};
+
+
+	struct FormationSystemData
+	{
+		0 require map<int, FormationItem> formationList;
+		1 optional int iVisibleHeroId;  			//add by hyf 2014/5/12 离线使用
+	};
+
+
+	struct XilianPropItem
+	{
+		0 require int propId;
+		1 require int value;
+	};
+
+
+	struct EquipData
+	{
+		0 require int iLevel; // 装备等级
+		1 require int iEnhanceMoney; // 强化消耗金钱总数
+		2 optional int iRandomPropID;
+		3 optional int iRandomValue;
+		4 optional vector<XilianPropItem> xilianPropList;
+	};
+
+	struct ItemData
+	{
+		0 require int iItemID;
+		1 require int iStackCount;
+		2 optional string strEquipData;
+	};
+
+
+	struct ItemSystemData
+	{
+		0 require vector<ItemData> itemList;
+		1 optional TimeResetValue buyPhyStengthCount;  // 当天购买体力次数
+		2 optional TimeResetValue iChatResetVal;		//当前已经使用世界聊天次数
+		3 optional map<string,bool> convertMap;			//使用过的礼包的ID 版本+ 礼包ID 		
+	};
+
+	struct EquipBagSystemData
+	{
+		0 require map<int, ItemData> equipList; // 装备列表
+	};
+
+	struct HeroRealEquipSystemData
+	{
+		0 require map<int, ItemData> equipList; // 装备列表
+	};
+
+	struct FightUseItem
+	{
+		0 require int iActionIndex;
+		1 require int iResultsetIndex;
+		2 require int iPost; // 是否是Result执行后
+		3 optional int iActorSkillID; // 主公技能ID
+	};
+
+	struct BattleData
+	{
+		0 require unsigned byte bAttackerWin;
+		1 require PKFight FightKey;
+		2 require string strBattleBody; // 这里采用pb编码,方便下发客户端
+		3 require int iStar; // 星级(直接由战斗模块计算),胜利方的星级
+		4 optional vector<long> randValueList;  // 战斗随机数
+		5 optional vector<FightUseItem> useItemList;
+		6 optional unsigned byte bQuit;
+		7 optional unsigned byte bQuitSuccess; // 是否退出成功
+	};
+
+	struct FightContext
+	{
+		0 require int iFightType;
+		1 require int iSceneID;  // 客户端显示用
+		2 require map<string, string> context; // 扩展
+		3 require vector<long> randValueList;
+		4 require vector<FightUseItem> useItemActionList; // PVE使用物品行为
+		5 require vector<int> dlgList; // 开场对话
+		6 require byte bBeginDlg;  // 是否是开场对话(如果不是，则为最后一批怪物出现后展示对话)
+	};
+
+	struct SceneRecord
+	{
+		0 require int iSceneID;
+		1 require int iStarLevel;   // 星级
+		2 optional TimeResetValue passTimes; // 通关次数, 每天重置
+		
+	};
+
+
+	struct DungeonSystemData
+	{
+		0 require vector<int> sectionList;  // 开启的章节
+		1 require map<int, SceneRecord> m_mapSceneRecord;  // 开启的关卡
+		2 require vector<int> noUse;   // 已经领取完美通关奖励的关卡
+		3 optional map<int, bool> perfectPassSectionMap;
+		4 optional map<int, bool> newSceneList; // 新开启的关卡，通知客户端表现翻牌后，去掉, map的第二参数无效
+	};
+
+	struct FightSoulItem
+	{
+		0 require int iBaseID;   // 武魂ID
+		1 require int iExp;      // 当前经验
+		2 require unsigned byte bLocked; // 是否锁定
+	};
+
+	struct FightSoulPractice
+	{
+		0 require int iBaseGrade;  // 修炼等级
+		1 require unsigned byte bMode;    // 模式,0 普通模式，1高级模式
+		2 require int iAdvanceGrade; // 高级模式修炼等级
+	};
+
+	struct FightSoulSystemData
+	{
+		0 require map<int, FightSoulItem> fightSoulMap; //武魂背包
+		1 require FightSoulPractice practiceStatus;  // 修炼状态
+		2 optional TimeResetValue callAdvanceCount;  // 召唤高级模式次数
+		3 optional unsigned byte bUsedPracticeFightSoul; // 是否已经召唤过
+	};
+
+
+
+	struct HeroEquipSystemData
+	{
+		0 require map<int, FightSoulItem> equipList;
+	};
+
+	struct GodAnimalSystemData
+	{
+		0 require vector<RoleSaveData> godAnimalList;
+		1 require string strActiveUUID;
+	};
+
+	struct LegionBase
+	{
+		0 require string strLegionName;  // 军团名字
+		1 require int iLegionLevel;      // 军团等级
+		2 require int iLegionExp;        // 军团经验
+		3 require string strLeaderName;  
+		4 require string strAnnouce;     // 军团公告
+		5 require unsigned int dwCreateTime; // 创建时间
+		6 require string strBroadcast;
+		7 require unsigned int dwLevelUpTime; // 升级时间
+		8 require unsigned int dwLastLoginTime; // 上次成员登录时间
+		9 optional int iLegionIconId;
+		10 optional unsigned int iLegionTotalContribute; //军团总贡献
+		11 optional unsigned int iLegionMoney;		//军团资金
+		12 optional unsigned int noUseData1; //上次下线时间
+		13 optional bool noUseData2;
+		//14 optional int iHoldCityCount;              //占领军团个数
+	};
+
+	struct LegionMemberItem
+	{
+		0 require PKRole roleKey;
+		1 require int iSumContribute;
+		2 require int noUseiCurContribute;
+		3 require string strName;
+		4 require int iLevel;
+		6 require TimeResetValue dayContribute;  // 当日贡献
+		7 require TimeResetValue noUseDatae1;//blessData;      // 祝福数据
+		8 require TimeResetValue noUseData2;//dayAwardFlag; // 日俸禄
+		9 require TimeResetValue noUseData3;//weekAwardFlag; // 周俸禄
+		10 optional vector<int> contributeVec;  //3日贡献，只存放3日信息
+		11 optional unsigned int dwLogionOutTime; //上次下线时间
+		12 optional bool bIsOutLine;
+		13 optional int iOccupation;		//职位
+		14 optional TimeResetValue nouseuseWorshipTimes;
+		15 optional int beWorshipGetContribute;
+		16 optional int iFightValue;
+		17 optional int iHeadIcon;
+	};
+
+	struct LegionMemberInfo
+	{
+		0 require map<string, LegionMemberItem> memberList;
+		1 optional TimeResetValue saveContributeVecValue;
+	};
+
+	struct LegionAppItem
+	{
+		0 require PKRole roleKey;
+		1 require string strName;
+		2 require int iLevel;
+		3 optional int iActorHeadIcon;
+	};
+
+	struct LegionAppInfo
+	{
+		0 require map<string, LegionAppItem> applyList;
+	};
+
+	struct LegionBoss
+	{
+		0 require unsigned int dwLastBossTime; // 上次BOSS时间
+		1 require int iBossLevel;    // boss 等级
+	};
+
+	struct LegionFightReport
+	{
+		0 require int iTargetTerritoryID; // 宣战目标领地
+		1 require unsigned int iDeclareTime; // 宣战时间
+		2 require vector<string> joinMemList; // 参战人员名字
+	};
+
+
+	struct LegionData
+	{
+		0 require LegionBase baseInfo;
+		1 require LegionMemberInfo memberInfo;
+		2 require LegionAppInfo appInfo;
+		3 require LegionBoss bossInfo;
+	};
+
+	struct CustomGiftData
+	{
+		0 require string strTitle;
+		1 require map<int, int> propAward;
+		2 require map<int, int> itemAward;
+		3 optional int iAwardedContibute; // 已经发放的军团贡献
+	};
+
+	struct GiftData
+	{
+		0 require int iGiftID;
+		1 require unsigned int dwGetTime;
+		2 optional unsigned byte bCustomGift; // 是否自定义礼包, 自定义礼包采用自定义数据
+		3 optional CustomGiftData customGiftData; // 自定义礼包
+	};
+
+	struct LegionShopItem
+	{
+		0 require int iIndex;
+		1 require int iShopID;
+		2 require unsigned byte bBuy; // 是否已经购买了
+	};
+
+
+	struct LegionSystemData
+	{
+		0 require vector<int> noUse; // 军团商店ID
+		1 require vector<int> noUse2;    // 已经购买的索引
+		2 optional map<string, GiftData> giftList; // 礼包
+		3 optional vector<LegionShopItem> shopItemList; // 商店ID列表
+		4 optional TimeResetValue blessData;      // 祝福数据
+		5 optional TimeResetValue dayAwardFlag; // 日俸禄
+		6 optional TimeResetValue weekAwardFlag; // 周俸禄
+		7 optional unsigned int dwLastRefreshSecond;  //上次刷新时间
+		8 optional TimeResetValue contributeShopRefreshTimes; //荣誉商店刷新次数 
+		9 optional map<string, unsigned int> actorHaveAddLegionList;
+		10 optional TimeResetValue actorWeekAddLegionTimes; //一周加入军团次数
+		11 optional TimeResetValue useWorshipTimes;
+		12 optional int nousebeWorshipGetContribute;
+		13 optional map<string,unsigned int > actorHaveWorship; //每天清理
+		14 optional TimeResetValue contributeTimes;  //军团贡献
+		
+	};
+
+	struct CityBattleItem
+	{
+		0 require string strName;
+		1 require PKRole roleKey;
+		2 require vector<int> starList;  //初始为0，被打败为1
+		3 require int iLevel;
+		4 require int iHeadIcon;
+		5 require int iFightValue;
+	};
+
+	struct LegionReport
+	{
+		1 require string strLegionName; // 报名军团
+		2 require map<string, CityBattleItem> reportMemberList;  // 参战成员
+		//3 optional int iHoldCityCount;          
+	};
+
+
+	struct LegionHonorItem
+	{
+		0 require string strLegionName;
+		1 require string strMemberName;
+		2 require int iLevel;
+		3 require int iKillNum;
+		4 require int iContribute;
+		5 require int iHonor;
+	};
+
+	struct CityBattleLegionData
+	{
+		0 require string strLegionName;
+		1 require unsigned int dwGetStarTime; //获得最后一个星星的时间
+		2 require int iGetStarCount;
+		3 require map<string, CityBattleItem> memberList;
+		4 optional int iHoldCityCount;    
+	};
+	
+	struct LegionBattle
+	{
+		0 require CityBattleLegionData attLegion;
+		1 require CityBattleLegionData guardLegion;
+	};
+
+	struct LegionCity
+	{
+		0 require int iCityID;
+		1 require string strOwnerLegion; // 注意，这里可能是怪物军团名(不存在实际军团)
+		2 require map<string, LegionReport> reportList; // 报名参战列表
+		//3 require map<string, LegionHonorItem> honorList; // 荣誉列表
+		//3 require vector<LegionFightRecord> fightRecordList; // 战报
+		3 require int iChineseDayNO; // 战斗日期
+		4 require string strWinLegion; // 胜利军团, 未开战，则为空
+		5 require bool bNpcHold; // 是否怪物占领
+		6 require LegionReport owerLogion;
+		7 require vector<LegionBattle> legionBattleList;
+		8 require map<string, int> m_legion2BattleId;
+	};
+	
+	struct LegionFightRecord
+	{
+		0 require vector<string> guardFightLog;
+		1 require vector<string> attFightLog;
+		2 require string strVsLegion;
+		
+	};
+	
+	struct LegionFightDetail
+	{
+		0 require string strGuardName;
+		1 require string battleBaseLog;  //基本信息
+		2 require map<string, LegionFightRecord> m_fightDetail;
+	};
+	
+	struct CityCampFightLog
+	{
+		0 require map<string,map<int, string> > lastFightLogMap;   //军团 ，cityID，战斗胜负日志
+		1 require map<int, LegionFightDetail > lastFightLogDetail;
+	};
+
+	struct GlobalLegionCityData
+	{
+		0 optional map<int, LegionCity> curLegionCityData;   // 当前数据
+		1 optional map<int, LegionCity> lastLegionCityData;  // 上次数据
+		2 optional int iLastDayNO;  // 上次战斗日期
+		3 optional map<string, int> iRoportCampMap;  //报名的军团
+		4 optional CityCampFightLog cityCampFightLog;
+		5 optional CityCampFightLog curCityFightLog;
+ 	};
+
+	struct CreateBossCtx
+	{
+		0 require int iFixMaxHP;
+		1 require int iFixLevel;
+		2 require int iHP;
+		3 require int iDef;
+	};
+
+	struct ClimbTowerSystemData{
+		 0 require int iHightestLayer;
+		 1 require int iCurrentLayer;
+		 2 require int iTotalCultivation;
+		 3 require int iClimbResetCount;       //已经重置的次数
+		 4 optional TimeResetValue dayRestFlag; //每日重置
+		 5 optional int iCurHaveBuyTimes;         //每日重置次数
+		 6 optional int iTotalBuyTimes;         //总的次数
+	};
+	 
+	struct AttackBossCtx
+	{
+		0 require int iAttAddPercent;
+	};
+
+	struct HonorGoodDetail
+	{
+		0 require int iGoodId;		//商品ID
+		1 require bool bIsSale;		//是否已经被买
+	};
+
+	struct ShopSystemData
+	{
+		0 require map<int,HonorGoodDetail> szGoodmap;
+		1 require int iGoldRandOnceCount;
+		2 require int iTokenRandOnceCount;
+		3 require unsigned int dwRefreshSecond;
+		4 require int iRefreshTimes;
+		5 optional bool bHaveFirstRand;			//首次抽取标记
+		6 optional TimeResetValue shakeTimes;		 // 摇动次数
+		7 optional TimeResetValue tokenFreeValue;
+		8 optional unsigned int dwLastTokenFreeSecond;
+		9 optional unsigned int dwLastGoldFreeSecond;
+		10 optional bool bHaveFirstRandTen;
+		11 optional map<int, int> paymentMap;
+		12 optional map<string,bool> actorPayOrderMap;
+		13 optional unsigned int lastNormalShopRefreshSecond;		// 上次普通商店刷新时间
+		14 optional map<int, HonorGoodDetail>	normalShopGoods;	// 商店卖品
+		15 optional unsigned int normalShopRefreshTimes;			// 商店刷新次数
+	};
+
+	struct LegionFightSideCtx
+	{
+		0 optional int iAddPercent;
+	};
+
+	struct LegionCityFightCtx
+	{
+		0 require LegionFightSideCtx attCtx;
+		1 require LegionFightSideCtx targetCtx;
+	};
+
+	struct FemailHeroDesc
+	{
+		0 require int iHeroID;
+		1 require int iFightValue;
+	};
+
+	struct ArenaSavePlayer
+	{
+		0 require bool bMonster;
+		1 require int iMonsterGrpID;
+		2 require int iShowHeroID;
+		3 require PKRole roleKey;
+		4 require string strName;
+		5 require int iLevel;
+		6 require int iFightValue;
+		7 optional vector<FemailHeroDesc> femaleHeroList;    //no use
+		8 optional int iLastBeLootSecond;
+	};
+
+	struct ArenaSaveAwardItem
+	{
+		0 require unsigned int dwTime;
+		1 require int iRank;
+		2 require string strUUID;
+	};
+
+	struct GlobalArenaData
+	{
+		0 require vector<ArenaSavePlayer> rankList;
+		1 require map<string, vector<ArenaSaveAwardItem> > awardMap;
+		2 optional unsigned int dwLastAwardTime;
+	};
+
+	struct ArenaAppendData
+	{
+		1 require int iNowChallengeCount;		 //当前已经挑战的次数
+		2 require int iBuyChallengeCount;			//今天买了的次数
+		3 require int iLastChgTime;				//战斗完成时间
+		4 require int iBeginCDSecond;					//开始邋CD时间
+	};
+
+	struct ArenaSystemSaveData
+	{
+		0 require TimeResetValue m_addChallengeCount;  // 增加的挑战次数		//no use
+		1 require TimeResetValue m_challengeCount;  // 当天已经挑战的次数	//no use
+		2 require vector<string> m_arenaLogList; // 竞技场日志，最多20条
+		3 optional bool bHaveNewLog;
+		4 optional ArenaAppendData appendData;
+	};
+
+	struct GlobalWorldBossData
+	{
+		0 require map<int, int> m_worldBossLevelMap;
+		1 optional map<int, int> m_bossLastFightDayMap;  // 世界BOSS上次战斗Day
+	};
+
+	struct CampBattleSideCtx
+	{
+		0 require bool bFixHP;
+		1 optional map<int, int> fixHPMap;
+		2 optional int werckAddPercent;
+		3 optional int attAddPercent;
+	};
+
+	struct CampBattleFightCtx
+	{
+		0 require CampBattleSideCtx attCtx;
+		1 require CampBattleSideCtx targetCtx;
+	};
+
+	struct FriendNode
+	{
+		0 require string strFriendName; 
+		1 require PKRole roleKey;
+		2 optional int iGetType;    
+	   	3 optional bool bHaveGive;   // true ，已经赠送
+	    4 optional unsigned int dwLastChgTime; //上次改变的时间
+	};
+
+	struct FriendSystemData
+	{
+		0 require int iGivePhyStrengthTimes;	//当日体力值赠送次数
+		1 require int iGetPhyStrengthTimes;		//当日体力值获取次数
+		2 require map<string,FriendNode> m_FriendMap; //朋友列表
+		3 require map<string,FriendNode> m_RequestMap;  //请求列表
+		4 require unsigned int dwLastChgTime; //上次改变的时间
+		5 optional map<string,bool> m_haveGetActorMap;
+		6 optional map<string,bool> m_haveGiveActorMap;
+	};
+
+	struct TaskDBUnit
+	{
+		0 require int iTaskId;		  //任务ID
+		1 require int iTaskProcess;     //已经完成的
+		2 require int chgTime;       //上次改变时间
+		3 require int enTaskState;   //任务状态 1-已经打开，2-已经完成 3-已经领奖
+		4 require int iHaveFinishedTimes;
+		5 optional int iTaskType;
+	};
+
+	struct MonthCardData
+	{
+		0 require int iCanGetTimes;
+		1 require unsigned int lastChgTime;
+	};
+	
+	struct TaskSystemData
+	{
+		0 require map<int,TaskDBUnit> dbTaskFinishMap;
+		1 optional TimeResetValue vigorValue;
+		2 optional MonthCardData monthCardData;
+	};
+
+	struct GuideSystemData
+	{
+		0 require vector<int> finishedList;
+		1 require vector<int> openedList;
+	};
+
+	struct DreamLandGuardFormation
+	{
+		0 require int iPos;
+		1 require int iBaseId;
+		2 require int iStepLevel;
+		3 require int iLevel;
+		4 require int ihp;
+		5 require int iMaxHp;
+		6 require int iIsGodAniaml;
+		7 optional bool bNotMonster;		//不是怪物
+		8 optional int iQuality;
+	};
+	struct DreamLandGuardData
+	{
+		0 require string actorName;
+		1 require vector<DreamLandGuardFormation> formation;
+		2 require int iTotalFightValue;
+		3 optional int iActorHead;
+		4 optional int iActorLevel;
+	};
+	
+	struct DreamLandSceneRecord
+	{
+		0 require int iSceneId;
+		1 require int sceneState;     	//关卡状态 0-未开启，1-开启, 2-已经完成 
+		2 require byte iHaveGetBox;		//已经领取宝箱
+		3 require byte iHaveGuard;		//是否分配了防守将
+		4 require bool bFirstFight;		//第一次战斗 		//no use
+		5 require map<int,int> targethpMap ;	//目标血 存放百分数
+		6 require int iMonsterHp;				//最后一关的怪物血量
+		7 require int iMonsterAttValue;			//最后一关的怪物的攻击力
+		8 require DreamLandGuardData Guarddata;
+	};
+
+	struct DreamLandSceneActor
+	{
+		0 require PKRole roleKey;
+		1 require ActorCreateContext actorContext;
+	};
+	
+	struct DreamLandData
+	{
+		0 require vector<int>  sectionList;    							//开启章节
+		1 require vector<DreamLandSceneRecord> sectionProcessVec;		//开启的关卡
+		2 require map<int,string> FormationMap;							//幻境阵型 string -- UUID 
+	   	3 require unsigned int dwTimeChg;								//时间
+	    	4 require int ihaveUseTimes;									//今日已经使用的出阵次数 //no use
+	    	5 require int unLockSectionId;									//未锁定的章节ID, 没有锁定的章节 为 -1
+	    	6 require DreamLandSceneActor sceneActor; 						//当前挑战的守关英雄数据
+	    	7 require int iHaveUseResetTime;								//已经使用的重置次数
+	    	8 require map<string,int> actorHpMap;							//自己血 存放百分数 10000
+	   	 9 require int iItemCount;		    							//药瓶数量
+	    	10 optional vector<ArenaSavePlayer> guardNamesVec;				//所有关卡的守关将的名字 //no use
+	    	11 optional map<int, vector<ArenaSavePlayer> > sectionGuardPlayerMap; 	//未锁定时，所有点击了第一个关卡的玩家数据
+	    	12 optional vector<string> deadHeroList;
+	};
+
+	struct DreamLandSideCtx
+	{
+		0 require bool bFixHP;
+		1 optional map<int, int> fixHPMap;
+		
+	};
+	
+	struct DreamLandFightCtx
+	{
+		0 require DreamLandSideCtx attCtx;		//攻击方
+		1 require DreamLandSideCtx targetCtx;	//守关方
+		2 require int iItemCount;		    	//药瓶数量
+		3 require int iMonsterHp;				//最后一关的怪物血量
+		4 require int iMonsterAttValue;			//最后一关的怪物的攻击力
+		6 require map<int ,int > properyMap;   	//属性加成
+		7 require string strHerolistData;			//英雄数据
+		8 require string strFormationData;		//阵型数据
+	};
+	
+	struct MailData
+	{
+		0 require string strUUID;
+		1 require string strTitle;
+		2 require string strSender;
+		3 require string strContent;
+		4 require int iState;
+		5 require string strAwardInfo;
+		6 require unsigned int dwSenderTime;
+		7 require int iKeepDay;
+		8 optional int iMailType;
+	};
+
+	struct MailSystemData
+	{
+		0 require vector<MailData> mailDataList;
+		1 require vector<int> usedBroadcastIDList; // 已经用掉的邮件ID
+		2 optional unsigned int dwChgSecond;
+	};
+
+	struct ManorResData
+	{
+		0 require int ResId;
+		1 require int iResLevel;
+		2 require int beginProductSecond;
+		3 require int beginLevelUpSecond;
+		4 require bool bResIsBuild;		//在建
+	};
+	
+	struct ManorWuHunAndItemUnit
+	{
+		0 require int id;
+		1 require bool bWuXieKeji;
+		2 optional bool bHaveBeLoot;  //onuse
+		3 require int iCount;
+		4 require int iBeLootCount;   //被掠夺的个数
+	};
+	
+	struct ManorWuHunAndItemData
+	{
+		1 require int level;
+		2 require int beginProductSecond;
+		3 require int beginLevelUpSecond;
+		4 require bool bResIsBuild;					//在建
+		5 require vector<ManorWuHunAndItemUnit> wuHunAndItemList;
+		6 require bool bIsProduct; 					//正在祭炼
+		7 require int iHaveRefreshTimes;
+		8 optional vector<ManorWuHunAndItemUnit> befroreProductCache;
+	};
+
+	struct ManorProtectData
+	{
+		1 require int iBeginProtectSecond;   	//保护时间生效时刻
+		2 require int iHaveBuyProtectSecond;	//购买了的时间，如果保护时间没有过期 那么不修改BeginProtectSecond,反之,修改
+		3 require vector<TimeResetValue> haveBuyProtectList;
+	};
+	
+	struct ManorSystemData
+	{
+		0 require vector<ManorResData> silverResVec;
+		1 require vector<ManorResData> heroExpResVec;
+		2 require int iResHarvestTimes;
+		3 require int iProductSivlerBeforLevelUp;   //如果升级那么记录前面的，收取后置0
+		4 require int iProductHeroExpBeforLevelUp;   //如果升级那么记录前面的，收取后置0
+		5 require ManorWuHunAndItemData wuHunDianData;
+		6 require ManorWuHunAndItemData tieJiangPuData;
+		7 require vector<string> manorLogVec;
+		8 require int iLostBeLootSecond;
+		9 require int bIsBeLoot;
+		10 optional unsigned int dwHarvestSecond;	//收获时间\
+		11 require int iVigorLastSecond;
+		12 optional bool bIsBattle;
+		13 optional int iBeLootSilver;
+		14 optional int iBeLootHeroExp;
+		15 optional bool bHaveNewLog;
+		16 optional ManorProtectData protectData;
+	};
+
+	struct CheckInData
+	{
+		0 require vector<TimeResetValue> checkInList;
+		1 require unsigned int dwLastSecond;   
+	};
+
+	struct GrowUpData
+	{	
+		0 require bool bHavebuyGrowUp ;
+ 		1 require map<int, int> haveGetReward;
+	};
+
+	struct AccPayMentData
+	{
+		0 require map<int, int> paymentGetRewardMap;
+	};
+
+	struct ActorLoginData
+	{
+		0 require int iLoginDays;
+		1 require map<int,int> haveRewardDays;
+		2 require unsigned int dwLoginSecond;
+	};
+
+	struct DayPaymentData
+	{
+		0 optional int 				operateId;		// 活动id
+		1 optional int 				paied;			// 累积充值数(人民币)
+		2 optional map<int,bool>		fetched;		// 已领取奖励id
+	};
+
+	struct OperateSystemData
+	{
+		0 require 	CheckInData 	checkInData;
+		1 optional 	GrowUpData 		growUpdata;
+		2 optional 	AccPayMentData 	accPayMentData;
+		3 optional 	bool 			bHaveGetTelphoneSteam;
+		4 optional 	ActorLoginData 	actorLoginData;
+		5 optional 	DayPaymentData	dayPaymentData;
+	};
+
+	struct OpenServerSecond
+	{
+		0 require unsigned int dwOpenServerSecond;
+	};
+};
+

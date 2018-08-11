@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<HeroQuality>
+  <DataRes xmlName="m_ID" excelName="英雄ID" DataType="ID"/>
+  <DataRes xmlName="m_quality1" excelName="品质1" DataType="String"/>
+  <DataRes xmlName="m_quality2" excelName="品质2" DataType="String"/>
+  <DataRes xmlName="m_quality3" excelName="品质3" DataType="String"/>
+  <DataRes xmlName="m_quality4" excelName="品质4" DataType="String"/>
+  <DataRes xmlName="m_quality5" excelName="品质5" DataType="String"/>
+  <DataRes xmlName="m_quality6" excelName="品质6" DataType="String"/>
+  <DataRes xmlName="m_quality7" excelName="品质7" DataType="String"/>
+  <DataRes xmlName="m_quality8" excelName="品质8" DataType="String"/>
+  <DataRes xmlName="m_quality9" excelName="品质9" DataType="String"/>
+  <DataRes xmlName="m_quality10" excelName="品质10" DataType="String"/>
+  <DataRes xmlName="m_quality11" excelName="品质11" DataType="String"/>
+  <DataRes xmlName="m_quality12" excelName="品质12" DataType="String"/>
+  <DataRes xmlName="m_quality13" excelName="品质13" DataType="String"/>
+</HeroQuality>
+
+</client>

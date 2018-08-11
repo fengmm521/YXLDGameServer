@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<CheckIn>
+  <DataRes xmlName="m_ID" excelName="id" DataType="ID"/>
+  <DataRes xmlName="m_allTimes" excelName="累积次数" DataType="int"/>
+  <DataRes xmlName="m_isDouble" excelName="是否可以领双倍" DataType="int"/>
+  <DataRes xmlName="m_VipConditions" excelName="领双倍Vip等级" DataType="int"/>
+  <DataRes xmlName="m_Award" excelName="奖励" DataType="String"/>
+  <DataRes xmlName="m_des" excelName="描述" DataType="String"/>
+</CheckIn>
+
+</client>

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<OpenFunction>
+  <DataRes xmlName="m_ID" excelName="功能ID" DataType="ID"/>
+  <DataRes xmlName="m_icon" excelName="显示图标" DataType="String"/>
+  <DataRes xmlName="m_info" excelName="描述" DataType="String"/>
+  <DataRes xmlName="m_yindao" excelName="是否引导" DataType="int"/>
+</OpenFunction>
+
+</client>

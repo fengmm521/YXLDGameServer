@@ -1,0 +1,13 @@
+##,,,,,
+ÀÛ»ý³äÖµID,³äÖµÄ¿±ê,½±ÀøDropId,½±Àø1,½±Àø2,½±Àø3
+int,int,int,string,string,string
+1,8,2007,LifeAtt#1#20000,LifeAtt#4#10000,LifeAtt#17#10
+2,18,2008,LifeAtt#1#40000,LifeAtt#4#20000,LifeAtt#17#15
+3,38,2009,LifeAtt#1#60000,LifeAtt#4#30000,LifeAtt#17#20
+4,88,2010,LifeAtt#1#80000,LifeAtt#4#40000,Item#19005#1
+5,168,2011,LifeAtt#1#100000,LifeAtt#4#50000,Item#19006#1
+6,268,2012,LifeAtt#1#120000,LifeAtt#4#60000,Item#19007#2
+7,418,2013,LifeAtt#1#140000,LifeAtt#4#70000,Item#19008#2
+8,618,2014,LifeAtt#1#160000,LifeAtt#4#80000,Item#13032#30
+9,888,2015,LifeAtt#1#180000,LifeAtt#4#90000,Hero#1032#1
+10,1688,2016,LifeAtt#1#200000,LifeAtt#4#100000,Item#13032#70

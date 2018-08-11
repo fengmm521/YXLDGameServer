@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<AccumulatePayment>
+  <DataRes xmlName="m_ID" excelName="累积充值ID" DataType="ID"/>
+  <DataRes xmlName="m_RewardOne" excelName="奖励1" DataType="String"/>
+  <DataRes xmlName="m_RewardTwo" excelName="奖励2" DataType="String"/>
+  <DataRes xmlName="m_RewardTree" excelName="奖励3" DataType="String"/>
+</AccumulatePayment>
+
+</client>

@@ -1,0 +1,41 @@
+Dirs = Src/RobotApp
+       
+PropSetDir = Include/Property
+CurDir=$(PWD)
+PropSetDefHeaders = $(basename $(notdir $(wildcard $(PropSetDir)/*.h)))
+
+LUA_DIR= $(PWD)/Tools
+
+all:
+	echo $(LUA_DIR)
+	cd $(CurDir)/Tools && $(LUA_DIR)/lua Component.lua ../RobotServer.xml  ../Src/RobotApp/StaticRobotCreateComponent.cpp ../Src/RobotApp/RobotComponentConstDef.h
+	chmod +x ./tolua++
+	#cd Pkg && ../tolua++ -n RobotServerExport -o ../Src/RobotApp/RobotServerExport.cpp RobotServer.pkg
+	cd Src/RobotApp && ../../tolua++ -n AegisRobotInnerExport -o AegisRobotInnerExport.cpp Robot.pkg
+	cd Jce && make
+
+	cd Proto && $(LUA_DIR)/lua $(CurDir)/Tools/MakeProtobuf.lua GameServer.proto
+	cd Src/RobotApp && protoc --cpp_out=./ RouterServer.proto
+	cd Proto && protoc --lua_out=../data/script/robot/pb/ GameServer.proto
+	cd ../lib && rm -rf *.a
+	cp ../Common/libcommD.a ../lib/
+	@for dir in $(Dirs); do make -C $$dir all -j4; echo; done
+	cp Src/RobotApp/RobotServer ./RobotServer -rf
+TopDir = ../
+	
+rebuild:comm-prebuild
+	@$(MAKE) -f makefileRobot
+
+include ../common-prebuild.inc
+	
+clean:comm-prebuild
+	cd Jce && make clean
+	@for dir in $(Dirs); do cd $(CURDIR)/$$dir && make clean; done
+	
+cleanall:comm-prebuild
+	cd Jce && make clean
+	@for dir in $(Dirs); do cd $(CURDIR)/$$dir && make cleanall; done
+	
+tar:
+	cd Src/RobotApp && make tar
+	cp Src/RobotApp/*.tgz ./

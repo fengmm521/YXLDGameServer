@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="ascii"?>
+<components>
+		<component name="TimeAxis" dll="libMiniApr.so"  createFun="createTimerComponent" version="1"/>
+		<component name="Random" dll="libMiniApr.so"  createFun="createMiniAprRandom" version="1"/>
+		
+		<component name="ProfileManager" dll="libMiniApr.so"  createFun="createProfilerManager" version="1">
+				<dependency name="ProfileTimer"/>
+				<dependency name="StrategyTimer"/>
+				<dependency name="Random"/>
+		</component>
+			
+		<component name="ProfileTimer" dll="libMiniApr.so"  createFun="createProfileTimer" version="1"/>		
+		
+		<component name="StrategyTimer" dll="libMiniApr.so"  createFun="createProfileStrategyAverage" version="1">
+				<dependency name="TimeAxis"/>
+				<property type="int" name="2" value="30000" />
+		</component>
+		
+		<component name="ScriptEngine" dll="libMiniApr.so"  createFun="createScriptEngine" version="1"/>
+		
+		<component name="BuffFactory" dll="libMiniApr.so"  createFun="createBuffFactory" version="1"/>
+		<table name="Buff" filetype="csv" file="/gamedata/csv/Skill/Buff.csv" indexfield="状态ID"/>
+		
+		<table name="ActorSkill" filetype="csv" file="/gamedata/csv/Skill/ActorSkill.csv" indexfield=""/>
+		<table name="Skill" filetype="csv" file="/gamedata/csv/Skill/Skill.csv" indexfield="技能ID"/>
+		<table name="Relive" filetype="csv" file="/gamedata/csv/Skill/Relive.csv" indexfield="等阶"/>
+		<table name="SkillNotifyProp" filetype="csv" file="/gamedata/csv/Skill/SkillNotifyProp.csv" indexfield=""/>
+		
+		<component name="SkillFactory" dll="libMiniApr.so"  createFun="createSkillFactory" version="1"/>
+		
+		<table name="Effect" filetype="csv" file="/gamedata/csv/Skill/SkillEffect.csv" indexfield="效果ID"/>
+		<component name="EffectFactory" dll="libMiniApr.so"  createFun="createEffectFactory" version="1">
+			<dependency name="SkillFactory"/>
+		</component>
+		
+		
+		<component name="MessageDispatch" dll="libGameEngine.so"  createFun="createMessageDispatch" version="1">
+			<dependency name="LoginManager"/>
+		</component>
+		
+		<table name="HeroCreate" filetype="csv" file="/gamedata/csv/Hero/HeroCreate.csv" indexfield="ID"/>
+		
+		<table name="BuyPhyCost" filetype="csv" file="/gamedata/csv/Comm/BuyPhyCost.csv" indexfield="第几次"/>
+		<table name="BuyPhyLimit" filetype="csv" file="/gamedata/csv/Comm/BuyPhyLimit.csv" indexfield="VIP等级"/>
+		<table name="OpenFunction" filetype="csv" file="/gamedata/csv/Comm/OpenFunction.csv" indexfield="功能ID"/>
+		<component name="EntityFactory" dll="libGameEngine.so"  createFun="createJZEntityFactory" version="1">
+			<table name="Hero" filetype="csv" file="/gamedata/csv/Hero/Hero.csv" indexfield="ID"/>
+			<table name="MonsterGroup" filetype="csv" file="/gamedata/csv/Monster/MonsterGroup.csv" indexfield="组ID"/>
+			<table name="Monster" filetype="csv" file="/gamedata/csv/Monster/Monster.csv" indexfield="怪物ID"/>
+			<propdef file="/propcsv/EntityProperty.csv" name="EntityPropDef"/>
+		</component>
+		
+		<table name="ClientVersion" filetype="csv" file="/gamedata/csv/Comm/ClientVersion.csv" indexfield="版本类型"/>
+		<component name="LoginManager" dll="libGameEngine.so"  createFun="createLoginManager" version="1">
+			<dependency name="GlobalCfg"/>
+			<dependency name="TimeAxis"/>
+			<dependency name="VIPFactory"/>
+			<dependency name="HeroTallentFactory"/>
+			
+		</component>
+		
+		<component name="GlobalCfg" dll="libGameEngine.so"  createFun="createGlobalCfg" version="1">
+			<table name="GlobalConfig" filetype="csv" file="/gamedata/csv/Comm/Global.csv" indexfield=""/>
+		</component>
+		
+		
+		
+		<table name="ReservedWords" filetype="csv" file="/gamedata/csv/Comm/ReservedWords.csv" indexfield=""/>
+		<component name="ReserveWordCheck" dll="libGameEngine.so"  createFun="createReserveWordCheck" version="1"/>
+		
+		
+		<table name="ErrorCode" filetype="csv" file="/gamedata/csv/Comm/ErrorCode.csv" indexfield="错误值"/>
+		<component name="MessageLayer" dll="libGameEngine.so"  createFun="createJZMessageLayer" version="1">
+			<dependency name="GlobalCfg"/>
+			<dependency name="ProfileManager"/>
+		</component>
+		
+		<component name="FightFactory" dll="libGameEngine.so"  createFun="createFightFactory" version="1"/>
+		
+		<table name="DungeonSection" filetype="csv" file="/gamedata/csv/Scene/SceneSection.csv" indexfield=""/>
+		<table name="DungeonScene" filetype="csv" file="/gamedata/csv/Scene/Scene.csv" indexfield=""/>
+		<table name="PerfectPassAward" filetype="csv" file="/gamedata/csv/Scene/PerfectPassAward.csv" indexfield=""/>
+		<component name="DungeonFactory" dll="libGameEngine.so"  createFun="createDungeonFactory" version="1"/>
+		
+		<table name="Item" filetype="csv" file="/gamedata/csv/Item/Item.csv" indexfield="道具ID"/>
+		<table name="EquipRonglianLvKey" filetype="csv" file="/gamedata/csv/Item/EquipRonglianLvKey.csv" indexfield="" />
+		<table name="EquipRonglianQuality" filetype="csv" file="/gamedata/csv/Item/EquipRonglianQuality.csv" indexfield="" />
+		<table name="EquipRonglianMap" filetype="csv" file="/gamedata/csv/Item/EquipRonglianMap.csv" indexfield="" />
+		<table name="EquipXilian" filetype="csv" file="/gamedata/csv/Item/EquipXilian.csv" indexfield="" />
+		<table name="Equip" filetype="csv" file="/gamedata/csv/Item/Equip.csv" indexfield="道具ID"/>
+		<table name="EquipCombine" filetype="csv" file="/gamedata/csv/Item/EquipCombine.csv" indexfield=""/>
+		<table name="EquipSuit" filetype="csv" file="/gamedata/csv/Item/EquipSuit.csv" indexfield=""/>
+		<table name="EquipEnhance" filetype="csv" file="/gamedata/csv/Item/EquipEnhance.csv" indexfield="等级"/>
+		
+		<table name="EquipRandomProp" filetype="csv" file="/gamedata/csv/Item/EquipRandomProp.csv" indexfield="属性组ID"/>
+		<table name="RandomPropShow" filetype="csv" file="/gamedata/csv/Item/RandomPropShow.csv" indexfield=""/>
+		
+		<component name="ItemFactory" dll="libGameEngine.so"  createFun="createItemFactory" version="1">
+			<propdef file="/propcsv/ItemProperty.csv" name="ItemPropDef"/>
+		</component>
+		
+		<table name="Drop" filetype="csv" file="/gamedata/csv/Item/Drop.csv" indexfield="掉落ID"/>
+		<table name="Exp" filetype="csv" file="/gamedata/csv/Comm/Exp.csv" indexfield="等级"/>
+		<component name="DropFactory" dll="libGameEngine.so"  createFun="createDropFactory" version="1"/>
+		
+		<component name="ZoneTime" dll="libGameEngine.so"  createFun="createZoneTime" version="1"/>
+		
+		<component name="ModifyDelegate" dll="libGameEngine.so"  createFun="createModifyDelegate" version="1">
+			<dependency name="MessageLayer"/>
+		</component>
+		
+		<component name="TimeRangeValue" dll="libGameEngine.so"  createFun="createTimeRangeValueFactory" version="1">
+			<dependency name="TimeAxis"/>
+			<dependency name="ZoneTime"/>
+		</component>
+		
+		<table name="FightSoul" filetype="csv" file="/gamedata/csv/FightSoul/FightSoul.csv" indexfield="ID"/>
+		<table name="FightSoulExp" filetype="csv" file="/gamedata/csv/FightSoul/FightSoulExp.csv" indexfield="等级"/>
+		<table name="FightSoulPractice" filetype="csv" file="/gamedata/csv/FightSoul/FightSoulPractice.csv" indexfield="修炼境界"/>
+		<table name="FightSoulExchange" filetype="csv" file="/gamedata/csv/FightSoul/FightSoulExchange.csv" indexfield="ID"/>
+		
+		<table name="LevelStepGrow" filetype="csv" file="/gamedata/csv/Hero/LevelStepGrow.csv" indexfield="ID"/>
+		<table name="HeroConvert" filetype="csv" file="/gamedata/csv/Hero/HeroConvert.csv" indexfield="ID"/>
+		<table name="HeroLevelExp" filetype="csv" file="/gamedata/csv/Hero/HeroLevelExp.csv" indexfield="等级"/>
+		
+		
+		<table name="GodAnimal" filetype="csv" file="/gamedata/csv/GodAnimal/GodAnimal.csv" indexfield="ID"/>
+		<table name="GodAnimalLevelExp" filetype="csv" file="/gamedata/csv/GodAnimal/GodAnimalLevelExp.csv" indexfield="等级"/>
+		<table name="GodAnimalLevelStep" filetype="csv" file="/gamedata/csv/GodAnimal/GoldAnimaLevelStep.csv" indexfield="等阶"/>
+		<component name="FightSoulFactory" dll="libGameEngine.so"  createFun="createFightSoulFactory" version="1">
+			<propdef file="/propcsv/FightSoulProperty.csv" name="FightSoulPropDef"/>
+			<dependency name="GlobalCfg"/>
+		</component>
+		
+		<component name="CleanUpManager" dll="libGameEngine.so"  createFun="createCleanupManager" version="1"/>
+		
+		
+		<table name="Machine" filetype="csv" file="/gamedata/csv/Manor/Machine.csv" indexfield="名字"/>
+
+		
+		<table name="ClimbTower" filetype="csv" file="/gamedata/csv/ClimbTower/climbtower.csv" indexfield="层数"/>
+		<component name="ClimbTowerFactory" dll="libGameEngine.so"  createFun="createClimbTowerFactory" version="1"/>
+		
+		
+		<table name="RandHero" filetype="csv" file="/gamedata/csv/Shop/RandHero.csv" indexfield="英雄ID"/>
+		<table name="RandItem" filetype="csv" file="/gamedata/csv/Shop/RandItem.csv" indexfield="物品ID"/>
+		<table name="HonorGoods" filetype="csv" file="/gamedata/csv/Shop/HonorGoods.csv" indexfield="商品ID"/>
+		<table name="HonorShop" filetype="csv" file="/gamedata/csv/Shop/HonorShop.csv" indexfield="商店ID"/>
+		<table name="HonorShopRefreshCost" filetype="csv" file="/gamedata/csv/Shop/HonorShopRefreshCost.csv" indexfield="刷新次数"/>
+		<table name="RandTemplate" filetype="csv" file="/gamedata/csv/Shop/RandTemplate.csv" indexfield="模板ID"/>
+		<table name="Payment" filetype="csv" file="/gamedata/csv/Shop/Payment.csv" indexfield="充值ID"/>
+		<table name="VipRand" filetype="csv" file="/gamedata/csv/Shop/VipRand.csv" indexfield="英雄ID"/>
+		<component name="ShopFactory" dll="libGameEngine.so"  createFun="createShopFactory" version="1"/>
+
+	
+		<table name="LegionBless" filetype="csv" file="/gamedata/csv/Legion/LegionBless.csv" indexfield="ID"/>
+		<table name="LegionContribute" filetype="csv" file="/gamedata/csv/Legion/LegionContribute.csv" indexfield="ID"/>
+		<table name="LegionLevelExp" filetype="csv" file="/gamedata/csv/Legion/LegionLevelExp.csv" indexfield="军团等级"/>
+		<table name="LegionPay" filetype="csv" file="/gamedata/csv/Legion/LegionPay.csv" indexfield="贡献区间"/>
+		<table name="LegionShop" filetype="csv" file="/gamedata/csv/Legion/LegionShop.csv" indexfield="ID"/>
+		<component name="LegionFactory" dll="libGameEngine.so"  createFun="createLegionFactory" version="1">
+			<dependency name="MessageLayer"/>
+			<dependency name="TimeAxis"/>
+		</component>
+		
+		<component name="CampBattleFactory" dll="libGameEngine.so" createFun="createCampBattleFactory" version="1">
+			<dependency name="TimeAxis"/>
+			<dependency name="ZoneTime"/>
+		</component>
+		
+		
+		<table name="QualityProp" filetype="csv" file="/gamedata/csv/Hero/QualityProp.csv" indexfield="品质ID"/>
+		<table name="HeroQuality" filetype="csv" file="/gamedata/csv/Hero/HeroQuality.csv" indexfield="英雄ID"/>
+		<table name="FavoriteCombine" filetype="csv" file="/gamedata/csv/Item/FavoriteCombine.csv" indexfield="喜好品ID"/>
+		
+		<table name="HeroTallent" filetype="csv" file="/gamedata/csv/Hero/HeroTallent.csv" indexfield="ID"/>
+		<component name="HeroTallentFactory" dll="libGameEngine.so" createFun="createHeroTallentFactory" version="1">
+			<dependency name="ItemFactory"/>
+		</component>
+		
+		<table name="Gift" filetype="csv" file="/gamedata/csv/Legion/Gift.csv" indexfield=""/>
+		<table name="LegionBoss" filetype="csv" file="/gamedata/csv/Legion/LegionBoss.csv" indexfield="等级"/>
+		<table name="LegionBossRankAward" filetype="csv" file="/gamedata/csv/Legion/LegionBossRankAward.csv" indexfield="排名"/>
+		<table name="LegionCity" filetype="csv" file="/gamedata/csv/Legion/LegionCity.csv" indexfield="领地ID"/>
+		
+		<table name="WorldBoss" filetype="csv" file="/gamedata/csv/WorldBoss/WorldBoss.csv" indexfield="ID"/>
+		<table name="WorldBossHP" filetype="csv" file="/gamedata/csv/WorldBoss/WorldBossHP.csv" indexfield="等级"/>
+		<table name="WorldBossRankAward" filetype="csv" file="/gamedata/csv/WorldBoss/WorldBossRankAward.csv" indexfield="排名"/>
+		<component name="BossFactory" dll="libGameEngine.so"  createFun="createBossFactory" version="1">
+			<dependency name="TimeAxis"/>
+			<dependency name="MessageLayer"/>
+		</component>
+		
+		<table name="ArenaMonster" filetype="csv" file="/gamedata/csv/Arena/ArenaMonster.csv" indexfield="名次"/>
+		<table name="ArenaAward" filetype="csv" file="/gamedata/csv/Arena/ArenaAward.csv" indexfield="名次"/>
+		<component name="ArenaFactory" dll="libGameEngine.so"  createFun="createArenaFactory" version="1">
+			<dependency name="MessageLayer"/>
+			<dependency name="TimeAxis"/>
+			<dependency name="EntityFactory"/>
+		</component>
+		
+		<table name="Vip" filetype="csv" file="/gamedata/csv/Vip/Vip.csv" indexfield="VIP等级"/>
+		<component name="VIPFactory" dll="libGameEngine.so"  createFun="createVIPFactory" version="1"/>
+		
+		<table name="Task" filetype="csv" file="/gamedata/csv/Task/Task.csv" indexfield="任务ID"/>
+		<component name="TaskFactory" dll="libGameEngine.so"  createFun="createTaskFactory" version="1"/>
+		
+		<table name="Guide" filetype="csv" file="/gamedata/csv/Guide/Guide.csv" indexfield="引导ID"/>
+		<component name="GuideFactory" dll="libGameEngine.so"  createFun="createGuideFactory" version="1"/>
+		
+		<table name="DreamLandSection" filetype="csv" file="/gamedata/csv/DreamLand/DreamLandSection.csv" indexfield="章节ID"/>
+		<table name="DreamLandScene" filetype="csv" file="/gamedata/csv/DreamLand/DreamLandScene.csv" indexfield="关卡ID"/>
+		<table name="DreamLandBox" filetype="csv" file="/gamedata/csv/DreamLand/DreamLandBox.csv" indexfield="宝箱ID"/>
+		<component name="DreamLandFactory" dll="libGameEngine.so"  createFun="createDreamLandFactory" version="1"/>
+		<table name="Mail" filetype="csv" file="/gamedata/csv/Comm/Mail.csv" indexfield="公告ID"/>
+		
+		<component name="ManorFactory" dll="libGameEngine.so"  createFun="createManorFactory" version="1"/>
+		<table name="ManorRes" filetype="csv" file="/gamedata/csv/Manor/ManorRes.csv" indexfield="领地矿ID"/>
+		<table name="ManorResLevel" filetype="csv" file="/gamedata/csv/Manor/ManorResLevel.csv" indexfield="领地矿ID"/>
+		<table name="ManorTieJiangPu" filetype="csv" file="/gamedata/csv/Manor/ManorTieJiangPu.csv" indexfield="等级"/>
+		<table name="ManorWuHunDian" filetype="csv" file="/gamedata/csv/Manor/ManorWuHunDian.csv" indexfield="等级"/>
+		<table name="ManorProtect" filetype="csv" file="/gamedata/csv/Manor/ManorProtect.csv" indexfield="盾ID"/>
+		<table name="ArenaRefresh" filetype="csv" file="/gamedata/csv/Arena/ArenaRefresh.csv" indexfield="玩家名次区间"/>
+		<table name="CoinTreeKnock" filetype="csv" file="/gamedata/csv/Shop/CoinTreeKnock.csv" indexfield="暴击倍"/>
+		<table name="CoinTreeShakeCost" filetype="csv" file="/gamedata/csv/Shop/CoinTreeShakeCost.csv" indexfield="次数"/>
+		<table name="ConvertCode" filetype="csv" file="/gamedata/csv/Item/ConvertCode.csv" indexfield="兑换礼包ID"/>
+		<table name="ManorRefreshCost" filetype="csv" file="/gamedata/csv/Manor/ManorRefreshCost.csv" indexfield="刷新次数"/>
+		
+		<table name="CheckIn" filetype="csv" file="/gamedata/csv/OperateSystem/CheckIn.csv" indexfield="月份"/>
+		<table name="OperateActive" filetype="csv" file="/gamedata/csv/OperateSystem/OperateActive.csv" indexfield="活动ID"/>
+		<table name="GrowUpPlan" filetype="csv" file="/gamedata/csv/OperateSystem/GrowUpPlan.csv" indexfield="计划ID"/>
+		<table name="AccumulatePayment" filetype="csv" file="/gamedata/csv/OperateSystem/AccumulatePayment.csv" indexfield="累积充值ID"/>
+		<table name="AccumlateLogin" filetype="csv" file="/gamedata/csv/OperateSystem/AccumlateLogin.csv" indexfield="累积登录天数"/>
+		<table name="DayPayment" filetype="csv" file="/gamedata/csv/OperateSystem/DayPayment.csv" indexfield="活动id"/>
+		<table name="DayPaymentReward" filetype="csv" file="/gamedata/csv/OperateSystem/DayPaymentReward.csv" indexfield=""/>
+		
+		<component name="OperateFactory" dll="libGameEngine.so"  createFun="createOperateFactory" version="1">
+			<dependency name="TimeAxis"/>
+			<dependency name="MessageLayer"/>
+		</component>
+		
+		<table name="PhoneStream" filetype="csv" file="/gamedata/csv/Comm/PhoneStream.csv" indexfield="号码段"/>
+		
+		
+		<object name="Actor" dll="libGameEngine.so"  createFun="createActor">
+			<dependency name="GMSystem" />
+			<dependency name="CalcSystem"/>
+			<dependency name="PropObserveSystem"/>
+			<dependency name="HeroSystem"/>
+			<dependency name="FormationSystem"/>
+			<dependency name="FightSystem"/>
+			<dependency name="ActorSaveSystem"/>
+			<dependency name="ItemSystem"/>
+			<dependency name="DungeonSystem"/>
+			<dependency name="FightSoulSystem"/>
+			<dependency name="EffectSystem"/>
+			<dependency name="GodAnimalSystem"/>
+			<dependency name="ClimbTowerSystem"/>
+			<dependency name="LegionSystem"/>
+			<dependency name="ShopSystem"/>
+			<dependency name="CampBattleSystem"/>
+			<dependency name="ArenaSystem"/>
+			<dependency name="FriendSystem"/>
+			<dependency name="TaskSystem"/>	
+			<dependency name="GuideSystem"/>
+			<dependency name="EquipBagSystem"/>
+			<dependency name="DreamLandSystem"/>
+			<dependency name="MailSystem"/>
+			<dependency name="ManorSystem"/>
+			<dependency name="OperateSystem"/>
+		</object>
+		
+		<object name="Ghost" dll="libGameEngine.so"  createFun="createGhost">
+			<dependency name="CalcSystem"/>
+			<dependency name="HeroSystem"/>
+			<dependency name="FormationSystem"/>
+			<dependency name="FightSystem"/>
+			<dependency name="FightSoulSystem"/>
+			<dependency name="GodAnimalSystem"/>
+			<dependency name="CampBattleSystem"/>
+			<dependency name="LegionSystem"/>
+			<dependency name="ArenaSystem"/>
+			<dependency name="DreamLandSystem"/>
+			<dependency name="ManorSystem"/>
+			<dependency name="FriendSystem"/>
+			<dependency name="ItemSystem"/>
+		</object>
+		
+		<object name="Monster" dll="libGameEngine.so"  createFun="createMonster">
+			<dependency name="CalcSystem"/>
+			<dependency name="SkillSystem"/>
+			<dependency name="BuffSystem"/>
+			<dependency name="EffectSystem"/>
+		</object>
+		
+		
+		<object name="Hero" dll="libGameEngine.so"  createFun="createHero">
+			<dependency name="CalcSystem"/>
+			<dependency name="PropObserveSystem"/>
+			<dependency name="SkillSystem"/>
+			<dependency name="BuffSystem"/>
+			<dependency name="EffectSystem"/>
+			<dependency name="HeroEquipSystem"/>
+			<dependency name="HeroRealEquipSystem"/>
+			<dependency name="HeroTallentSystem"/>
+		</object>
+		
+		<object name="GodAnimal" dll="libGameEngine.so"  createFun="createGoldAnimal">
+			<dependency name="CalcSystem"/>
+			<dependency name="PropObserveSystem"/>
+			<dependency name="SkillSystem"/>
+			<dependency name="BuffSystem"/>
+			<dependency name="EffectSystem"/>
+		</object>
+		
+		<object name="CalcSystem" dll="libGameEngine.so"  createFun="createCalcSystem"/>
+		<object name="PropObserveSystem" dll="libGameEngine.so"  createFun="createPropObserveSystem"/>
+		<object name="HeroSystem" dll="libGameEngine.so"  createFun="createHeroSystem"/>
+		<object name="GMSystem" dll="libGameEngine.so"  createFun="createGMSystem"/>
+		<object name="FormationSystem" dll="libGameEngine.so"  createFun="createFormationSystem"/>
+		<object name="FightSystem" dll="libGameEngine.so"  createFun="createFightSystem"/>
+		<object name="SkillSystem" dll="libGameEngine.so"  createFun="createSkillSystem"/>
+		<object name="BuffSystem" dll="libGameEngine.so"  createFun="createBuffSystem"/>
+		<object name="EffectSystem" dll="libGameEngine.so"  createFun="createEffectSystem"/>
+		<object name="ItemSystem" dll="libGameEngine.so"  createFun="createItemSystem"/>
+		<object name="ActorSaveSystem" dll="libGameEngine.so"  createFun="createActorSaveSystem"/>
+		<object name="DungeonSystem" dll="libGameEngine.so"  createFun="createDungeonSystem"/>
+		
+		<object name="GodAnimalSystem" dll="libGameEngine.so"  createFun="createGodAnimalSystem"/>
+		
+		<object name="FightSoulSystem" dll="libGameEngine.so"  createFun="createFightSoulSystem"/>
+		<object name="HeroEquipSystem" dll="libGameEngine.so"  createFun="createHeroEquipSystem"/>
+		
+		<object name="ClimbTowerSystem" dll="libGameEngine.so"  createFun="createClimbTowerSystem"/>
+		<object name="LegionSystem" dll="libGameEngine.so"  createFun="createLegionSystem"/>
+		<object name="ShopSystem" dll="libGameEngine.so"  createFun="createShopSystem"/>
+		<object name="CampBattleSystem" dll="libGameEngine.so" createFun="createCampBattleSystem"/>
+		<object name="ArenaSystem" dll="libGameEngine.so"  createFun="createArenaSystem"/>
+		<object name="FriendSystem" dll="libGameEngine.so"  createFun="createFriendSystem"/>
+		<object name="TaskSystem" dll="libGameEngine.so"  createFun="createTaskSystem"/>
+		<object name="GuideSystem" dll="libGameEngine.so"  createFun="createGuideSystem"/>
+
+		<object name="EquipBagSystem" dll="libGameEngine.so"  createFun="createEquipBagSystem"/>
+		<object name="HeroRealEquipSystem" dll="libGameEngine.so"  createFun="createHeroRealEquipSys"/>
+		<object name="DreamLandSystem" dll="libGameEngine.so"  createFun="createDreamLandSystem"/>
+		<object name="MailSystem" dll="libGameEngine.so"  createFun="createMailSystem"/>
+		
+		<object name="HeroTallentSystem" dll="libGameEngine.so"  createFun="createTallentSystem"/>
+		<object name="ManorSystem" dll="libGameEngine.so"  createFun="createManorSystem"/>
+		<object name="OperateSystem" dll="libGameEngine.so"  createFun="createOperateSystem"/>
+		
+</components>
+

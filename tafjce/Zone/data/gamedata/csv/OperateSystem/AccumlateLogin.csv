@@ -1,0 +1,10 @@
+##,,,,,
+ÀÛ»ýµÇÂ¼ÌìÊý,½±ÀøDropId,½±Àø1,½±Àø2,½±Àø3,½±Àø4
+int,int,string,string,string,string
+1,70001,LifeAtt#2#50,LifeAtt#4#10000,LifeAtt#1#20000,LifeAtt#17#60
+2,70002,LifeAtt#2#100,LifeAtt#4#20000,LifeAtt#1#40000,Equip#200361
+3,70003,LifeAtt#2#100,LifeAtt#4#30000,LifeAtt#1#60000,Equip#200422
+4,70004,LifeAtt#2#150,LifeAtt#4#40000,LifeAtt#1#80000,LifeAtt#17#90
+5,70005,LifeAtt#2#150,LifeAtt#4#50000,LifeAtt#1#100000,Equip#200453
+6,70006,LifeAtt#2#200,LifeAtt#4#60000,LifeAtt#1#120000,LifeAtt#17#120
+7,70007,LifeAtt#2#300,LifeAtt#4#70000,LifeAtt#1#140000,Hero#1017#1

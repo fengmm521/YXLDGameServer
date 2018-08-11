@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<Item>
+  <DataRes xmlName="m_ID" excelName="道具ID" DataType="ID"/>
+  <DataRes xmlName="m_name" excelName="名称" DataType="String"/>
+  <DataRes xmlName="m_quality" excelName="品质" DataType="byte"/>
+  <DataRes xmlName="m_icon" excelName="图标" DataType="int"/>
+  <DataRes xmlName="m_desc" excelName="功能描述" DataType="String"/>
+  <DataRes xmlName="m_descFull" excelName="详细描述" DataType="String"/>
+  <DataRes xmlName="m_useEffect" excelName="使用效果" DataType="int"/>
+  <DataRes xmlName="m_lvLimits" excelName="等级限制" DataType="int"/>
+  <DataRes xmlName="m_sellMoney" excelName="物品卖出单价" DataType="int"/>
+  <DataRes xmlName="m_attinfo" excelName="属性展示" DataType="String"/>
+  <DataRes xmlName="m_type" excelName="类型" DataType="int"/>
+</Item>
+
+</client>

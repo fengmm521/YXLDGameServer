@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<ActorSkill>
+  <DataRes xmlName="m_ID" excelName="技能ID" DataType="ID"/>
+  <DataRes xmlName="m_level" excelName="开启等级" DataType="short"/>
+  <DataRes xmlName="m_icon" excelName="图标" DataType="short"/>
+  <DataRes xmlName="m_cost" excelName="消耗能量" DataType="byte"/>
+  <DataRes xmlName="m_name" excelName="技能名称" DataType="string"/>
+  <DataRes xmlName="m_desc" excelName="技能描述" DataType="string"/>
+</ActorSkill>
+
+</client>

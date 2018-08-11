@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<QualityProp>
+  <DataRes xmlName="m_ID" excelName="品质ID" DataType="ID"/>
+  <DataRes xmlName="m_color" excelName="颜色" DataType="int"/>
+  <DataRes xmlName="m_Pingjie" excelName="阶段" DataType="int"/>
+</QualityProp>
+
+</client>

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<AnnounceMent>
+  <DataRes xmlName="m_ID" excelName="公告ID" DataType="ID"/>
+  <DataRes xmlName="m_title" excelName="活动标题" DataType="String"/>
+  <DataRes xmlName="m_name" excelName="活动名称" DataType="String"/>
+  <DataRes xmlName="m_time" excelName="活动时间" DataType="String"/>
+  <DataRes xmlName="m_info" excelName="活动内容" DataType="String"/>
+</AnnounceMent>
+
+</client>

@@ -1,0 +1,25 @@
+#include "RoleData.jce"
+
+module ServerEngine
+{
+	enum eFightRetCode
+	{
+		en_FightRet_OK = 0,
+		en_FightRet_SysError = 1,
+	};
+
+	interface Fight
+	{
+		int doPVEFight(out BattleData battleInfo, ActorCreateContext roleInfo, int iMonsterGrpID, FightContext ctx);
+
+		int doPVPFight(out BattleData battleInfo, ActorCreateContext attRoleInfo, ActorCreateContext targetRileInfo, FightContext ctx);
+
+		int doMultiPVEFight(out BattleData battleInfo, ActorCreateContext roleInfo, vector<int> monsterGrpList, FightContext ctx);
+
+		int continuePVEFight(out BattleData battleInfo, ActorCreateContext roleInfo, int iMonsterGrpID, FightContext ctx);
+
+		int continueMultiPVEFight(out BattleData battleInfo, ActorCreateContext roleInfo, vector<int> monsterGrpList, FightContext ctx);
+
+		int continuePVPFight(out BattleData battleInfo, ActorCreateContext attRoleInfo, ActorCreateContext targetRileInfo, FightContext ctx);
+	};
+};

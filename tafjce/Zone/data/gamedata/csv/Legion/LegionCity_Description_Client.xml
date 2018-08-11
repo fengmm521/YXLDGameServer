@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<LegionCity>
+  <DataRes xmlName="m_ID" excelName="领地ID" DataType="int"/>
+  <DataRes xmlName="m_name" excelName="领地名字" DataType="String"/>
+  <DataRes xmlName="m_image" excelName="地图图片" DataType="int"/>
+</LegionCity>
+
+</client>

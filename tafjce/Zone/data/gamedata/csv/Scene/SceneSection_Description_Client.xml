@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<SceneSection>
+	<DataRes xmlName="m_ID" excelName="章节ID" DataType="ID"/>
+	<DataRes xmlName="m_nameFirst" excelName="序号" DataType="String"/>
+	<DataRes xmlName="m_name" excelName="名称" DataType="String"/>
+	<DataRes xmlName="m_lvlLimit" excelName="开启等级" DataType="short"/>
+	<DataRes xmlName="m_desc" excelName="章节描述" DataType="String"/>
+</SceneSection>
+
+</client>

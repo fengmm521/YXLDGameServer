@@ -1,0 +1,45 @@
+class _PropertySetT
+{
+	TOLUA_TEMPLATE_BIND(T, string)
+	
+	Int32 getInt(T key,int nDef = 0) const;
+	float getFloat(T key, float fDef) const;
+	const char* getString(T key, const char* strDef) const;
+	long getInt64(T key, long nDef64) const;
+};
+
+class PropertySet
+{
+	void setInt(int iKey, Uint32 iValue);
+	void setString(int iKey, const char* pszValue);
+	void setFloat(int iKey, float fValue);
+	void setInt64(int iKey, Int64 i64Value);
+	Int32 getInt(int iKey,Int32 iDef = 0) const;
+	float getFloat(int iKey, float fDef) const;
+	const char* getString(int iKey, const char* strDef) const;
+	Int64 getInt64(int iKey, Int64 i64Def) const;
+};
+
+
+struct EventArgs
+{
+	EventArgs(){}
+	~EventArgs(){}
+	_PropertySetT<string>	context;
+};
+
+class vector {
+
+	TOLUA_TEMPLATE_BIND(T, int, string, double)
+
+	void clear();
+	int size() const;
+
+	const T& operator[](int index) const;
+	T& operator[](int index);
+	void push_back(T val);
+
+	vector();
+	~vector();
+};
+

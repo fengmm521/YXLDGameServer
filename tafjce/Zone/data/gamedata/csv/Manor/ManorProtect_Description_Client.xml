@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<ManorProtect>
+  <DataRes xmlName="m_ID" excelName="盾ID" DataType="ID"/>
+  <DataRes xmlName="m_name" excelName="护盾名" DataType="string"/>
+  <DataRes xmlName="m_cost" excelName="消耗元宝" DataType="int"/>
+  <DataRes xmlName="m_CD" excelName="购买CD" DataType="int"/>
+  <DataRes xmlName="m_time" excelName="保护持续时间" DataType="int"/>
+  <DataRes xmlName="m_info" excelName="购买提示" DataType="string"/>
+</ManorProtect>
+
+</client>

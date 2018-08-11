@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<Task>
+  <DataRes xmlName="m_ID" excelName="任务ID" DataType="ID"/>
+  <DataRes xmlName="m_name" excelName="任务名称" DataType="String"/>
+  <DataRes xmlName="m_info" excelName="任务描述" DataType="String"/>
+  <DataRes xmlName="m_rewardTypeone" excelName="奖励类型1" DataType="String"/>
+  <DataRes xmlName="m_rewardTypetwo" excelName="奖励类型2" DataType="String"/>
+  <DataRes xmlName="m_rewardTypetree" excelName="奖励类型3" DataType="String"/>
+  <DataRes xmlName="m_Relevance" excelName="关联界面" DataType="String"/>
+  <DataRes xmlName="m_Relevance2" excelName="关联界面2" DataType="int"/>
+  <DataRes xmlName="m_Icon" excelName="任务图标" DataType="String"/>
+</Task>
+
+</client>

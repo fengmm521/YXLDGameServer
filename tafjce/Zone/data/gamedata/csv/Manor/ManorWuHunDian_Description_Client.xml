@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<ManorWuHunDian>
+  <DataRes xmlName="m_ID" excelName="等级" DataType="int"/>
+  <DataRes xmlName="m_name" excelName="名称" DataType="String"/>
+  <DataRes xmlName="m_cost" excelName="升级花费铜币" DataType="int"/>
+  <DataRes xmlName="m_costRefresh" excelName="刷新花费" DataType="int"/>
+  <DataRes xmlName="m_timeLevelUp" excelName="升级时间" DataType="int"/>
+  <DataRes xmlName="m_timeProduct" excelName="祭炼时间" DataType="int"/>
+  <DataRes xmlName="m_boxNum" excelName="开启格子数" DataType="int"/>
+</ManorWuHunDian>
+
+</client>

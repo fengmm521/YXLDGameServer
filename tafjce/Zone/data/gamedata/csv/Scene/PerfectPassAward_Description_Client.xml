@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<PerfectPassAward>
+	<DataRes xmlName="m_ID" excelName="完美通关奖励ID" DataType="ID"/>	
+	<DataRes xmlName="m_type" excelName="奖励类型" DataType="byte"/>
+	<DataRes xmlName="m_goodID" excelName="奖励ID" DataType="int"/>
+	<DataRes xmlName="m_count" excelName="数量" DataType="int"/>
+	<DataRes xmlName="m_stepLvl" excelName="等阶" DataType="short"/>
+</PerfectPassAward>
+
+</client>

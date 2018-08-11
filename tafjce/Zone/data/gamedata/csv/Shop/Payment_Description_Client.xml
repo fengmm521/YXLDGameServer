@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<Payment>
+  <DataRes xmlName="m_ID" excelName="ID" DataType="ID"/>
+  <DataRes xmlName="m_PayID" excelName="充值ID" DataType="int"/>
+  <DataRes xmlName="m_des1" excelName="描述" DataType="String"/>
+  <DataRes xmlName="m_des2" excelName="描述2" DataType="String"/>
+  <DataRes xmlName="m_Recommend" excelName="是否推荐" DataType="int"/>
+  <DataRes xmlName="m_yuanbao" excelName="获得游戏币" DataType="int"/>
+</Payment>
+
+</client>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ascii"?>
+<components>
+		<component name="TimeAxis" dll="libMiniApr.so"  createFun="createTimerComponent" version="1"/>
+		<component name="ProfileManager" dll="libMiniApr.so"  createFun="createProfilerManager" version="1">
+				<dependency name="ProfileTimer"/>
+				<dependency name="StrategyTimer"/>
+		</component>
+			
+		<component name="ProfileTimer" dll="libMiniApr.so"  createFun="createProfileTimer" version="1"/>		
+		
+		<component name="StrategyTimer" dll="libMiniApr.so"  createFun="createProfileStrategyAverage" version="1">
+				<dependency name="TimeAxis"/>
+				<property type="int" name="2" value="30000" />
+		</component>
+		
+		<component name="ScriptEngine" dll="libMiniApr.so"  createFun="createScriptEngine" version="1"/>
+		<component name="SocketSystem" dll="libMiniApr.so"  createFun="CreateSocketSystem" version="1"/>
+		
+		<table name="HeroCreate" filetype="csv" file="/gamedata/csv/Hero/HeroCreate.csv" indexfield="ID"/>
+		<component name="ClientSim" dll="libMiniApr.so"  createFun="CreateSimComponent" version="1">
+				<dependency name="TimeAxis"/>
+				<dependency name="SocketSystem"/>
+		</component>
+		
+		<table name="Robot" filetype="csv" file="/Robot/Robot.csv" indexfield=""/>
+		
+</components>

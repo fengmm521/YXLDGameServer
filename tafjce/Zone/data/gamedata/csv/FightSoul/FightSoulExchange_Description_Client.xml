@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<FightSoulExchange>
+  <DataRes xmlName="m_ID" excelName="ID" DataType="ID"/>
+  <DataRes xmlName="m_fightSoulID" excelName="武魂ID" DataType="int"/>
+  <DataRes xmlName="m_count" excelName="需求碎片" DataType="short"/>
+  <DataRes xmlName="m_desc" excelName="描述" DataType="string"/>
+</FightSoulExchange>
+
+</client>

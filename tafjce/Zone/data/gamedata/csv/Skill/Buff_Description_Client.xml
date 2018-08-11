@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<Buff>
+  <DataRes xmlName="m_ID" excelName="状态ID" DataType="ID"/>
+  <DataRes xmlName="m_name" excelName="特效资源" DataType="String"/>
+</Buff>
+
+</client>

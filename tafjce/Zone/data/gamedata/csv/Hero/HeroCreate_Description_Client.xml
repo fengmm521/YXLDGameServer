@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<HeroCreate>
+  <DataRes xmlName="m_ID" excelName="ID" DataType="ID"/>
+  <DataRes xmlName="m_name" excelName="名称" DataType="String"/>
+  <DataRes xmlName="m_feature" excelName="英雄特点" DataType="String"/>
+  <DataRes xmlName="m_stuntName" excelName="英雄绝技" DataType="String"/>
+  <DataRes xmlName="m_img1" excelName="英雄形像1" DataType="short"/>
+  <DataRes xmlName="m_img2" excelName="英雄形像2" DataType="short"/>
+</HeroCreate>
+
+</client>

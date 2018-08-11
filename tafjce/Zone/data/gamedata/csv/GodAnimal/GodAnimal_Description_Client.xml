@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<GodAnimal>
+  <DataRes xmlName="m_ID" excelName="ID" DataType="ID"/>
+  <DataRes xmlName="m_name" excelName="名称" DataType="String"/>
+  <DataRes xmlName="m_desc" excelName="神兽描述" DataType="String"/>
+  <DataRes xmlName="m_icon" excelName="神兽头像" DataType="int"/>
+  <DataRes xmlName="m_img1" excelName="神兽形像1" DataType="int"/>
+  <DataRes xmlName="m_img2" excelName="神兽形像2" DataType="int"/>
+  <DataRes xmlName="m_animName" excelName="动画名" DataType="String"/>
+  <DataRes xmlName="m_animScale" excelName="动画缩放" DataType="int"/>
+  <DataRes xmlName="m_changeItemId" excelName="兑换ItemID" DataType="int"/>
+  <DataRes xmlName="m_changeNumber" excelName="兑换数量" DataType="int"/>
+  <DataRes xmlName="m_changeType" excelName="激活条件" DataType="int"/>
+  <DataRes xmlName="m_cost" excelName="激活花费" DataType="int"/>
+</GodAnimal>
+
+</client>

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<Vip>
+  <DataRes xmlName="m_ID" excelName="VIP等级" DataType="ID"/>
+  <DataRes xmlName="m_LvlPrivilege" excelName="等级特权" DataType="String"/>
+  <DataRes xmlName="m_BuyTiLiNum" excelName="购买体力次数" DataType="int"/>
+</Vip>
+
+</client>

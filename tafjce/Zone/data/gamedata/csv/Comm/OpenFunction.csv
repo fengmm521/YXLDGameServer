@@ -1,0 +1,23 @@
+"##这是一个注释
+en_Function_Domain = 0; // 领地功能
+ en_Function_Legion = 1; // 军团功能
+ en_Function_ShopHeroGuide = 2; // 商城抽取英雄功能
+ en_Function_GodAnimal = 3; // 神兽
+ en_Function_Arena = 4; // 比武大会
+ en_Function_Friend = 5;  // 好友
+ en_Function_WorldBoss = 6;    // 世界BOSS
+ en_Function_FightSoul = 7;   // 武魂
+ en_Function_CampFight = 8;  // 阵营战
+ en_Function_ClimTower = 9; // 爬塔 
+ en_FightType_DreamLand = 11; //九天幻境",,,,,
+功能ID,开启等级,显示图标,错误码ID,描述,是否引导
+int,int,string,int,string,int
+13,6,lingdi_1.png,113,领地会大量产出各类游戏资源，如修为、铜币、珍宝、英雄武魂等……更有掠夺领地等丰富玩法等着你！,1
+1,24,juntuan_1.png,114,集体的力量是伟大的。加入军团后，每天可获得各种福利，一起努力建设军团，还可称霸天下，一统全服！,2
+2,1,2.png,122,xxxxxx,1
+3,180,shenshou_1.png,123,仙宠在战斗中可提供大量输出，同时还可提升出战英雄的攻击的生命！,1
+4,9,jinjichang_1.png,124,在比武大会内与其他主公厮杀，提升排名。每天可根据排名获得大量的荣誉与铜币。,1
+5,15,btn_haoyou_02.png,125,与其他主公结为好友，每天可互送体力。,2
+12,35,jiutianhuanji_1.png,164,每日挑战九天幻境可获得大量铜币、修为，还有机会获得英雄、珍宝等特殊奖励。,1
+14,20,zhujianshanzhuagn_1.png,800,铸剑山庄可产出大量装备，更有机率获得传说中的极品装备！,1
+15,40,zhuanbeidz_1.png,999,在装备锻造中可对装备进行融炼与洗炼，装备融炼有一机率提升装备品质，同时改变装备的附加属性，装备洗炼可以使装备获得洗炼属性。,1

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ascii"?>
+<tablecheck>
+	
+	<!-- 插件定义/实现文件为plugin/XXX.lua -->
+	<plugin>
+			<item name="CheckType" />
+			<item name="ValueLimit" />
+			<item name="Unique" />
+	</plugin>
+	
+	<!-- 数据表检测定义 -->
+	<tables>
+		<table name="test.csv">
+				<!-- 基础数据类型检测 -->
+				<check type="CheckType"/>
+			
+				<!-- 数值上下限检查 -->
+				<check type="ValueLimit" field="测试数值2" min="0" max="101"/>
+				<check type="ValueLimit" field="测试数值5" min="0" max="1.9"/>
+				
+				
+				<!--列数值唯一性检查-->
+				<check type="Unique" field="物品ID" />
+		</table>
+	</tables>
+	
+</tablecheck>

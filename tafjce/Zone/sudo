@@ -1,0 +1,1 @@
+sudo ./GameServer0 --config=./GameServer0.config.conf & sh /home/feiwu/app/taf/data/ServerEngine/GameServer0/start.sh

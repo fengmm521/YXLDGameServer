@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<ManorResLevel>
+  <DataRes xmlName="m_ID" excelName="ID" DataType="ID"/>
+  <DataRes xmlName="m_name" excelName="类型" DataType="string"/>
+  <DataRes xmlName="m_output" excelName="产量" DataType="int"/>
+  <DataRes xmlName="m_timeLevelUp" excelName="升级时间" DataType="int"/>
+  <DataRes xmlName="m_store" excelName="最大储量" DataType="int"/>
+  <DataRes xmlName="m_level" excelName="等级" DataType="short"/>
+  <DataRes xmlName="m_cost" excelName="升级消耗" DataType="int"/>
+  <DataRes xmlName="m_resID" excelName="资源名" DataType="short"/>
+</ManorResLevel>
+
+</client>

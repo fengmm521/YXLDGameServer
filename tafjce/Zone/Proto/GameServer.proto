@@ -1,0 +1,4393 @@
+// GameServer proto
+
+package GSProto;
+
+// 实体类型，玩家、英雄等
+enum EntityType
+{
+	en_class_Null = 0;
+	en_class_Actor = 1;
+	en_class_Hero = 2;
+	en_class_Ghost = 3;
+	en_class_Monster = 4;
+	en_class_GodAnimal = 5; // 神兽
+	en_class_Max = 6;
+};
+
+enum SexType
+{
+	en_Sex_Male = 0; // 男性
+	en_Sex_FeMale = 1; // 女性
+};
+
+// 通用宏定义
+enum CommonDef
+{
+	option allow_alias = true;
+	//MAX_HERO_COUNT = 180;  // 单个玩家最大英雄数量
+	MAX_BATTLE_MEMBER_SIZE = 18; // 全体上阵最大数目(不包括武魂)
+	MAX_ROLENAME_LEN = 6;  // 角色名字字数限制
+	MAX_FIGHTROUND_NUM = 25; // 战斗最大回合数
+	ATT_GOLDANIMAL_POS = 18; // 攻击方神兽位置
+	TARGET_GOLDANIMAL_POS = 19; // 防守方神兽位置
+	MAX_FIGHTSOUL_BAGSIZE = 12;  // 武魂背包大小
+	MAX_FIGHTSOUL_WEARSIZE = 8; // 武魂装备栏大小
+	LEGION_LIST_PAGESIZE = 10; // 军团页面单页显示数量
+	LEGION_BATTLERECORD_PAGECOUNT = 10; // 军团战每页显示战报数量
+	LEGION_HONORRANK_COUNT = 10; // 军团荣誉排名数量
+	MAX_VIP_LEVEL = 15; // VIP最高等级
+	MAX_EQUIP_BAGSIZE = 300; // 装备背包大小
+	MAX_MONEY_VALUE = 2000000000;
+	MAX_CHAT_LEN = 144;		//聊天长度
+};
+
+
+enum KickOffReason
+{
+	en_KickOff_DuplicateAccount = 0; // 相同帐号登录了
+	en_KickOff_Timeout = 1;  // 长期没有上行包踢掉了
+	en_KickOff_GM = 3;
+};
+
+message SCMessage
+{
+	required int32 iCmd = 1;
+	optional bytes strMsgBody = 2;
+};
+
+message CSMessage
+{
+	required int32 iCmd = 1;
+	optional bytes strMsgBody = 2;
+};
+
+// RS协议CMD
+enum GameServerCMD
+{
+	CMD_BEGIN_CMD = 15000;
+	CMD_TEST = 15001;
+	CMD_ERROR = 15002;
+	CMD_ALOGIN = 15003;
+	CMD_GETROLE = 15004;
+	CMD_ROLE_FIN = 15005;
+	CMD_HERO_LIST = 15006;  // 初始英雄信息
+	CMD_NEW_ROLE = 15007;
+	CMD_KICKOFF_ACCOUNT = 15008;
+	CMD_CHECK_ACTORNAME = 15009;
+	CMD_FORMATION_DATA = 15010;   // 初始阵形信息,后续通知阵形也用这个信息
+	CMD_GM_MSG = 15011; // GM消息
+	CMD_FIGHT_MEMBER = 15012;
+	CMD_FIGHT_ACTION = 15013;
+	CMD_FIGHT_FIN = 15014;
+	CMD_BAG_DATA  = 15015; // 初始下发背包信息
+	CMD_BAG_CHG = 15016; // 背包变更
+	CMD_DUNGEON_SECTIONLIST = 15017; // 登录通知FB章节信息
+	CMD_QUERY_DSECTIONDETAIL = 15018; // 查询章节详情
+	CMD_SECTION_UPDATE = 15019; // 章节信息更新
+	CMD_COMM_FIGHTRESULT = 15020; // 战斗结果
+	CMD_ATT_CHG = 15021;  // 属性修改和通知
+	CMD_DUNGEON_FIGHT = 15022; // FB战斗
+	CMD_GET_SECTION_AWARD = 15023; // 领取完美通关奖励
+	CMD_ACTOR_LEVELUP = 15024;  // 升级通知
+	CMD_FORMATION_CHG = 15025;  // 调整阵形
+	CMD_HERO_UPDATE = 15026;  // 新增、更新英雄
+	CMD_HERO_DEL = 15027;  // 删除英雄
+	CMD_GET_HERODESC = 15028;
+	CMD_FIGHTSOUL_BAG = 15029; // 武魂背包信息
+	CMD_MOVE_FIGHTSOUL = 15030; // 移动武魂(包括装备)
+	CMD_CHG_FSCONTAINER = 15031; // 武魂容器变化(包括英雄装备)
+	CMD_FIGHTSOUL_PRACTICE = 15032; // 武魂修炼
+	CMD_FIGHTSOUL_AUTOCOMBINE = 15033; // 一键合成
+	CMD_FIGHTSOUL_LOCK = 15034; // 锁定解锁, 下行走武魂容器变化
+	CMD_FIGHTSOUL_ADVANCEMODE = 15035; // 开启高级模式, 
+	CMD_HERO_CONVERT = 15036; // 英雄转换
+	CMD_COMM_DLG = 15037; // 通用对话框协议
+	CMD_HHYPER_LINK = 15038; // 超链接
+	CMD_PING = 15039; // 心跳包
+	CMD_HERO_LEVELUP = 15040; // 英雄升级
+	CMD_QUERY_HERO_LEVELINFO = 15041; // 查询英雄升级信息
+	//CMD_QUERY_HERO_LEVELSTEP = 15042; // 查询英雄等阶信息
+	CMD_HERO_LEVELSTEPUP = 15043; // 英雄等阶升级
+	CMD_ITEM_USE = 15044; // 物品使用
+	CMD_QUERY_HEROFIGHTSOUL = 15045; // 查询英雄武魂装备
+	CMD_QUERY_HEROTIP = 15046;
+	CMD_GODANIMAL_TRAIN = 15047;// 神兽培养
+	CMD_GODANIMAL_ACTIVE = 15048; // 神兽出战
+	CMD_GODANIMAL_LIST = 15049; // 神兽列表
+	CMD_GODANIMAL_UPDATE = 15050; // 神兽更新/新增
+	CMD_GODANIMAL_QUERYLEVELSTEP = 15051; // 查询神兽升阶信息
+	CMD_GODANIMAL_EXELEVELSTEPUP = 15052; // 神兽升阶
+	CMD_GODANIMAL_EXEINHERIT = 15053; // 传承
+	CMD_GODANIMAL_QUERYINHERIT = 15054; // 查询传承
+	CMD_GODANIMAL_DETAIL = 15055; // 查询神兽详情
+	CMD_FIGHTSOUL_PRACTICEFAIL = 15056; // 武魂修炼失败，无内容
+	CMD_FIGHTSOUL_EXCHANGE = 15057; // 武魂碎片兑换
+	
+	CMD_QUERY_HEROPROGRESS = 15065; // 查询英雄等阶进度
+	CMD_QUERY_SELFMAID = 15066; // 查询自身女仆信息(用于客户端主动请求)
+	
+	CMD_CLICK_LEGION = 15068; // 军团入口协议,玩家点击军团
+	CMD_QUERY_LEGIONLIST = 15069; // 查询军团列表
+	CMD_APPJOIN_LEGION = 15070; // 申请加入军团
+	CMD_CREATE_LEGION = 15072; // 创建军团
+	CMD_QUERY_LEGION_BASE = 15073; // 查询军团基本信息
+	CMD_QUERY_LEGION_MEMBERLIST = 15074; // 查询军团成员列表
+	CMD_QUERY_LEGION_APP = 15075; // 查询军团申请信息
+	CMD_MODIFY_LEGION_SETTING = 15076; // 修改军团设置
+	CMD_DEAL_LEGIONAPP = 15077; // 处理军团申请
+	CMD_DISMISS_LEGION = 15078; // 解散军团
+	CMD_KICK_LEGIONMEMBER = 15079; //军团踢人
+	CMD_TRANSFER_LEGIONLEADER = 15080; // 转让军团团长
+	CMD_QUERY_LELGION_CONTRIBUTE = 15081; // 军团贡献查询
+	CMD_LEGION_CONTRIBUTE = 15082; // 军团贡献
+	CMD_LEGION_BLESS = 15083; // 军团祈福
+	CMD_QUERY_LEGIONPAY = 15084; // 军团俸禄查询
+	CMD_GET_LEGIONPAY = 15085; // 领取军团俸禄
+	CMD_OPEN_LEGIONSHOP = 15086; // 打开军团商店
+	CMD_REFRESH_LEGIONSHOP = 15087; // 刷新军团商店
+	CMD_SELECT_LEGIONSHOP = 15089; // 选择商店卡片
+	//CMD_GIVEUP_LEGIONSHOP = 15090; // 放弃商店
+	CMD_LEAVE_LEGION = 15091; // 离开军团
+	CMD_QUERY_OTHERLEGION = 15092; // 查询其他军团信息
+	CMD_CANCEL_LEGIONAPP = 15093; // 取消申请
+	//CMD_REFUSE_ALLAPP = 15094; // 忽略所有
+	
+	// 军团BOSS协议
+	CMD_UPDATE_LEGIONBOSS = 15095;  // 更新BOSS信息
+	CMD_QUERY_LEGIONBOSS = 15096; // 查询军团BOSS
+	CMD_CALL_LEGIONBOSS = 15097; // 召唤军团BOSS
+	CMD_CHEER_LEGIONBOSS = 15098; // 鼓舞
+	CMD_FIGHT_LEGIONBOSS = 15099; // 参战
+	CMD_LEGIONBOSS_RELIVE = 15100; // 复活
+	
+	//TODO: xionghai 2015-07-09 1601
+	//svn代码提交不完全, 导致无法编译通过, 暂时解除注释
+	// 军团领地战
+	/*CMD_QUERY_LEGIONBATTLE = 15101;  // 查询领地战界面
+	CMD_QUERY_BATTLEOWNER = 15102;   // 查询军团领地势力范围
+	CMD_QUERY_LASTBATTLE_LIST = 15103; // 查询上次战况
+	CMD_QUERY_SINGLE_LASTBATTLE = 15104; // 查询单个历史战况
+	CMD_REPORT_LEGIONBATTLE = 15105; // 宣战
+	CMD_JOIN_LEGIONBATTLE = 15106; // 参战
+	
+	// 军团领地战当前战况协议
+	CMD_QUERY_CURBATTLE_PAGE = 15107; // 查询当前战况(倒计时为0后客户端发起)
+	CMD_ADD_CURBATTLE_RECORD = 15108; // 通知增加当前新的战况(战斗触发)
+	CMD_UPDATE_CURBATTLE_SELFINFO = 15109; // 通知更新当前战况我的信息(我的战斗触发, 和肖总确认，去掉我的军团排名信息)
+	CMD_UPDATE_CURBATTLE_LEGIONINFO = 15110; // 通知更新当前所有军团信息(定时刷新)
+	CMD_QUERY_CURBATTLE_SELFRECORD = 15111; // 查询当前战场我的战报 (数量不多，每次查询全发)
+	CMD_COMM_QUERYBATTLE = 15112; // 通用查询战斗协议,和竞技场等公用
+	CMD_QUERY_CURBATTLE_HONORRANK = 15113; // 查询当前战斗荣誉排行
+	CMD_CLOSE_CURBATTLE_PAGE = 15114; // 关闭当前战斗页面,关闭后，服务器不主动同步实时信息了
+	*/
+
+	CMD_QUERY_LEGIONBATTLE = 15101;  // 查询领地战界面
+	CMD_QUERY_BATTLEOWNER = 15102;   // 查询军团领地势力范围
+	CMD_QUERY_LASTBATTLE_LIST = 15103; // 查询上次战况
+	CMD_QUERY_SINGLE_LASTBATTLE = 15104; // 查询单个历史战况
+	CMD_REPORT_LEGIONBATTLE = 15105; // 宣战
+	CMD_JOIN_LEGIONBATTLE = 15106; // 参战
+	
+	// 军团领地战当前战况协议
+	CMD_QUERY_CURBATTLE_PAGE = 15107; // 查询当前战况(倒计时为0后客户端发起)
+	CMD_ADD_CURBATTLE_RECORD = 15108; // 通知增加当前新的战况(战斗触发)
+	CMD_UPDATE_CURBATTLE_SELFINFO = 15109; // 通知更新当前战况我的信息(我的战斗触发, 和肖总确认，去掉我的军团排名信息)
+	CMD_UPDATE_CURBATTLE_LEGIONINFO = 15110; // 通知更新当前所有军团信息(定时刷新)
+	CMD_QUERY_CURBATTLE_SELFRECORD = 15111; // 查询当前战场我的战报 (数量不多，每次查询全发)
+	CMD_COMM_QUERYBATTLE = 15112; // 通用查询战斗协议,和竞技场等公用
+	CMD_QUERY_CURBATTLE_HONORRANK = 15113; // 查询当前战斗荣誉排行
+	CMD_CLOSE_CURBATTLE_PAGE = 15114; // 关闭当前战斗页面,关闭后，服务器不主动同步实时信息了
+	//modify end
+
+	// 查询历史信息
+	CMD_QUERY_LASTBATTLE_HONORRANK = 15115; // 查询上次战况荣誉排名
+	CMD_QUERY_LASTBATTLE_RECORD_PAGE = 15116; // 查询上次战况战斗页面
+	
+	// 补充查询军团宣战
+	CMD_QUERY_LEGIONBATTLE_REPORT = 15117; // 查询宣战情况
+	CMD_QUERY_LASTBATTLE_SELFRECORD = 15118; // 查询上次战况战报
+	
+	// 聊天协议
+	CMD_CHANNEL_CHAT = 15120; // 聊天
+	CMD_WHISPER = 15121; // 私聊
+	
+	// 礼包协议
+	CMD_QUERY_GIFT = 15200; // 查询礼包
+	CMD_GET_GIFT = 15201; // 领取礼包
+	
+	//爬塔副本
+	CMD_QUERY_CLIMBTOWERDETAIL = 15302; //查询爬塔副本基本信息
+	CMD_RESET_CLIMBTOWER = 15303;   //重置爬塔副本
+	CMD_CHALLENGE_TOWER = 15304;	//挑战
+	CMD_FAST_CHALLENGE_TOWER = 15305;	//快速挑战
+	CMD_TOWER_FAST_CHALLENGE_RESOULT = 15306; //快速挑战结算
+	CMD_TOWER_ADD_RESETCOUNT = 15307; //增加重置次数
+	
+	// 补个协议~~
+	CMD_LEGIONBOSS_END = 15400; // 军团BOSS结束
+	
+	// 竞技场协议
+	CMD_OPEN_ARENA = 15600; // 打开竞技场
+	CMD_QUERY_ARENA_AWARD = 15601; // 查询竞技场奖励
+	CMD_GET_ARENA_AWARD = 15602; // 领取竞技场奖励
+	CMD_QUERY_ARENA_RANK = 15603; // 查询竞技场排名
+	CMD_QUERY_ARENA_LOG = 15604; // 查询竞技场日志
+	CMD_ADD_ARENACHALLENGE = 15605; // 增加竞技场挑战次数
+	CMD_ARENA_FIGHT = 15606; // 竞技场挑战
+	
+	CMD_UPDATE_WORLDBOSS = 15700;  // 更新BOSS信息
+	CMD_QUERY_WORLDBOSS = 15701; // 查询世界BOSS
+	CMD_CHEER_WORLDBOSS = 15702; // 鼓舞
+	CMD_FIGHT_WORLDBOSS = 15703; // 参战
+	CMD_WORLDBOSS_RELIVE = 15704; // 复活
+	CMD_WORLDBOSS_END = 15705;
+	
+	//阵营战
+	CMD_CAMPBATTLE_OPEN = 15800;	//打开阵营战
+	CMD_CAMPBATTLE_JOIN = 15801;    //参战
+	CMD_CAMPBATTLE_CLOSE = 15802;   //关闭阵营战，（退出阵营战）
+	CMD_CAMPBATTLE_BATTLE_LOG = 15803; //下行阵营战战斗结果
+	CMD_CAMPBATTLE_REFREASH_RANKLIST = 15804; //刷新排行列表
+	CMD_CAMPBATTLE_REFREASH_ACTORDETAIL = 15805; //阵营战刷新玩家基本信息
+	CMD_CAMPBATTLE_REFREASH_TIME = 15806;    //刷新阵营战时间
+	CMD_CAMPBATTLE_JOIN_CANCLE = 15807;	   //取消参战
+	CMD_CMAPBATTLE_SYSTEM_CLOSE = 15808;	//服务器关闭阵营战，
+	
+	
+	CMD_BUY_PHYSTRENGTH = 15900; // 购买体力
+	
+	//好友系统
+	CMD_FRIENDSYSTEM_QUERY = 16000;						//打开好友界面查询好友信息
+	CMD_FRIENDSYSTEM_DELETE_FRIEND = 16003;				//删除好友
+	CMD_FRIENDSYSTEM_SEARCH_FRIEND = 16004;				//获取推荐好友
+	CMD_FRIENDSYSTEM_ADDORDELET_REQUESTFRIEND = 16005;	//同意或者拒绝请求
+	CMD_FRIENDSYSTEM_QUERY_FRIENDLIST = 16006;		//只查询好友列表
+	CMD_FRIENDSYSTEM_QUERY_REQUESTLIST = 16007;			//只查询请求列表
+	CMD_FRIENDSYSTEM_GIVE_PHYSTRENGTH = 16008;			//赠送体力值
+	CMD_FRIENDSYSTEM_GET_PHYSTENGTH	= 16009;			//领取体力值
+	CMD_FRIENDSYSTEM_REQUEST = 160010;				    //好友申请
+
+	//查看玩家基本信息
+	CMD_USENAME_FINED_ACTOR_INFO = 160011;				//通过名字查看玩家信息
+	CMD_USEPBPKROLE_FINED_ACTOR_INFO = 160012;			//通过PBPkRole查看玩家信息
+	
+	//客户端数据上浮控制
+	CMD_ATT_COMEUP = 160021;
+	
+	//跑马灯协议
+	CMD_MARQUEE = 160041;
+	
+	CMD_HERO_SANGONG = 160050; // 散功
+	CMD_QUERY_SANGONG = 160051; // 查询散功
+	
+	CMD_QUERY_ACTORINFO = 17000;
+	CMD_QUERY_FIGHTSOUL = 17001; // 空协议
+	CMD_QUERY_FIRSTFIGHT = 17002; // 查询第一场战斗
+	
+	CMD_NOTIFY_GUIDE = 17005; // 通知客户端新引导出现
+	CMD_GUIDE_FINISH = 17006; // 通知服务器完成引导
+	
+	CMD_TASK_QUERY_TASKINFO = 17010; //查看任务列表
+	CMD_TASK_GET_REWARD = 17011;	//获取任务奖励
+	
+	CMD_FIGHT_USEACTORSKILL = 17020; // 战斗中使用药物
+	
+	CMD_FIGHT_PLAYFINISH = 17021;
+	CMD_FIGHT_QUIT = 17022; // 撤退，仅仅在FB和爬塔中有效
+	
+	CMD_GODANIMAL_DETAIL_BYID = 17030; // 获取神兽详情
+	
+	CMD_GODANIMAL_ANIMALSOUL_QUERY = 17040;  // 查询神兽 兽魂
+	CMD_GODANIMAL_ANIMALSOUL_ACTIVE = 17041; //激活神兽 兽魂
+	CMD_GODANIMAL_ANIMALSOUL_SELL = 17042;   //出卖 神兽
+	
+	CMD_QUERY_HEROCONVERT = 17050; // 轮回查询空协议，仅仅用于客户端功能未开启提示
+	
+	CMD_ACTOR_VIPLEVELUP = 17051;
+	
+	CMD_TASKSYSTEM_NEWTASKOPEN = 17052;   //有新开的任务
+	
+	CMD_TASKSYSTEM_NEWTASKFINISH = 17053;	//有新任务完成
+	
+	
+	CMD_NEWPASS_SECTION = 17055;  // 新开启章节通关
+	
+	CMD_HEROSYSTEM_SELLHERO = 17056; //英雄出售
+	
+	CMD_HERO_COVERT_OPEN = 17058; //轮回界面开启顺序
+	
+	CMD_EQUIP_BAG = 17060; // 下发装备包裹信息
+	CMD_QUERY_HEROEQUIP = 17061; // 查询英雄装备
+	CMD_EQUIP_MOVE = 17062; // 装备移动
+	CMD_EQUIPCONTAINER_CHG = 17063; // 装备栏变化
+	CMD_EQUIP_SELLBYPOS = 17064; // 出售单件装备
+	CMD_EQUIP_SELLBYQUALITY = 17065; // 按照品质出售
+	CMD_EQUIP_COMBINE = 17066; // 装备合成
+	CMD_QUERY_EQUIPDESC_BYID = 17067; // 根据装备ID查看详情
+	CMD_QUERY_EQUIPSOURCE = 17068; // 查询装备来源
+	
+	CMD_DELETE_HEROS = 17070;		//批量删除英雄
+	
+	CMD_FIGHTSOUL_AUTOPRACTICE = 17071; // 自动修炼
+	
+	CMD_EQUIP_SUITSTATE_UPDATE = 17072; // 套装属性更新
+	
+	CMD_EQUIP_QUERYENHANCE = 17073; // 查询装备强化信息
+	
+	CMD_EQUIP_ENHANCE = 17074; // 装备强化
+	
+	CMD_EQUIP_CHIPSELL = 17076; // 装备碎片出售
+	
+	CMD_EQUIP_CHIPCOMBINE = 17077; // 装备碎片合成
+	CMD_DUNGEON_SAODANG = 17078; // FB扫荡
+	
+	CMD_QUERY_MAILLIST = 17079; // 查询邮件列表
+	
+	CMD_QUERY_MAILDESC = 17080; // 查询邮件详情
+	
+	CMD_GET_MAILAWARD = 17081; // 提取附件
+	
+	CMD_DREAMLAND_OPEN_REQSECTON = 17090;		//进入幻境
+	CMD_DREAMLAND_RESET = 17091;   //重置
+	CMD_DREAMLAND_QUERY_SCENEINFO = 17092;  //查询章节的关卡信息
+	CMD_DREAMLAND_QUERY_SCENEFORMATION = 17093;  //查看守关玩家阵型
+	CMD_DREAMLAND_REQUEST_OPENBOX = 17084;   //请求打开宝箱
+	CMD_DREAMLAND_GETACTOR_FORMATION_INFO = 17095; //获取玩家布阵相关信息（ 死亡英雄 ，及上阵次数等信息）
+	CMD_DREAMLAND_FORMATION_CHG = 17086;  //玩家布阵改变
+	CMD_DREAMLAND_REQUEST_FIGHT = 17097; //请求战斗
+	CMD_DREAMLAND_QUERY_BOX = 17098;	//请求查看宝箱
+
+	CMD_HERO_CONVERT_CONFIRM = 17200; // 确认转换
+	CMD_HERO_SOULCHG = 17201; // 英雄魂魄变化
+	
+	CMD_HERO_TALLENT_LEVELUP = 17202; // 天赋升级
+	CMD_HERO_TALLENT_UPDATE = 17203; // 天赋更新
+	
+	CMD_ITEM_SELLITEM = 17204;	 //背包物品出卖
+	
+	CMD_COMMON_GETHERO = 17205;	//获取英雄通用接口
+	
+	CMD_CHG_ACTOR_HEAD = 17206;	//修改玩家头像
+	
+	CMD_EQUIP_RONGLIAN = 17207;	// 装备熔炼
+	
+	CMD_EQUIP_XILIAN_DATA 		= 17208;	// 请求洗练数据
+	CMD_EQUIP_XILIAN_GEN 		= 17209;	// 洗练请求(GEN = Generate)
+	CMD_EQUIP_XILIAN_REPLACE 	= 17210;	// 替换请求
+	CMD_EQUIP_XILIAN_TRANSFER 	= 17211;	// 洗练属性转移
+	CMD_EQUIP_XILIAN_BUYLOCK 	= 17212;	// 请求购买洗炼锁
+	
+	//新领地协议
+	CMD_MANOR_QUERY = 17300;					//查询领地信息
+	CMD_MANOR_RES_USE_GOLD_LEVELUP = 17301; 	//使用金币快速升级
+	CMD_MANOR_RES_COMMON_LEVELUP = 17302;		//普通升级
+	CMD_MANOR_RES_HARVEST = 17303;         		//收取矿
+	CMD_MANOR_WUHUNDIAN_QUERY = 17304;	   		//查询武魂殿
+	CMD_MANOR_WUHUNDIAN_LEVELUP = 17305;		//武魂殿升级
+	CMD_MANOR_WUHUNDIAN_BEGIN_PRODUCT = 17306; 	//武魂殿开始祭奠
+	CMD_MANOR_WUHUNDIAN_WUXIEKEJIE = 17307;		//武魂殿无懈可击
+	CMD_MANOR_WUHUNDIAN_REFRESH = 17308;		//刷新武魂殿
+	CMD_MANOR_TIEJIANGPU_QUERY = 17309;			//铁匠铺查看
+	CMD_MANOR_TIEJIANGPU_LEVELUP = 17310;		//铁匠铺升级
+	CMD_MANOR_TIEJIANGPU_REFRESH = 17311;		//铁匠铺刷新
+	CMD_MANOR_TIEJIANGPU_BEGIN_PRODUCT = 17312;	//铁匠铺开始生产
+	CMD_MANOR_TIEJIANGPU_WUXIEKEJI = 17313;		//铁匠铺物品设置无懈可击
+	CMD_MANOR_QUERY_LOG = 17314;				//查看领地日志
+	CMD_MANOR_REVENGE = 17315;					//报复
+	CMD_MANOR_PUBLISH = 17316;					//悬赏发布
+	CMD_MANOR_WUHUNDIAN_BULID_ADDSPEED = 17317;	//武魂殿加速升级
+	CMD_MANOR_TIEJIANGPU_BULID_ADDSPEED = 17318;	//铁匠铺加速升级
+	CMD_MANOR_REQUEST_LOOT = 17319;					//请求掠夺对象
+	CMD_MANOR_REQUEST_LOOT_BATTLE = 17320;			//请求掠夺战斗
+	CMD_MANOR_WUHUNDIAN_ONEKEY_HARVEST = 17321;		//武魂殿一键收取
+	CMD_MANOR_TIEJIANGPU_ONEKEY_HARVEST = 17322;	//铁匠铺一键收取
+	
+	// 英雄新版协议
+	CMD_HERO_CALLHERO = 17800; // 召唤英雄
+	CMD_HERO_EQUIP_FAVORITE = 17801; // 装备喜好品
+	CMD_HERO_COMBINE_FAVORITE = 17802; // 合成喜好品
+	CMD_HERO_QUALITY_UP = 17803; // 升级品质
+	
+	//新商城系统
+	CMD_SHOPSYSTEM_RANDITEMORHERO = 17901;	//抽取
+	CMD_SHOPSYSTEM_HONORCONVERT_QUERY = 17902;	//查询荣誉兑换
+	CMD_SHOPSYSTEM_HONORCONVERT_REFRESH = 17903;	//刷新武魂兑换
+	CMD_SHOPSYSTEM_HONORCONVERT_CONVERT = 17904;	//兑换物品
+	
+	CMD_GODANIMAL_EMPTY = 17905;			//神兽空协议
+	
+	CMD_NOTICE_CLIENT_PUSHVIP_SCENE = 17906;	
+	
+	//新竞技场增加协议
+	
+	CMD_ARENA_CHANGE_CHALLENGELIST = 17907; //刷新挑战列表
+	CMD_ARENA_RESET = 17908;				//重置倒计时
+	
+	CMD_CHAT_CHANNEL_QUERY = 17909;			//世界频道查询
+	
+	CMD_COINTREE_SHAKE_QUERY = 17910;		//查询摇一摇
+	CMD_COINTREE_SHAKE = 17911;				//瑶瑶
+	CMD_FRIENDSYSTEM_ONEKEY_GET_STRENGTH = 17912;	//好友系统一键收取体力
+	
+	CMD_NEED_SILVER = 18000;  // 需要银币
+	CMD_NEED_HEROEXP = 18001; // 需要修为
+	
+	CMD_SEND_COVERT_CODE = 18002;	//兑换码
+	
+	CMD_REQUEST_REFRESHGOLD = 18010; // 刷新金币
+	
+	CMD_QUERY_CANSAVEMONEY = 18011; // 查询是否可充值
+	
+	CMD_TBT_GETUUID = 18012;	//获取同步推UUID
+	
+	//军团
+	CMD_DEAL_LEGIONAPP_ONEKEY = 18013; //军团请求 一键忽略
+	CMD_LEGION_APPOINT = 18014;			//军团任命
+	
+	CMD_LEGION_QUERY_WORSHIP = 18015;	//查询军团膜拜信息
+	CMD_LEGION_WORSHIP_MEMBER = 18016;  //膜拜
+	CMD_LEGION_GET_WORSHIP_REWARD = 18017; //领取膜拜奖励
+	
+	CMD_SHOPSYSTEM_QUERY = 18018;	//查询商城信息
+	CMD_PAYMENT_FIRST_PAY = 18019;	//领取首冲奖励
+	CMD_PAYMENT_QUERY = 18020;	//查询充值列表
+	CMD_PAYMENT_FIRST_QUERY = 18021; // 查询首冲
+	
+	CMD_EQUIPDUNGEON_QUERY_EQUIPINFO = 18100; // 查看翻牌可获得的装备信息
+	CMD_EQUIPDUNGEON_FP = 18101; // 翻牌
+	
+	//签到
+	CMD_OPERATESYSTEM_QUERY_CHECKIN = 18200; //查询签到
+	CMD_OPERATESYSTEM_CHECKIN = 18201; //签到
+	
+	CMD_NOTICE_CLIENT_TOLEVELUP_VIP = 18202; //通知客户端去升级VIP
+	
+	CMD_TASK_GET_VIGOR = 18203;	//领取精力
+	
+	CMD_NOTICE_LEGOIN_MEMBER_OUTLEGION = 18204; //玩家被踢出，或者军团解散
+	
+	CMD_MANORSYSTEM_QUERY_PROTECT = 18205;		//查询保护
+	
+	CMD_MANORSYTEM_BUY_PROTECT = 18206;		  //购买保护时间
+	
+	CMD_QUERY_OPERATE_ACTIVE = 18207;		//查询运营活动
+	CMD_QUERY_GROWUP_DETAIL = 18211;
+	CMD_BUY_GROWUP_PLAN = 18212;
+	CMD_GET_GROWUP_REWARD = 18213;
+	
+	CMD_QUERY_ACCOUNT_PAYMENT_DETAIL = 18214;   //查询累积充值
+	CMD_GET_ACCOUNT_PAYMENT_REWARD = 18215;
+	
+	CMD_GET_MONTHCARD_REWARD = 18216;
+	
+	CMD_CANBUY_MONTHCARD = 18217;   //查询是否能买月卡
+	
+	CMD_OPERATE_TELPHONE_STREAM = 18218; //运营活动求流量
+	
+	//CMD_NOTICE_CLIENT_PUSHVIP_SCENE_COMMON = 18218;	
+	
+	CMD_QUERY_ACCOUNT_LOGIN_IN = 18219;		//查询登陆奖励详情
+	CMD_GET_ACCOUNT_REWARD = 18220;			//获取登陆奖励
+	
+	//CMD_VIVO_ALOGIN = 18221;
+	CMD_VIVO_BUY_GOOD = 18222;		//购买VIVO商品
+	CMD_IOS_BUY_GOODS = 18223;		// IOS 购买商品
+	
+	CMD_QUERY_DAY_PAYMENT_DETAIL 	= 18224;	// 查询日充值活动详细数据
+	CMD_GET_DAY_PAYMENT_REWARD		= 18225;	// 获取日充值活动奖励
+};
+
+enum LoginResult
+{
+	en_LoginResult_OK = 0;
+	en_LoginResult_SuggestUpdata = 1;  // 建议更新
+	en_LoginResult_MustUpdata = 2;     // 强制更新
+	en_LoginResult_RoleOnLine = 3;     // 角色已经在线
+};
+
+enum NewRoleResult
+{
+	en_NewRole_OK = 0;
+	en_NewRole_Fail = 1;
+	en_NewRole_DunplicateName = 2; // 重名
+};
+
+enum GetRoleResult
+{
+	en_GetRole_OK = 0;
+	en_GetRole_NoRole = 1;
+	en_GetRole_Error = 2;
+};
+
+enum BagChgType
+{
+	en_BagChg_Add = 0;
+	en_BagChg_StackCountChg = 1;
+	en_BagChg_Del = 2;
+};
+
+// 技能命中结果
+enum SkillHitResult
+{
+	en_SkillHitResult_Begin = 0;
+	en_SkillHitResult_Hit = 1;		// 命中
+	en_SkillHitResult_Knock = 2;		// 暴击
+	en_SkillHitResult_Doge = 3;		// 闪避
+	en_SkillHitResult_Block = 4;		// 抵挡
+	en_SkillHitResult_ImMunity = 5; // 免疫
+	en_SkillHitResult_End = 6;
+};
+
+enum FightType
+{
+	en_FightType_Begin = 0;
+	en_FightType_Scene = 1;  // 关卡战斗
+	en_FightType_Boss = 4; // BOSS
+	en_FightType_LegionCity = 5; // 军团领地
+	en_FightType_Arena = 6; //竞技场战斗
+	en_FightType_ClimbTower = 7; //爬塔副本
+	en_FightType_CampBattleFactory = 8; //阵营战副本
+	en_FightType_FirstFight = 9; // 首场战斗\
+	en_FightType_ClimbTower_FASTCHANGE = 10; //爬塔快速挑战
+	en_FightType_DreamLand = 11; //九天幻境
+	en_FightType_ManorSystem = 12; //领地掠夺
+	en_FightType_EquipScene = 13; // 装备FB
+};
+
+enum ItemType
+{
+	en_ItemType_Item = 0; // 物品
+	en_ItemType_Equip = 1; // 装备
+	en_ItemType_Material = 3; // 装备碎片
+	en_ItemType_Favorite = 4;
+};
+
+enum BagType
+{
+	en_BagType_Item = 0; // 物品背包
+	en_BagType_Materail = 2; // 装备碎片背包
+};
+
+enum CommQuality
+{
+	en_Quality_Begin = 0;
+	en_Quality_White = 1;   // 白色
+	en_Quality_Green = 2;  // 绿色
+	en_Quality_Blue = 3;  // 蓝色
+	en_Quality_Pure = 4;  // 紫色
+	en_Quality_Gold = 5; //  金色
+	en_Quality_Red = 6; // 红色
+	en_Quality_End = 7;
+};
+
+enum ErrorCodeType
+{
+	en_ErrorCodeType_Normal = 0; // 普通错误码
+	en_ErrorCodeType_Float = 1;  // 上浮类型
+};
+
+message Cmd_Sc_Error
+{
+	required string strErrorMsg = 1;
+	optional int32 iType = 2;  // 错误码类型，待扩展
+};
+
+message Cmd_Cs_Alogin
+{
+	required int32 iIsVersionCheck = 1;
+	required int32 iVersionType = 2;
+	required int32 iVersionMain = 3;
+	required int32 iVersionFeature = 4;
+	required int32 iVersionBuild = 5;
+	
+	required string strChannelFlag = 6;
+	
+	optional string strChannel = 7;   // 渠道标识
+	optional string strAccessKey = 8;
+	optional string strPayToken = 9;
+	optional string strPf = 10;
+	optional string strPfKey = 11;
+	
+	optional string strChannelId = 12;
+	optional string strUserId = 13;
+	optional string strToken = 14;
+	optional string strProductCode = 15;
+	optional string strChannelLabel = 16;
+};
+
+message CMD_REQUEST_REFRESHGOLD_CS
+{
+	required string strChannel = 1;   // 渠道标识
+	optional string strAccessKey = 2;
+	optional string strPayToken = 3;
+	optional string strPf = 4;
+	optional string strPfKey = 5;
+};
+
+
+message Cmd_Sc_Alogin
+{
+	required int32 iResult = 1;   // 登录结果LoginResult
+	required string strMd5 = 2;   // bin文件md5文件的md5代码
+	optional string strUrl = 3;   // 如果强制或者建议更新，需要填写URL
+};
+
+
+message Cmd_Sc_GetRole
+{
+	required int32 iResult = 1;
+	optional RoleBase roleBaseData = 2;
+};
+
+enum enHeadType
+{
+	en_HeadType_none = 0;
+	en_HeadType_Hero = 1;
+	en_HeadType_GodAnimal = 2;
+};
+
+message RoleBase
+{
+	required uint32 dwObjectID = 1;
+	required int32 iLevel = 2;
+	required int32 iExp = 3;
+	required string strName = 4;
+	required int32 iPhystrength = 5;
+	required int32 iSilver = 6;
+	required int32 iGold = 7;
+	optional int32 iHeroConvertCount = 8; // 当天英雄转换次数
+	repeated PropItem szPropList = 9; // 其他属性集
+	optional int32 iLevelUpExp = 10;
+	optional int32 iVipLevel = 11;
+	optional int32 iVipExp = 12;
+	optional int32 iVipLevelUpExp = 13;
+	optional enHeadType iHeadType = 14;
+	optional int32 iHeadId = 15;
+	optional string strLegionName = 16; //军团名字
+	optional bool bShowFirstPayBtn = 17; //是否显示首冲按钮
+};
+
+
+// 这里只下发英雄基础信息
+
+/*message HeroSoulInfo
+{
+	required int32 iHeroID = 1;
+	required int32 iSoulCount = 2;
+};*/
+
+message Cmd_Sc_HeroList
+{
+	repeated HeroBaseData szHeroList = 1;
+	//repeated HeroSoulInfo szSoulList = 2;
+};
+
+message Cmd_Sc_HeroUpdate
+{
+	required HeroBaseData heroData = 1;
+};
+
+message Cmd_Sc_HeroDel
+{
+	required uint32 dwObjectID = 1;
+};
+
+message Cmd_Cs_GetHeroDesc
+{
+	required uint32 dwObjectID = 1;
+};
+
+message SkillInfo
+{
+	required int32 iSkillID = 1;
+	required bool bActive = 2;
+};
+
+message Cmd_Sc_GetHeroDesc
+{
+	required uint32 dwObjectID = 1;			// OBJID
+	repeated PropItem szPropList = 2;  // 属性集
+	repeated SkillInfo szSkillList = 3; // 技能列表
+	optional int32 iAttGrow = 4;
+	optional int32 iMaxHPGrow = 5;
+	repeated PropItem szPropAddValueList = 6; // 增加值
+	optional int32 iDefGrow = 7;
+};
+
+
+message HeroTallent
+{
+	required int32 iTallentID = 1;
+	optional int32 iLevel = 2;
+	optional bool bCanUpgrade = 3; // 技能是否可升级
+};
+
+message HeroFavoriteDesc
+{
+	required int32 iItemID = 1;
+	required int32 iPos = 2;
+};
+
+message HeroBaseData
+{
+	required uint32 dwObjectID = 1;
+	required int32 iHeroID = 2;
+	required int32 iLevel = 3;    // 等级
+	required int32 iLevelStep = 4; // 等阶
+	required int32 iFightValue = 5; // 战力
+	optional int32 iMaxHP = 6; // 英雄生命
+	optional int32 iAtt = 7; // 攻击
+	repeated PropItem szPropList = 8;
+	repeated HeroTallent szTallentList = 9; // 天赋列表
+	repeated HeroFavoriteDesc szFavoriteList = 10; // 已经装备的喜好品
+	optional int32 iQuality = 11;
+	optional int32 ipos = 12;
+};
+
+message Cmd_Cs_NewRole
+{
+	required string strRoleName = 1;
+};
+
+message Cmd_Sc_NewRole
+{
+	required int32 iResult = 1;
+};
+
+message Cmd_Sc_Kickoff
+{
+	required int32 iReason = 1;
+};
+
+message Cmd_Cs_CheckActorName
+{
+	required string strAcorName = 1;
+};
+
+
+message Cmd_Sc_CheckActorName
+{
+	required int32 iIsOk = 1;
+};
+
+//编队物器数据
+message FormationItemData
+{
+	required uint32 dwObjectID = 1;
+	required int32 iPos = 2;
+};
+
+//编队数据
+message Cmd_Sc_FormationData
+{
+	repeated FormationItemData szFormationList = 1;
+	required int32 iMemberLimit = 2; // 上阵人数限制
+	required int32 iFightValue = 3;  // 总战力
+};
+//编队
+message Cmd_Cs_FormationChg
+{
+	repeated FormationItemData szFormationList = 1;
+};
+
+//GM消息
+
+message Cmd_Cs_GmMsg
+{
+	required string strCmd = 1;
+};
+
+
+// 战斗相关数据
+
+enum FightActionType
+{
+	en_FightAction_Begin = 0;
+	en_FightAction_Skill = 1; // 技能Action
+	en_FightAction_DelBuff = 2; // 删除Buff
+	en_FightAction_ReplaceMember = 3; // 替换上阵队员
+	en_FightAction_Dlg = 4; // 对话Action
+	en_FightAction_GuideUseItem = 5; // 引导吃药Action
+};
+
+enum FightResultType
+{
+	en_FightResult_Begin = 0;
+	en_FightResult_SkillDamage = 1; // 伤害Result
+	en_FightResult_BackDamage = 2; // 反击伤害
+	en_FightResult_PropChg = 3; // 属性变化
+	en_FightResult_AddBuff = 4; // 添加Buff
+	en_FightResult_DelBuff = 5; // 删除Buff
+	en_FightResult_Relive = 6; // 复活Result
+	en_FightResult_CreateItem = 7; // 产出一个药物
+	en_FightResult_UseActorSkill = 8;
+	en_FightResult_SyncHP = 9; // 同步HP
+	en_FightResult_ZiBao = 10; // 自爆
+};
+
+enum Shop_CostType			//消耗类型
+{
+	en_Shop_CostType_Silver = 1; //消耗银币
+	en_Shop_CostType_Gold = 2;//消耗元宝
+	en_Shop_CostType_HeroExp = 3; //消耗修为
+	en_Shop_CostType_Honor = 4; //消耗荣誉
+};
+
+enum Shop_GoodType  //商店商品类型
+{
+	en_ShopType_LifeAttType = 1;
+	en_Shop_GoodType_Hero = 2;    //英雄
+	en_Shop_GoodType_GodAnimal = 3; //神兽
+	en_Shop_GoodType_Item = 4;         //道具
+};
+
+//副本类型
+
+enum Section_Type
+{
+	en_SectionType_Normal = 0; // 普通FB
+	en_SectionType_Equip = 1; // 装备FB
+};
+
+//数值类型
+
+enum LifeAtt
+{
+	en_LifeAtt_Begin = 0;
+	en_LifeAtt_Silver = 1;
+	en_LifeAtt_Gold = 2;
+	en_LifeAtt_Exp = 3;
+	en_LifeAtt_HeroExp = 4;  // 修为
+	en_LifeAtt_MaxHP = 5;  // 生命
+	en_LifeAtt_Att = 6;   // 攻击
+	en_LifeAtt_Doge = 7;  // 闪避
+	en_LifeAtt_Hit = 8;   // 命中
+	en_LifeAtt_AntiKnock = 9; // 韧性
+	en_LifeAtt_Knock = 10; // 暴击
+	en_LifeAtt_Block = 11; // 抵挡
+	en_LifeAtt_Wreck = 12; // 破击
+	en_LifeAtt_Armor = 13; // 护甲
+	en_LifeAtt_Sunder = 14; // 破甲
+	en_LifeAtt_InitAnger  =15; // 初始怒气
+	en_LifeAtt_FSChipCount = 16;  // 武魂碎片数量
+	en_LifeAtt_PhyStrength = 17;  // 体力
+	en_LifeAtt_HeroConvertCount = 18; // 英雄当天转换次数
+	en_LifeAtt_FunctionMask = 19; // 功能位
+	en_LifeAtt_Honor = 20; // 荣誉
+	
+	en_LifeAtt_HP = 21; // 用于战斗显示
+	en_LifeAtt_PhyStrengthLimit = 22; // 体力上限
+	en_LifeAtt_VIPLevel = 23;  // VIP等级
+	en_LifeAtt_Anger = 24; // 怒气
+	en_LifeAtt_FightValue = 25; // 战力
+	en_LifeAtt_HasFightSoul = 26; // 英雄是否有武魂
+	en_LifeAtt_VIPEXP = 27;
+	en_LifeAtt_Notice = 28;		//提示引导位
+	en_LifeAtt_SkillDamage = 29; // 绝技伤害
+	en_LifeAtt_SkillDef = 30; // 绝技防御
+	en_LifeAtt_HasEquip = 31; // 是否有装备
+	en_LifeAtt_Price = 32;	//英雄价钱
+	en_LifeAtt_actorhead = 33; //玩家头像
+	en_LifeAtt_actorheadtype = 34 ; //玩家头像类型
+	en_LifeAtt_actorVigor = 35;
+	
+	en_LifeAtt_Quality = 36; // 品质
+	en_LifeAtt_Def = 37; // 防御
+	en_LifeAtt_LeftPhyStrength = 38; //已购买次数
+	
+	en_LifeAtt_Contribute = 39;	//荣誉
+	en_LifeAtt_KnockDamage = 40; // 暴击伤害(展示用)
+	en_LifeAtt_KnockXiXue = 41; // 暴击吸血(展示用)
+	en_LifeAtt_ConAttackRate = 42; // 连击(展示用)
+	en_LifeAtt_ShowFristPayBtn = 43;
+	
+	en_LifeAtt_End = 44;
+};
+
+//通知类型
+
+enum enNoticeGuid
+{
+	en_NoticeGuid_TASK = 0;
+	en_NoticeGuid_SHOP = 1;
+	en_NoticeGuid_Friend = 2;
+	en_NoticeGuid_Formation = 3;
+	en_NoticeGuid_LevelUp = 4;
+	en_NoticeGuid_StepLevelUp = 5;
+	en_NoticeGuid_HaveGift = 6;
+	en_NoticeGuid_HaveMail = 7;
+	en_NoticeGuid_ArenaHaveNewLog = 8;
+	en_NoticeGuid_ManorHaveWuHun = 9;
+	en_NoticeGuid_ManorHaveItem = 10;
+	en_NoticeGuid_ManorHaveNewLog = 11;
+	en_NoticeGuid_TASK_Line = 13;	//主线盒支线任务提示
+	en_NoticeGuid_FirstPayMent = 14;
+	en_NoticeGuid_CheckIn = 15;
+	en_NoticeGuid_Legion_Worship = 16;	//膜拜
+	en_NoticeGuid_Legion_Salary = 17;	//军团俸禄
+	en_NoticeGuid_Legion_HaveRequest = 18; //有军团请求
+	en_NoticeGuid_GrowUpHaveReward = 19; //成长计划可领奖
+	en_NoticeGuid_ACCPaymentHaveReward = 20; //累积充值可领奖
+	en_NoticeGuid_ALL = 21;
+	
+};
+
+//功能类型
+enum enFunction
+{
+	en_Function_Legion = 1; // 军团功能
+	en_Function_GodAnimal = 3; // 神兽
+	en_Function_Arena = 4; // 竞技场
+	en_Function_Friend = 5;  // 好友
+	en_Function_FightSoul = 7;   // 武魂
+	en_Function_ClimTower = 9; // 爬塔
+	en_Function_CampFight = 10;  //阵营战
+	en_Function_HeroCvt = 11; // 英雄转换(轮回)
+	en_Function_DreamLand = 12; //九天幻境
+	en_Function_Manor = 13;
+	en_Function_EquipDungeon = 14; // 装备和装备FB
+	en_Function_EquipXilian = 15;	// 装备洗炼
+};
+
+
+//战斗英雄消息
+
+message FightHero
+{
+	required int32 iBaseID = 1;
+	required int32 iLevel = 2;			// 等级
+	required int32 iLevelStep = 3;		// 等阶
+	required int32 iMaxHP = 4;
+	required int32 iInitAnger = 5;     //初始怒气
+	optional int32 iHP = 6;
+	optional int32 iQuality = 7;       //品质
+};
+
+//战斗怪物消息
+
+message FightMonster
+{
+	required int32 iBaseID = 1;
+	required int32 iLevel = 2;
+	required int32 iLevelStep = 3;		// 等阶
+	required int32 iMaxHP = 4;
+	required int32 iInitAnger = 5;
+	optional int32 iHP = 6;
+};
+
+//战斗神兽
+message FightGodAnimal
+{
+	required int32 iBaseID = 1;
+	required int32 iLevel = 2;			// 等级
+	required int32 iLevelStep = 3;		// 等阶
+	required int32 iMaxHP = 4;
+	required int32 iInitAnger = 5;
+};
+
+//战斗角色
+message FightObj
+{
+	required int32 iObjectType = 1;
+	required int32 iPos = 2;
+	optional FightHero hero = 3;
+	optional FightMonster monster = 4;
+	optional int32 iFinHP = 5;
+	optional FightGodAnimal godAnimal = 6;
+};
+
+//替换成员动作
+message ReplaceMemberAction
+{
+	required bool bAttackerReplace = 1;
+	repeated FightObj szNewFightObject = 2;
+	optional bool bFinalFight = 3; // 是否最后一波怪物,只在爬塔和FB有效
+};
+
+//战斗技能动作
+message FightSkillAction
+{
+	required int32 iAttackerPos = 1;
+	required int32 iSkillID = 2;
+	required int32 iAngerAfterSkill = 3; // 攻击者释放后怒气
+	optional int32 iAGodAnimalAnger = 5;
+	optional int32 iTGodAnimalAnger = 6;
+	optional bool bIsStageSkill = 7; // 是否登场技能
+};
+
+
+// FightResulSet 是一个最小播放集合单元
+message FightResulSet
+{
+	repeated FightResult szResult = 1;
+	optional bool bContinueSkill = 2; // 是否连击
+	optional bool bContinueKill = 3; // 是否连杀
+};
+
+// FightResult 是一个最小播放单元
+message FightResult
+{
+	required int32 iResultType = 1;
+	optional FightSkillDamageResult damageResult = 2;
+	optional FightBackDamageResult backResult = 3;
+	optional FightPropChgResult propChgResult = 4;
+	optional FightAddBuffResult addBuffResult = 5;
+	optional FightDelBuffResult delBuffResult = 6;
+	optional ReliveResult reliveResult = 7;
+	optional FightCreateItemResult createItemResult = 8;
+	optional FightUseActorSkillResult useActorSkillResult = 9;
+	optional FightSyncHPResult syncHPResult = 10;
+	optional FightZiBaoResult zibaoResult = 11;
+};
+
+message FightZiBaoResult
+{
+	required int32 iPos = 1;
+};
+
+//同步血量结果
+message FightSyncHPResult
+{
+	required int32 iTargetPos = 1;
+	required int32 iHP = 2;
+	optional int32 iAnger = 3;
+};
+
+//创建物品结果
+
+message FightCreateItemResult
+{
+	required int32 iResultItemCount = 1;
+	optional int32 iTargetPos = 2;
+	optional int32 iCreateItemCount = 3;
+};
+
+//角色技能类型
+
+enum ActorSkillDefine
+{
+	en_ActorSkill_Damage = 1;
+	en_ActorSkill_Heal = 2;
+	en_ActorSkill_Control = 3;
+};
+
+message FightUseActorSkillResult
+{
+	required int32 iResultItemCount = 1;
+};
+
+// 添加状态Result
+//战斗添加buff
+message FightAddBuffResult
+{
+	required int32 iTargetPos = 1;
+	required int32 iBuffID = 2;
+};
+
+//删除buff
+message FightDelBuffResult
+{
+	required int32 iTargetPos = 1;
+	required int32 iBuffID = 2;
+};
+
+// 复活Result
+message ReliveResult
+{
+	required int32 iTargetPos = 1;
+	required int32 iLifeAtt = 2;
+	required int32 iChgValue = 3;
+	optional int32 iResultValue = 4; // 最终值(当为HP的时候有效)
+};
+
+// 吸血Result
+message FightPropChgResult
+{
+	required int32 iTargetPos = 1;
+	required int32 iLifeAtt = 2;
+	required int32 iChgValue = 3;
+	optional int32 iResultValue = 4; // 最终值(当为HP的时候有效)
+};
+
+// 普通技能伤害Result
+message FightSkillDamageResult
+{
+	required int32 iTargetPos = 1;
+	required int32 iHitResult = 2;
+	required int32 iDamageHP = 3;  // 正数为伤害，负数为治疗
+	required int32 iResultHP = 4;  // 被伤害者最终HP(播放完设置)
+	required int32 iResultAnger = 5; // 被伤害者最终怒气(播放完设置)
+};
+
+// 反击Result
+message FightBackDamageResult
+{
+	required int32 iAttackPos = 1;  // 注意，这里的位置是发起反击者的位置,目标是SkillAction里的位置
+	required int32 iDamageHP = 2;  // 正数为伤害，负数为治疗
+	required int32 iTargetResultHP = 3;  // 被伤害者最终HP(播放完设置)
+	required int32 iBackSkillID = 4;  // 反击技能ID
+};
+
+// FightAction 通用类
+message FightAction
+{
+	required int32 iActionType = 1;
+	optional FightSkillAction skillAction = 2;
+	optional FightDelBuffAction delBuffAction = 3;
+	optional ReplaceMemberAction replaceMemberAction = 4;
+	repeated FightResulSet szResultSet = 5;
+	optional int32 iActionIndex = 6;
+	optional DialogAction dlgAction = 7; // 对话文字Action
+};
+
+//对话动作
+message DialogAction
+{
+	required int32 iDlgID = 1; // 对话ID, 目前具体说话的英雄头像和文字内容都由策划和客户端确定
+};
+
+//删除buff动作
+message FightDelBuffAction
+{
+	required int32 iTargetPos = 1;
+	required int32 iBuffID = 2;
+};
+
+//战斗消息头
+message FightHead
+{
+	required int32 iHeadID = 1;
+	required string strActorName = 2;
+	optional int32 iLevel = 3;
+	//optional int32 iFightValue = 4;
+};
+
+message FightDataAll
+{
+	repeated FightObj szFightObject = 1;  // 战斗参与者
+	repeated FightAction szFightAction = 2; // 战斗Action
+	optional int32 iFightType = 3;
+	optional int32 iSceneID = 4;
+	required int32 iIsAttackerWin = 5;
+	optional int32 iCurItemCount = 6; // 当前药物个数,计算中的数值
+	optional bool bOnlyOneFight = 7; // 是否只有一场战斗，仅在FB和爬塔战斗有效
+	optional int32 iInitItemCount = 8; // 初始药物数量
+	optional FightHead leftHead = 9;  // 左边头像(PVP才有)
+	optional FightHead rightHead = 10; // 右边头像(PVP才有)
+};
+
+//战斗成员
+message Cmd_Sc_FightMember
+{
+	repeated FightObj szFightObject = 1;  // 战斗参与者
+	optional int32 iFightType = 2;
+	optional int32 iSceneID = 3;
+	required int32 iIsAttackerWin = 4;
+	optional bool bCanUseActorSkill = 5;  // 是否可以吃药
+	optional int32 iItemCount = 6;
+	optional bool bCanSkipBattle = 7; // 是否可跳过战斗
+	optional bool bFinalFight = 8; // 是否最后一波怪物 // 是否最后一场战斗，只在FB和爬塔有效
+	optional FightHead leftHead = 9;  // 左边头像(PVP才有)
+	optional FightHead rightHead = 10; // 右边头像(PVP才有)
+};
+
+//战斗动作
+message Cmd_Sc_FightAction
+{
+	required FightAction singleAction = 1; // 单个Action数据下发
+};
+
+//物品信息
+message ItemInfo
+{
+	required uint32 dwObjectID = 1;
+	required int32 iItemID = 2;
+	required int32 iItemCount = 3;
+	optional int32 iCombineNeedCount = 4; // 合成需要的数量
+};
+
+
+//背包信息
+
+message Cmd_Sc_BagData
+{
+	repeated ItemInfo szItemData = 1;
+	repeated ItemInfo szMaterialData = 2; // 装备碎片
+};
+
+//背包内容
+message BagChgInfo
+{
+	required int32 iChgType = 1;
+	optional ItemInfo itemDetail = 2;
+	optional uint32 delObjectID = 3;
+};
+
+message Cmd_Sc_BagChg
+{
+	repeated BagChgInfo szBagChgList = 1;
+	required int32 iBagType = 2; // 背包类型
+};
+
+//地牢副本
+message DungeonSection
+{
+	required int32 iSectionID = 1;
+	required int32 iIsPerfectPass = 2;
+	repeated int32 szPerfectIDList = 3;
+	required bool bGeted = 4;
+	optional int32 iStar = 5; // 章节星级
+};
+
+
+//地牢副本列表
+message Cmd_Sc_DungeonSectionList
+{
+	repeated DungeonSection szDungeonSection = 1;
+};
+
+// 关卡评分等级
+enum DungeonSceneStar
+{
+	en_SceneStar_Null = 0;
+	en_SceneStar_1 = 1;
+	en_SceneStar_2 = 2;
+	en_SceneStar_3 = 3;
+};
+
+//关卡场景祥情
+message DungeonSceneDetail
+{
+	required int32 iSceneID = 1;
+	required int32 iStarLevel = 2; // 评分等级,0 则为还未打过,没有评分
+	optional bool bNewOpen = 3; // 是否新通关的
+	
+	
+	optional bool bHasPassLimit = 4; // 是否限制总数
+	optional int32 iLeftCount = 5; // 剩余FB次数
+	optional int32 iTotalCount = 6; // FB总次数
+	
+	optional bool bIsOpend = 12; // 是否开启
+};
+
+//请求关卡
+message Cmd_Cs_QueryDSectionDetail
+{
+	required int32 iSectionID = 1;
+};
+
+//请求关卡返回
+message Cmd_Sc_QueryDSectionDetail
+{
+	repeated DungeonSceneDetail szDungeonScene = 1;
+	required int32 iSectionSize = 2;
+	optional int32 iCostPhystrength = 3;
+	
+	optional bool bSaoDangHaveLimit = 4; // 扫荡是否有限制
+	optional bool bShowSaoDangCD = 5; // 是否显示扫荡CD
+	optional int32 iSaoDangCDSecond = 6; // 扫荡CD时间(如果有CD)
+	optional int32 iLeftSaoDangCount = 7; // 剩余扫荡次数
+	optional int32 iSaoDangLimitCount = 8;// 扫荡总次数
+	optional int32 iSectionID = 9;
+};
+
+//关卡更新
+message Cmd_Sc_SectionUpdate
+{
+	required DungeonSection updateInfo = 1; // 这里不区分开启新的章节还是更新星级,(客户端不维护章节以下关卡的常驻信息，每次向服务器查询)
+};
+
+//战斗奖励物品
+message FightAwardItem
+{
+	required int32 iItemID = 1;
+	required int32 iCount = 2;
+	optional PropItem dynamicEquipProp = 3;
+};
+
+//奖励金钱
+message AwardPay
+{
+	required int32 money = 1;
+	required int32 count = 2;
+};
+
+//物品属性
+message PropItem
+{
+	required int32 iLifeAttID = 1;
+	required int32 iValue = 2;
+};
+
+
+message Cmd_Sc_AttChg
+{
+	required uint32 dwObjectID = 1;
+	repeated PropItem szChgLifeAtt = 2;
+};
+
+//奖励英雄
+message FightAwardHero
+{
+	required int32 iHeroID = 1;			//英雄ID
+	required int32 iLevelStep = 2;		//等阶
+	required int32 iCount = 3;			//个数
+	optional int32 iQuality = 4;		//品质
+	required bool bHaveChgSoul = 5;  	//是否转换武魂
+	optional int32 iSoulId = 6;			//武魂ID
+};
+
+//奖励英雄结果
+message FightAwardResult
+{
+	repeated PropItem szAwardPropList = 1;
+	repeated FightAwardItem szAwardItemList = 2;
+	repeated FightAwardHero szAwardHeroList = 3;
+	repeated AwardPay szAwardPayList = 4;
+};
+
+//英雄经验奖励祥情
+message HeroExpAwardDetail
+{
+	required uint32 dwHeroObjectID = 1;
+	required bool bLevelUp = 2;
+	required int32 iHeroExpPercent = 3;
+};
+
+//普通战斗结果
+message Cmd_Sc_CommFightResult
+{
+	required int32 iSceneID = 1;
+	required int32 iIsSuccess = 2;
+	optional int32 iStar = 3;
+	optional FightAwardResult awardResult = 4;
+	optional bool bReserve = 5;  // 去掉了
+	repeated HeroExpAwardDetail szHeroAward = 6; // 英雄等级以及是否升级
+	optional int32 iHeroGetExp = 7; // 英雄获得经验(所有上阵英雄获得相同的经验)
+	optional bool bCanFP = 8; // 是否可以翻牌
+	optional int32 iCostGold = 9; // 本次翻牌消耗元宝
+	optional int32 iExtraExp = 10;
+};
+
+//查询装备信息
+message CMD_EQUIPDUNGEON_QUERY_EQUIPINFO_SC
+{
+	repeated int32 szEquipIDList = 1;
+};
+
+message CMD_EQUIPDUNGEON_FP_CS
+{
+	required int32 iPos = 1;
+}
+
+message CMD_EQUIPDUNGEON_FP_SC
+{
+	required int32 iPos = 1;      // 翻出的位置
+	required EquipInfo equipInfo = 2; // 翻出的装备信息
+	required int32 iNextCostGold = 3; // 下次翻牌消耗元宝
+};
+
+//地牢战斗
+message Cmd_Cs_DungeonFight
+{
+	required int32 iSceneID = 1;
+};
+
+//获取关卡奖励
+message Cmd_Cs_GetSectionAward
+{
+	required int32 iSectionID = 1;
+};
+
+message CMD_GET_SECTION_AWARD_SC
+{
+	required int32 iIsOK = 1;
+	required int32 iSectionID = 2;
+}
+
+
+//角色升级
+message Cmd_Sc_ActorLevelUp
+{
+	required int32 iLevel = 1;
+	required int32 iExp = 2;
+	required int32 iLevelUpExp = 3;
+	optional int32 iPreLevel = 4; // 升级前等级
+	optional int32 iPrePhyStrength = 5; // 升级前体力
+	optional int32 iCurPhyStrength = 6; // 升级后体力
+	optional int32 iPreFormationHeroLimit = 7; // 升级前上阵英雄限制
+	optional int32 iCurFormationHeroLimit = 8; // 升级后上阵英雄限制
+};
+
+//角色vip升级
+message CMD_ACTOR_VIPLEVELUP_SC
+{
+	required int32 iVipLevel = 1;
+	required int32 iVipExp = 2;
+	required int32 iVipLevelUpExp = 3;
+	optional int32 iVipPreLevel = 4; // 升级前等级
+};
+
+//战魂练习等级
+enum en_FSPracticeGrade
+{
+	en_practice_Begin = 0;
+	en_practice_Grade1 = 1;
+	en_practice_Grade2 = 2;
+	en_practice_Grade3 = 3;
+	en_practice_Grade4 = 4;
+	en_practice_Grade5 = 5;
+};
+
+//战魂练习模式
+enum en_PracticeMode
+{
+	en_practice_BaseMode = 0;
+	en_practice_AdvanceMode = 1;
+};
+
+enum en_FSContainerType
+{
+	en_FSConType_Bag = 0;  // 武魂背包容器
+	en_FSConType_Wear = 1; // 英雄武魂装备容器
+};
+
+//战魂
+message FightSoulItem
+{
+	required uint32 dwObjectID = 1;
+	required int32 iBaseID = 2;
+	required int32 iExp = 3;
+	required int32 iPos = 4;
+	required bool bLocked = 5;
+	required int32 iLevel = 6;
+	repeated PropItem szPropList = 7;
+	required int32 iNextLvExp = 8;
+	optional int32 iEatExp = 9; // 被吞噬额外经验
+};
+
+//战魂练习状态
+message FightSoulPracticeStatus
+{
+	required int32 iGrade = 1;
+	required int32 iMode = 2;
+};
+
+//战魂背包
+message Cmd_Sc_FightSoulBag
+{
+	repeated FightSoulItem szFightSoulList = 1;
+	required int32 iChipCount = 2;
+	required FightSoulPracticeStatus status = 3;
+};
+
+//CMD_MOVE_FIGHTSOUL
+message Cmd_Cs_MoveFightSoul
+{
+	required int32 iSrcConType = 1;  // 拖动Src容器类型
+	required int32 iDstConType = 2;  // 拖动目标容器
+	required sint32 iSrcPos = 3;     // Src位置
+	required sint32 iDstPos = 4;     // 目标位置
+	optional uint32 dwHeroObjectID = 5; // 英雄ObjectID
+};
+
+// 产出消耗原因
+enum CreateConsumeReason
+{
+	en_Reason_GM = 0; // GM 命令
+	en_Reason_HeroLevelUp = 1; // 英雄升级
+	en_Reason_HeroConvert = 2; // 英雄转换
+	en_Reason_HeroLevelStepUp = 3; // 英雄等阶升级
+	en_Reason_FightSoulPractice = 4; // 修炼武魂
+	en_Reason_FightSoulExchange = 5; // 武魂碎片兑换
+	en_Reason_Award = 6; // 奖励,有待进一步细化
+	en_Reason_DungeonFight = 7; // FB战斗
+	en_Reason_SkillUse = 8; // 技能使用
+	en_Reason_FightSoulAdvanceMode = 9; // 武魂高级修炼
+	en_Reason_GoldMine = 10; // 领地金矿产出
+	en_Reason_LoveMaidConsume = 11; // 宠幸消耗
+	en_Reason_LoveMaidCreate = 12; // 宠幸产出
+	en_Reason_AdvancePlayConsume = 13; // 高级宠幸消耗
+	en_Reason_PlayGet = 14; // 调戏获得
+	en_Reason_GoldMineConsume = 15; // 金矿加速
+	en_Reason_GoldMineCreate = 16;  //金矿创建
+	en_Reason_FightResConsume = 17; // 资源战斗消耗
+	en_Reason_FightResCreate = 18; // 资源战斗产出
+	en_Reason_CreateLegionConsume = 23; // 创建军团消耗
+	en_Reason_CreateLegionFail = 24; // 创建军团失败返还
+	en_Reason_ContributeCost = 25; // 军团建设消耗
+	en_Reason_ContributeCreate = 26; // 军团建设产出
+	en_Reason_BlessCost = 27; // 祝福消耗
+	en_Reason_BlessCreate = 28; // 祝福创造
+	en_Reason_LegionPay = 29; // 军团俸禄
+	en_Reason_LegionBoss_Consume = 30; // 军团BOSS消耗
+	en_Reason_LegionBoss_Create = 31; // 军团BOSS产出
+	en_Reason_addTowerRestCount = 32; //通天塔增加重置次数消耗
+	en_Reason_LegionFightKill = 33; // 领地战击杀获得
+	en_ReaSon_RandomHeroCost = 34; //抽卡消耗
+	en_Reason_LegionBossReliveConsume = 36; // 军团BOSS战复活
+	//en_Reason_ShopBuyGoodCost = 37; //商城购买物品消耗
+	//en_Reason_ShopSellGood = 38; //从商城购买获得 
+	//en_Reason_ShopBuyFailedReturn = 39; //商城购买失败 返还
+	en_Reason_ArenaRankGet = 40; // 竞技场排名奖励
+	en_Reason_ArenaBuyCountCost = 41; // 竞技场购买消耗
+	en_Reason_ArenaChallengeCreate = 42; // 竞技场挑战奖励
+	en_Reason_GiftCreate = 43; // 礼包产出
+	en_Reason_WorldBossCheerComsume = 44; // 世界BOSS鼓舞消耗
+	en_Reason_WorldBossDamageCreate = 45; // 世界BOSS产出
+	en_Reason_WorldBossReliveConsume = 46; // 世界BOSS复活消耗
+	en_Reason_CampBattleGet = 50;	//阵营战获得
+	en_Reason_BuyPhyStrengthConsume = 51; // 购买体力消耗
+	en_Reason_BuyPhyStrengthCreate = 52; // 购买产出体力
+	en_Reason_ResumePhyStrengthCreate = 53; // 恢复体力
+	en_Reason_LevelUpCreate = 54; // 升级奖励体力
+	en_Reason_PerfectPassSection = 55; // 完美通关奖励
+	en_Reason_FriendGivePhyStrength = 56; //好友赠送体力值
+	en_Reason_GoldAnimaTrain = 57;			//神兽传承消耗
+	en_Reason_DungeonPhyStrengthReback = 58; // 副本体力归还
+	en_Reason_ClimTowerChallengeAward = 59; // 通天塔挑战奖励
+	en_Reason_LegionShopAward = 60; // 军团商店奖励
+	en_Reason_TaskFinishReward = 61; //完成任务奖励
+	en_Reason_SELLGODANIMALSOUL = 62; //出售神兽武魂
+	en_Reason_ShopSystem_RandomHero = 63; //英雄抽卡
+	en_Reason_ItemUse = 64; // 物品使用
+	en_Reason_GodAnimalActive = 65; // 激活神兽
+	en_Reason_GodAnimalLevelStep = 66; // 神兽升阶
+
+	en_Reason_SellEquip = 67; // 装备出售
+	en_Reason_EquipCombine = 68; // 装备合成
+	en_Reason_SELLHERO = 69; //卖英雄
+	en_Reason_EquipLevelUp = 70; // 装备升级
+	en_Reason_SellEquipChip = 71; // 装备碎片出售
+	en_Reason_EquipChipCombine = 72; // 装备碎片合成
+	en_Reason_DreamLand_OpenBox = 73; //幻境 开宝箱
+
+	en_Reason_GetMailAward = 74; // 提取附件
+	en_Reason_TallentUpgrade = 75; // 天赋升级
+	
+	en_Reason_ItemSell = 76;  //物品出卖
+	
+	en_Reason_Inherit_Cost = 78; //传承消耗
+	en_Reason_ManorSilverResAddSpeed = 79; //铜矿加速 花费
+	en_Reason_ManorHeroExpResAddSpeed = 80; //修为矿加速花费
+	en_Reason_ManorRes_LevelUp = 81;  //领地矿升级花费
+	en_Reason_ManorRes_Harvest = 82; //领地收取产出
+	en_Reason_Manor_WuHunDian_LEVELUP_COST = 83; //武魂殿升级花费
+	en_Reason_Manor_WuHunDian_WUXIEKEJI_Cost = 84;  //武魂殿设置武魂无懈可击
+	en_Reason_Manor_WuHunDian_Refresh = 85; //刷新武魂殿
+	en_Reason_Manor_TieJiangPu_LEVELUP_COST = 86; //铁匠铺升级花费
+	en_Reason_Manor_TieJiangPu_Refresh = 87; //铁匠铺刷新花费
+	en_Reason_Manor_TieJiangPu_WUXIEKEJI_Cost = 88; //铁匠铺无懈可击
+	en_Reason_Manor_WuHunDian_LEVELUP_GOLDADDSPEED = 89;	//武魂殿升级金币加速
+	en_Reason_Manor_TieJiangPu_LEVELUP_GOLDADDSPEED = 90;	//铁匠铺升级金币加速
+	en_Reason_Manor_Actor_Loot_Other = 91;
+	en_Reason_AddHero = 92; // 添加英雄
+	
+	en_Reason_CallHero = 93; // 召唤英雄
+	
+	en_Reason_EquipFavorite = 94; // 装备喜好品
+	en_Reason_CombineFavorite = 95;
+	
+	en_Reason_Manor_Loot = 96;	//领地掠夺
+	
+	en_Reason_SHOPSYSTEM_RefreshHonorConvert = 97;	//刷新商城荣誉兑换
+	en_Reason_SHOPSYSTEM_Honor_Convert = 98;		//荣誉兑换
+	en_Reason_RECOVER_VIGOR = 99;
+	en_Reason_Manor_Search = 100;		//搜索掠夺
+	en_Reason_Arena_ResetCost = 101;
+	en_Reason_WORLD_CHATCOST = 102;		//世界聊天花费
+	
+	en_Reason_CoinTree_Shake = 103;		//摇摇钱树产出
+	en_Reason_SanGongConsume = 104;    // 散功消耗
+	
+	en_Reason_ConvertCode_Convert = 105; //礼包兑换 	
+	en_Reason_Gold_Pay = 106; // 充值
+	en_Reason_Legin_Worship_GetPhyStrength = 107; //军团膜拜获得体力
+	en_Reason_Legin_Worship = 108; //膜拜
+	
+	en_Reason_LegionShop_BUY = 109;//军团商店购买
+	
+	en_Reason_Add_Contribute = 110;	//
+	
+	en_Reason_Legion_Shop_Refresh = 111; //军团商店刷新
+	
+	en_Reason_Legion_Shop_Buy = 112; //购买物品
+	
+	en_Reason_RandHero_Get_HeroExp = 113; //抽取英雄获取修为
+	
+	en_Reason_First_Pay = 114;	//首冲
+	
+	en_Reason_EquipFB_FPCostGold = 115;  // 装备FB翻牌
+	
+	en_Reason_CheckInReward = 116;	//签到奖励
+	
+	en_Reason_LUNCH_GETVIGOR = 117; //午餐获取体力
+	en_Reason_DINNER_GETVIGOR = 118; //午餐获取体力
+	en_Reason_Manor_Protect = 119;	//购买领地保护
+	en_Reason_Item_Use = 120;
+	en_Reason_BUY_GROWUP_PLAN = 121;
+	en_Reason_GROWUPPLAN_GET = 122; //领取成长计划
+	en_Reason_ACC_PayMent_GET = 123; //累积充值奖励
+	en_Reason_MonthCard_GET = 124; //领取月卡
+	
+	en_Reason_PayReturn = 125; //充值返还
+	
+	en_Reason_Get_Account_Login_Reward = 126; //累积登陆奖励
+	
+	en_Reason_Equip_Ronglian 		= 127;	// 装备熔炼
+	en_Reason_Equip_Xilian			= 128;	// 装备洗炼
+	en_Reason_Equip_XilianTransfer	= 129;	// 洗练属性转移
+	en_Reason_Equip_XilianBuyLock	= 130;	// 购买洗炼锁
+	en_Reason_Operate_DayPayment	= 131;	// 活动.日充值活动奖励
+	en_Reason_NormalShop_Refresh	= 132;	// 普通商店刷新
+	en_Reason_NormalShop_Buy		= 133;	// 普通商店购买
+	
+	en_Reason_LEGION_BATTLE = 134; //
+};
+
+// 单个武魂变化
+message FightSoulChgItem
+{
+	required int32 iPos = 1;  // 位置
+	required bool bDel = 2;   // 是否删除
+	optional FightSoulItem fightSoulData = 3; // 如果不是删除，则更新数据
+};
+
+//容器
+message Cmd_Sc_ChgFsContainer
+{
+	required int32 iObjectType = 1;
+	required uint32 dwObjectID = 2;
+	required int32 iContainerType = 3;
+	repeated FightSoulChgItem szChgList = 4;
+};
+
+//战魂练习
+message Cmd_Sc_FightSoulPractice
+{
+	required  FightSoulPracticeStatus status = 1;
+};
+//锁定战魂
+message Cmd_Cs_FightSoulLock
+{
+	required int32 iConType = 1; // 容器类型
+	required int32 iPos = 2;
+	optional uint32 dwHeroObjectID = 3; // 如果是装备设置英雄
+	required bool bLock  = 4;  // true 为锁定，false为解锁
+};
+
+//英雄转化
+message CMD_HERO_CONVERT_CS
+{
+	required int32 iHeroID = 1;
+	required int32 iCount = 2;
+};
+
+message CMD_HERO_CONVERT_SC
+{
+	required int32 iNewHeroID = 1;
+}
+
+//确认信息
+message ConfirmMsg
+{
+	required string strLeftText = 1;
+	required string strLeftCmd = 2;
+	required string strRightText = 3;
+	required string strRightCmd = 4;
+};
+
+//普通对话
+message Cmd_Sc_CommDlg
+{
+	required string strMessage = 1;
+	optional ConfirmMsg confirmData = 2;
+};
+
+//羁绊连接
+message Cmd_Cs_HyperLink
+{
+	required string strHyperLinkCmd = 1;
+};
+
+//查询英雄等级
+message Cmd_Cs_QueryHeroLevelInfo
+{
+	required uint32 dwHeroObjectID = 1;
+};
+
+//英雄升级
+message HeroLevelUpInfo
+{
+	required uint32 dwHeroObjectID = 1;
+	required int32 iNextMaxHP = 2;  // 下一级MAXHP
+	required int32 iNextAtt = 3; // 下一级攻击
+	required int32 iNextLv = 4;
+	required int32 iCurHeroExp = 5; // 当前级英雄修为
+	required int32 iNeedHeroExp = 6;
+	required int32 iActorTkHeroExp = 7; // 玩家携带修为
+	optional int32 iNextDef = 8;  // 
+};
+
+//返回英雄等级信息
+message Cmd_Sc_QueryHeroLevelInfo
+{
+	required HeroLevelUpInfo levelInfo = 1;
+	optional NoticeHeroList  heroList = 2;
+};
+
+//英雄升级
+message Cmd_Cs_HeroLevelUp
+{
+	required uint32 dwHeroObjectID = 1;
+};
+
+//返回英雄升级
+
+message Cmd_Sc_HeroLevelUp
+{
+	required HeroLevelUpInfo levelInfo = 1;
+	optional NoticeHeroList  heroList = 2;
+};
+
+//通知英雄
+message NoticeHeroList
+{
+	repeated uint32 szdwHeroObjectID = 1;
+};
+
+//物品使用
+message Cmd_Cs_ItemUse
+{
+	required uint32 dwItemObjectID = 1;
+};
+//返回物品使用结果
+message CMD_ITEM_USE_SC
+{
+	required FightAwardResult awardresoult = 1;
+};
+
+//请求英雄战魂
+message Cmd_Cs_QueryHeroFightSoul
+{
+	required uint32 dwHeroObjectID = 1;
+};
+
+//返回英雄战魂
+message Cmd_Sc_QueryHeroFightSoul
+{
+	required uint32 dwHeroObjectID = 1;
+	repeated FightSoulItem szFightSoulList = 2; 
+};
+
+message Cmd_Cs_QueryHeroTip
+{
+	required uint32 dwHeroObjectID = 1;
+};
+
+
+message Cmd_Sc_QueryHeroTip
+{
+	required uint32 dwObjejctID = 1;
+	required int32 iSkillID = 2;
+};
+
+//神兽祥情
+message GoldAnimalDetail
+{
+	required uint32 dwObjectID = 1;
+	repeated PropItem szPropList = 2;
+	required int32 iCurExp = 3;
+	required int32 iNeedExp = 4;
+	optional int32 iActiveSkillID = 5;  // 主动技能(由于技能在某些下行不需要，这里设置为optional)
+	optional int32 iStageSkillID = 6;  // 登场技能
+	required int32 iBaseID = 7; // 基础ID
+	optional int32 iFightValue = 8; // 战力
+	required int32 iLevel = 9;
+	optional int32 iLevelStep = 10;
+};
+
+//训练神兽
+message Cmd_Sc_GoldAnimalTrain
+{
+	required uint32 dwObjectID = 1;
+	required bool bKnock = 2; // 是否暴击
+	required int32 iGetExp = 3; // 获得经验
+	required GoldAnimalDetail detail = 4;  // 刷新详情
+};
+
+//神兽出战
+message Cmd_Cs_GoldAnimalActive
+{
+	required uint32 dwObjectID = 1;
+};
+
+message Cmd_Sc_GoldAnimalActive
+{
+	required uint32 dwObjectID = 1; // 出战神兽
+};
+
+//神兽基础数据
+message GoldAnimalRoleBase
+{
+	required uint32 dwObjectID = 1;
+	required int32 iBaseID = 2;
+	required int32 iLevel = 3;
+	required int32 iLevelStep = 4;
+};
+
+//消耗物品
+message ConsumeItem
+{
+	required int32 iItemID = 1;
+	required int32 iNeedCount = 2;
+};
+
+//神兽等级信息
+message GoldAnimalLevelStepInfo
+{
+	repeated PropItem szPropList = 1;
+	optional int32 iActiveSkillID = 2;  // 主动技能(由于技能在某些下行不需要，这里设置为optional)
+	optional int32 iStageSkillID = 3;  // 登场技能
+	required int32 iLevelStep = 4;  // 当前等阶
+	required int32 iLevelLimit = 5;  // 等级上限
+	required int32 iFightValue = 6; // 战力
+};
+
+//升级经验
+message Cmd_Cs_ExeLevelStepUp
+{
+	required uint32 dwObjectID = 1;
+};
+
+/*message Cmd_Cs_QueryHeroLevelStep
+{
+	required uint32 dwHostHeroID = 1;
+	repeated uint32 szConsumeHero = 2;
+};*/
+
+
+/*message Cmd_Sc_QueryHeroLevelStep
+{
+	required uint32 dwHostHeroID = 1;
+	optional HeroBaseData postInfo = 2; // 升阶后信息
+	optional int32 iNeedSilver = 3; // 需要银两
+	optional int32 iPostProgress = 4;  // 升级后进度
+};*/
+
+
+message CMD_HERO_LEVELSTEPUP_CS
+{
+	required uint32 dwHostHeroID = 1;
+};
+//战魂交换
+message Cmd_Cs_FightSoulExchange
+{
+	required int32 iExchangeID = 1;
+};
+
+// 玩家标识
+message PBPkRole
+{
+	required string strAccount = 1;
+	required int32 iWorldID = 3;    // 原始WorldID
+};
+
+//怪物类型
+enum  MonsterType
+{
+	en_MonsterType_Normal = 0;
+	en_MonsterType_Elite = 1;
+	en_MonsterType_Boss = 2;
+	en_MonsterType_WorldBoss = 3;
+};
+
+
+// 自己的女仆显示信息
+message MaidSelfInfo
+{
+	required int32 iLoveCount = 1;
+	required int32 iLoveLimitCount = 2;
+	required int32 iCDSecond = 3;
+	optional int32 iAdvanceLoveCost = 4; // 高级宠幸消耗元宝
+	optional int32 iBaseLoveHeroExp = 5;  // 基础宠信获得修为
+	optional int32 iAdvanceLoveHeroExp = 6;  // 高级宠幸获得修为
+};
+
+enum MaidPlayState
+{
+	en_MaidPlay_Used = 1;  // 已经调戏过了
+	en_MaidPlay_Limit = 2; // 已经达到互动上限制
+	en_MaidPlay_Can = 3; // 可调戏
+};
+
+message MaidOtherInfo
+{
+	required int32 iPlayState = 1; // 互动状态MaidPlayState
+};
+
+//角色基础信息
+message PlayerBase
+{
+	required PBPkRole roleKey  = 1;    
+	required string strName = 2;   // 名字
+	required int32 iVisibleHeroID = 3; // 显示的英雄头像
+	required int32 iLevel = 4; // 等级
+};
+
+message CMD_QUERY_HEROPROGRESS_CS
+{
+	required uint32 dwHeroObjectID = 1;
+};
+
+message CMD_QUERY_HEROPROGRESS_SC
+{
+	required uint32 dwHeroObjectID = 1;
+	required int32 iCurProgress = 2;
+	required int32 iNeedProgress = 3;
+	optional NoticeHeroList heroList = 4;
+};
+
+//公会物品
+message LegionListItem
+{
+	required int32 iRank = 1; // 排名
+	required string strLegionName = 2; // 军团名字
+	required string strLeaderName = 3; // 团长名字
+	required uint32 dwLegionObjectID = 4; // 军团OBJID
+	required int32 iLevel = 5;
+	required int32 iMemCount = 6;
+	required int32 iMemLimit = 7;
+	required bool bApplyed = 8;
+	required int32 iLegionIconId = 9;
+};
+
+message CMD_QUERY_LEGIONLIST_CS
+{
+	required int32 iPageIndex = 1;
+};
+
+message CMD_QUERY_LEGIONLIST_SC
+{
+	required int32 iTotalPages = 1;
+	repeated LegionListItem szLegionList = 2; // 军团列表
+	required int32 iPageIndex = 3;
+};
+
+message CMD_APPJOIN_LEGION_CS
+{
+	required uint32 dwLegionObjectID = 1;
+};
+
+message CMD_APPJOIN_LEGION_SC
+{
+	required uint32 dwLegionObjectID = 1;
+};
+
+message CMD_CREATE_LEGION_CS
+{
+	required string strLegionName = 1;
+	required int32 iLegionIconId = 2;
+};
+
+message LegionBaseInfo
+{
+	required uint32 dwLegionObjectID = 1;
+	required string strLegionName = 2;
+	required string strLeaderName = 3;
+	required int32 iRank = 4;
+	required int32 iMemCount = 5;
+	required int32 iMemLimit = 6;
+	required int32 iLevel = 7;
+	required int32 iExp = 8;
+	required int32 iLevelUpExp = 9;
+	required string strBroadcat = 10;
+	required int32 iOccupation = 11; // 职位
+	required int32 iBlessed = 12; // 是否已经祝福了
+	optional int32 iContribute = 13;
+	required int32 iLegionIconId = 14;
+	required int32 iTotalContribute = 15; //军团所有贡献
+	required int32 iLegionMoney = 16;	//军团资金
+	optional string strAnnouce = 17;
+};
+
+message CMD_QUERY_LEGION_BASE_SC
+{
+	required LegionBaseInfo baseInfo = 1;
+};
+
+enum enLegionOccupation
+{
+	en_LegionOccupation_Leader = 1;  // 帮主
+	en_LegionOccupation_ViceLeader = 2; // 副帮主
+	en_LegionOccupation_Member = 3; // 团员
+	en_LegionOccupation_Newer = 4;  // 见习
+};
+
+message LegionMember
+{
+	required string strMemName = 1;
+	required int32 iLevel = 2;
+	required int32 iOccupation = 3;
+	required int32 iArenaRank = 4;
+	required int32 iDayContribute = 5;
+	required int32 iTotalContribute = 6;
+	required int32 iContributeRank = 7;
+	required bool bActorIsOnLine = 8;
+	optional uint32 outLineSecond = 9;
+	required bool bIsCanWorship = 10;
+	required int32 iThreeDayContribute = 11;
+	required int32 iHeadIcon = 12;
+};
+
+message CMD_QUERY_LEGION_MEMBERLIST_SC
+{
+	repeated LegionMember szMemberList = 2;
+};
+
+message LegionAppItem
+{
+	required string strAppName = 1;
+	required int32 iLevel = 2;
+	required int32 iArenaRank = 3;
+	required int32 iActorHeadIcon = 4;
+};
+
+
+message CMD_QUERY_LEGION_APP_SC
+{
+	repeated LegionAppItem  szAppList = 2;
+};
+
+message CMD_MODIFY_LEGION_SETTING_CS
+{
+	required string strAnnouce = 1;
+	required string strBroadcast = 2;
+	required int32 iLegionIconId = 3;
+};
+
+message CMD_DEAL_LEGIONAPP_CS
+{
+	required string strAppName = 2;
+	required bool bAccept = 3;
+};
+
+message CMD_DEAL_LEGIONAPP_SC
+{
+	required string strAppName = 2;
+	required bool bAccept = 3;
+};
+
+
+message CMD_KICK_LEGIONMEMBER_CS
+{
+	required string strLegionMemName = 1;
+};
+
+
+message CMD_KICK_LEGIONMEMBER_SC
+{
+	required string strLegionMemName = 1;
+};
+
+message CMD_TRANSFER_LEGIONLEADER_CS
+{
+	required string strTargetMemName = 1;
+};
+
+message CMD_TRANSFER_LEGIONLEADER_SC
+{
+	required string strNewLeader = 1;
+};
+
+message CMD_QUERY_LELGION_CONTRIBUTE_SC
+{
+	required int32 iContribute = 1;
+	required int32 iLegionExp = 2;
+	required int32 iLegionUpLevelExp = 3;
+	required int32 iLevel = 4;
+};
+
+
+message CMD_QUERY_OTHERLEGION_CS
+{
+	required uint32 dwLegionObjectID = 1;
+};
+
+message OtherLegionInfo
+{
+	required uint32 dwLegionObjectID = 1;
+	required string strLegionName = 2;
+	required int32 iLevel = 3;
+	required string strLeaderName = 4;
+	required int32 iRank = 5;
+	required int32 iMemCount = 6;
+	required int32 iMemLimit = 7;
+	required string strAnnouce = 8;
+};
+
+message CMD_QUERY_OTHERLEGION_SC
+{
+	required OtherLegionInfo otherLegionInfo = 1;
+};
+
+message CMD_LEGION_CONTRIBUTE_CS
+{
+	required int32 iContributeType = 1;
+};
+
+message CMD_LEGION_CONTRIBUTE_SC
+{
+	required int32 iContribute = 1;
+	required int32 iLegionExp = 2;
+	required int32 iLegionUpLevelExp = 3;
+	required int32 iLevel = 4;
+	required int32 iGetContribute = 5;
+};
+
+message CMD_LEGION_BLESS_CS
+{
+	required int32 iBlessType = 1;
+};
+
+message CMD_LEGION_BLESS_SC
+{
+	required int32 iContribute = 1;
+	required int32 iGetContribute = 2;
+};
+
+enum enLegionPayType
+{
+	en_LegionPay_Day = 0;
+	en_LegionPay_Week = 1;
+};
+
+message LegionPay
+{
+	required int32 iPayType = 1;
+	required int32 iLegionLv = 2;
+	required int32 iDomainCount = 3;
+	required int32 iBaseGold = 4;
+	required int32 iBaseSilver = 5;
+	required int32 iContributeRank = 6;  // 贡献排名
+	required int32 iTotalGold = 7;
+	required int32 iTotalSilver = 8;
+	required bool bGeted = 9; // 是否已经领取了
+};
+
+message CMD_QUERY_LEGIONPAY_SC
+{
+	repeated LegionPay szPayList = 1;
+	required int32 iActorContribute = 2;
+};
+
+message CMD_GET_LEGIONPAY_CS
+{
+	required int32 iPayType = 1;
+};
+
+message CMD_GET_LEGIONPAY_SC
+{
+	required int32 iPayType = 1;
+	required bool bGeted = 2;
+	required int32 iActorContribute = 3;
+};
+
+enum enLegionShopItemType
+{
+	en_LegionShop_Item = 1;
+	en_LegionShop_LifeAtt = 2;
+	en_LegionShop_Hero = 3;
+};
+
+enum enLegionShopType
+{
+	en_ShopType_Prop = 0;
+	en_ShopType_Item = 1;
+	en_ShopType_Hero = 2;
+};
+
+/*
+message LegionShopItem
+{
+	required int32 iType = 1;
+	optional PropItem lifeatt = 2;
+	optional FightAwardItem item = 3;
+	optional FightAwardHero hero = 4;
+	required bool bBuyed = 5;  // 是否已经购买了
+	required int32 iIndex = 6;// 索引标识
+};
+
+message ShopPage
+{
+	repeated LegionShopItem szShopList = 1;
+	required int32 iContribute = 2;
+	required int32 iRefreshCost = 3;  // 刷新消耗
+	required int32 iBuyCost = 4;   // 购买消耗
+};*/
+
+message GoodDetail
+{
+	required int32 iGoodId = 1;
+	required bool bIsSale = 2;
+	required int32 iIndex = 3;
+	required bool bCanBuy = 4;
+	optional int32 iCanBuyLevel = 5;
+};
+
+message CMD_OPEN_LEGIONSHOP_SC
+{
+	repeated GoodDetail szGoodList = 1;
+	required bool bIsToday = 2;
+	required int32 iUpdateMoment = 3;
+	required int32 iContribute = 4;
+};
+
+/*
+message CMD_REFRESH_LEGIONSHOP_SC
+{
+	required ShopPage page = 1;
+};*/
+
+message CMD_SELECT_LEGIONSHOP_CS
+{
+	required int32 iIndex = 1;
+};
+
+/*
+message CMD_SELECT_LEGIONSHOP_SC
+{
+	repeated LegionShopItem szShopList = 1;
+	required int32 iContribute = 2;
+	required int32 iPos = 3;
+};
+
+message CMD_GIVEUP_LEGIONSHOP_SC
+{
+	required ShopPage page = 1;
+};
+*/
+enum enChatChannel
+{
+	en_ChatChannel_World = 1;  // 世界频道
+	en_ChatChannel_Legion = 3; // 军团频道
+	en_ChatChannel_System = 4; // 系统频道
+};
+
+message CMD_CHANNEL_CHAT_CS
+{
+	required int32 iChancel = 1;
+	required string strMsg = 2; // 消息内容
+};
+
+message CMD_CHANNEL_CHAT_SC
+{
+	required string strSender = 1;
+	required PBPkRole senderKey = 2;
+	required string strMsg = 3;
+	required int32 iChannel = 4;
+};
+
+message CMD_WHISPER_CS
+{
+	required string strRecver = 1;
+	required string strMsg = 2;
+};
+
+message CMD_WHISPER_SC
+{
+	required string strSender = 1;
+	required PBPkRole senderKey = 2;
+	required string strRecver = 3;
+	required PBPkRole recverKey = 4;
+	required string strMsg = 5;
+};
+
+message LegionBossRankItem
+{
+	required string strName = 1;
+	required int32 iDamageValue = 2;
+};
+
+message LegionBossPreCall
+{
+	required int32 iCallCDSecond = 1; // 召唤CD
+	required int32 iBossMaxHP = 2; // boss的HP上限
+	required int32 iBossHP = 3; // BOSS当前HP
+};
+
+message LegionBossFightInfo
+{
+	required int32 iLeftKillSecond = 1; // 如果已经召唤了，则该字段有效，为剩余击杀时间
+	repeated LegionBossRankItem szRankList = 2; // 军团BOSS排名
+	required int32 iCheeredCount = 3; // 鼓舞次数
+	required int32 iSelfDamage = 4; // 自身伤害
+	required int32 iSumSilver = 5; // 累计银币奖励
+	required int32 iSumHonor = 6; // ；累计荣誉奖励
+	optional int32 iReliveCD = 7; // 复活CD, > 0 则我当前死亡,==0为生存
+	required int32 iBossMaxHP = 8; // boss的HP上限
+	required int32 iBossHP = 9; // BOSS当前HP
+};
+
+message CMD_QUERY_LEGIONBOSS_SC
+{
+	required bool bCalled = 1;   // 是否已经召唤了
+	optional LegionBossPreCall preCallInfo = 2;
+	optional LegionBossFightInfo fightInfo = 3; 
+};
+
+message CMD_LEGIONBOSS_END_SC
+{
+	required bool bKill = 1;  // 是否是被击杀的
+	required int32 iRank = 2; // 0则为无排名
+	required int32 iDamage = 3;
+	required int32 iAwardSilver = 4;
+	required int32 iAwardHonor = 5;
+};
+
+message CMD_CALL_LEGIONBOSS_SC
+{
+	required LegionBossFightInfo fightInfo = 3;
+}
+
+message CMD_CHEER_LEGIONBOSS_SC
+{
+	required int32 iCheerCount = 1;
+};
+
+
+message LegionBossUpdate
+{
+	repeated LegionBossRankItem szRankList = 1; // 军团BOSS排名
+	required int32 iBossMaxHP = 2; // boss的HP上限
+	required int32 iBossHP = 3; // BOSS当前HP
+};
+
+message CMD_UPDATE_LEGIONBOSS_SC
+{
+	required LegionBossUpdate updateInfo = 1;
+};
+
+
+message WorldBossRankItem
+{
+	required string strName = 1;
+	required int32 iDamageValue = 2;
+};
+
+message WorldBossPreStart
+{
+	required int32 iWaitSecond = 1; // 开启CD
+	required int32 iBossMaxHP = 2; // boss的HP上限
+	required int32 iBossHP = 3; // BOSS当前HP
+};
+
+message WorldBossFightInfo
+{
+	required int32 iLeftKillSecond = 1; // 如果已经召唤了，则该字段有效，为剩余击杀时间
+	repeated WorldBossRankItem szRankList = 2; // 军团BOSS排名
+	required int32 iCheeredCount = 3; // 鼓舞次数
+	required int32 iSelfDamage = 4; // 自身伤害
+	required int32 iSumSilver = 5; // 累计银币奖励
+	required int32 iSumHonor = 6; // ；累计荣誉奖励
+	optional int32 iReliveCD = 7; // 复活CD, > 0 则我当前死亡,==0为生存
+	required int32 iBossMaxHP = 8; // boss的HP上限
+	required int32 iBossHP = 9; // BOSS当前HP
+};
+
+message CMD_QUERY_WORLDBOSS_SC
+{
+	required bool bStarted = 1;   // 是否已经开始了
+	optional WorldBossPreStart preStartInfo = 2;
+	optional WorldBossFightInfo fightInfo = 3;
+	optional int32 iShowMonsterID = 4;
+	optional int32 iBossLevel = 5;
+};
+
+message WorldBossUpdate
+{
+	repeated WorldBossRankItem szRankList = 1; // 军团BOSS排名
+	required int32 iBossMaxHP = 2; // boss的HP上限
+	required int32 iBossHP = 3; // BOSS当前HP
+};
+
+message CMD_UPDATE_WORLDBOSS_SC
+{
+	required WorldBossUpdate updateInfo = 1;
+};
+
+message CMD_WORLDBOSS_END_SC
+{
+	required bool bKill = 1;  // 是否是被击杀的
+	required int32 iRank = 2; // 0则为无排名
+	required int32 iDamage = 3;
+	required int32 iAwardSilver = 4;
+	required int32 iAwardHonor = 5;
+};
+
+message CMD_CHEER_WORLDBOSS_SC
+{
+	required int32 iCheerCount = 1;
+};
+
+message ClimbTowerDatail{
+	required int32 iTotalLayers = 1;       //总层数
+	required int32 iCurrentLayer = 2;  	//当前层
+	required int32 iClimbResetCount = 3; 	//重置次数
+	required int32 iHightestLayer = 4; 	//历史最高层
+	required int32 iTotalCultivation = 5;	//累积培养点数
+	required int32 iNextLayerCultivation = 6; //下层培养点数	
+};
+
+
+message CMD_QUERY_CLIMBTOWERDETAIL_SC{
+	required ClimbTowerDatail detail = 1;
+};
+
+message CMD_CHALLENGE_TOWER_CS{
+	required int32 iTowerLayerId = 1;
+}
+message CMD_FAST_CHALLENGE_TOWER_CS{
+	required int32 iTowerLayerId = 1;
+}
+message CMD_TOWER_FAST_CHALLENGE_RESOULT_SC
+{
+	required bool bIsWin = 1;
+	required int32 iChallengeLayerId = 2;
+	optional FightAwardResult awrdRes = 3;
+};
+
+message LegionBattleCityBase
+{
+	required int32 iCityID = 1;
+	required string strOwnerLegion = 2;
+	required string strLeader = 3;
+	required int32 iGetSilverDay = 4;  // 
+	//required int32 iGetGoldWeek = 5; 
+};
+
+// 报名的单个军团信息
+message BattleLegionReportItem
+{
+	required string strLegionName = 1;
+	required int32 iJoinMemCount = 2;
+	required int32 iLegionLevel = 3;
+	optional int32 iOwnCityCount = 4;
+	optional int32 iAttAddPercent = 5;
+};
+
+// 报名的军团信息
+message BattleReportLegionInfo
+{
+	repeated BattleLegionReportItem szLegionList = 1;
+};
+
+// 报名后的页面显示
+message LegionBattleReported
+{
+	required LegionBattleCityBase baseCityInfo = 1;
+	required BattleReportLegionInfo reportedLegionInfo = 2;
+	required int32 iLeftSecond = 3; // 剩余准备时间
+};
+
+// 单条领地战报
+message LegionBattleRecordItem
+{
+	required string strWinLegionName = 1;
+	required string strWinActorName = 2;
+	required string strFailLegionName = 3;
+	required string strFailActorName = 4;
+};
+
+message LegionBattleRecordPage
+{
+	repeated LegionBattleRecordItem szBattleRecordPage = 1;
+};
+// 单个军团在战斗中的状态
+message LegionFightStateItem
+{
+	required string strLegionName = 2;
+	required int32 iLeftAliveMem = 3;
+	required int32 iLevel = 4;
+};
+
+// 所有军团在战斗中状态
+message LegionFightState
+{
+	repeated LegionFightStateItem szLegionState = 1;
+	required bool bFinish = 2;
+	optional string strWinLegionName = 3;
+};
+message LegionFightSelfState
+{
+	required int32 iKillerCount = 1;
+	required int32 iGetHonor = 2;
+	required int32 iGetContribute = 3;
+};
+
+message LegionBattlePage
+{
+	required int32 iCityID = 1; // 领地ID
+	required LegionBattleRecordPage battleRecordPage = 2;  // 最新的一页战斗信息
+	required LegionFightState legionStateInfo = 3;
+	required LegionFightSelfState seflState = 4;
+};
+
+message CMD_QUERY_LEGIONBATTLE_SC
+{
+	required bool bFightingTime = 1; // 是否在战斗时间内
+	required bool bReported = 2; // 我方军团是否参战了
+	required bool bJoin = 3; // 我是否参战了
+	optional LegionBattleReported reportedInfo = 4;  // 未开战， 宣战并且参战了，显示这个页面
+	optional LegionBattlePage battlePage = 5; // 已经开战，并且宣战了，显示这个页面
+};
+
+message LegionCityOwnerItem
+{
+	required int32 iCityID = 1;
+	required string strOwner = 2;
+	required bool bCanReportFight = 3;   // 是否可宣战
+	optional bool bMonsterOwner = 4; // 是否怪物拥有
+};
+
+message CMD_QUERY_BATTLEOWNER_SC
+{
+	repeated  LegionCityOwnerItem szCityList = 1;
+};
+
+message LegionCityReportState
+{
+	required int32 iCityID = 1;
+	required string strLegionName = 2;
+	required string strLeaderName = 3;
+	required int32 iSilver = 4;
+	required bool bSelfOwner = 5;
+	required bool bCanReport = 6;
+};
+
+message CMD_QUERY_LEGIONBATTLE_REPORT_CS
+{
+	required int32 iQueryCityID = 1;// 0为查询全部
+};
+
+message CMD_QUERY_LEGIONBATTLE_REPORT_SC
+{
+	repeated LegionCityReportState szReportStateList = 1;
+};
+
+message LegionLastBattleMsg
+{
+	required int32 iCityID = 1;     // 城市ID
+	required bool bWin = 2;         // 是否胜利
+	required bool bSelfReport = 3; // 是否是宣战方
+};
+
+message CMD_QUERY_LASTBATTLE_LIST_SC
+{
+	repeated LegionLastBattleMsg szLastBattleMsg = 1;
+};
+
+message CMD_QUERY_SINGLE_LASTBATTLE_CS
+{
+	required int32 iCityID = 1; // 查询指定城市的上届战况
+};
+
+
+message LegionLastBattlePage
+{
+	required int32 iCityID = 1; // 领地ID
+	required LegionBattleRecordPage battleRecordPage = 2;  // 第一页战斗信息
+	required int32 iTotalPage = 3;
+	required int32 iCurPage = 4;
+	required LegionFightState legionStateInfo = 5;
+	required LegionFightSelfState seflState = 6;
+};
+
+message CMD_QUERY_SINGLE_LASTBATTLE_SC
+{
+	required LegionLastBattlePage lastBattlePage = 1;
+};
+
+
+message CMD_REPORT_LEGIONBATTLE_CS
+{
+	required int32 iCityID = 1;
+};
+
+message CMD_REPORT_LEGIONBATTLE_SC
+{
+	required LegionBattleReported reportInfo = 1;
+}
+
+
+message CMD_JOIN_LEGIONBATTLE_SC
+{
+	required LegionBattleReported reportInfo = 1;
+};
+
+message CMD_QUERY_CURBATTLE_PAGE_SC
+{
+	required LegionBattlePage battlePage = 1; // 战斗中的显示页面
+};
+
+message CMD_ADD_CURBATTLE_RECORD_SC
+{
+	repeated LegionBattleRecordItem szNewBattleRecordPage = 1;
+};
+
+message CMD_UPDATE_CURBATTLE_SELFINFO_SC
+{
+	required LegionFightSelfState seflState = 1;
+};
+
+message CMD_UPDATE_CURBATTLE_LEGIONINFO_SC
+{
+	required LegionFightState newState = 1;
+};
+
+message LegionBattleSelfRecordItem
+{
+	required string strAttackerLegionName = 1;
+	required string strAttackerName = 2;
+	required string strTargetLegionName = 3;
+	required string strTargetName = 4;
+	required bool bAttackerWin = 5; // 攻击方是否胜利
+	required string strFightKey = 6;
+};
+
+message CMD_QUERY_CURBATTLE_SELFRECORD_SC
+{
+	repeated LegionBattleSelfRecordItem szSelfRecord = 1;
+};
+
+
+message CMD_QUERY_LASTBATTLE_SELFRECORD_CS
+{
+	required int32 iCityID = 1;
+};
+
+message CMD_QUERY_LASTBATTLE_SELFRECORD_SC
+{
+	repeated LegionBattleSelfRecordItem szSelfRecord = 1;
+};
+
+message CMD_COMM_QUERYBATTLE_CS
+{
+	required string strFightKey = 1;
+};
+
+
+message HonorRankItem
+{
+	required string strName = 2;
+	required int32 iLevel  = 3;
+	required int32 iKillCount = 4;
+	required int32 iGetHonor = 5;
+	required int32 iGetContribute = 6;
+	required string strLegionName = 7;
+};
+
+message CMD_QUERY_CURBATTLE_HONORRANK_SC
+{
+	repeated HonorRankItem szHornorRank = 1;
+};
+
+message CMD_QUERY_LASTBATTLE_HONORRANK_CS
+{
+	required int32 iCityID = 1;
+};
+
+message CMD_QUERY_LASTBATTLE_HONORRANK_SC
+{
+	repeated HonorRankItem szHornorRank = 1;
+};
+
+message CMD_QUERY_LASTBATTLE_RECORD_PAGE_CS
+{
+	required int32 iCityID = 1;
+	required int32 iPage = 2;
+};
+
+message CMD_QUERY_LASTBATTLE_RECORD_PAGE_SC
+{
+	required int32 iCityID = 1; // 领地ID
+	required LegionBattleRecordPage battleRecordPage = 2; 
+	required int32 iTotalPage = 3;
+	required int32 iCurPage = 4;
+};
+
+message GiftCustomBody
+{
+	required string strTitle = 1;
+	repeated PropItem szAwardPropList = 2;
+	repeated FightAwardItem szAwardItemList = 3;
+	optional int32 iAwardedContribute = 4; // 已经发放的军团贡献（注意，已经发放了）
+};
+
+message GiftItem
+{
+	required string strUUID = 1;
+	required bool bCustomGift = 2; // 是否自定义礼包
+	optional int32 iGiftID = 3; // 固定礼包ID
+	optional GiftCustomBody cutomBody = 4; // 自定义礼包内容
+};
+
+message CMD_QUERY_GIFT_SC
+{
+	repeated GiftItem szGiftItem = 1;
+};
+
+message CMD_GET_GIFT_CS
+{
+	required string strGiftUUID = 1;
+};
+
+message CMD_GET_GIFT_SC
+{
+	required string strGiftUUID = 1;
+};
+
+message CMD_CANCEL_LEGIONAPP_CS
+{
+	required uint32 dwLegionObjectID = 1;
+};
+
+
+message CMD_CANCEL_LEGIONAPP_SC
+{
+	required uint32 dwLegionObjectID = 1;
+};
+
+message ArenaPlayer
+{
+	required int32 iShowID = 1;   // 如果 bMonster 则为怪物ID, 否则为英雄ID
+	required string strName = 2;
+	required int32 iLevel = 3;
+	required int32 iFightValue = 4;
+	required int32 iRank = 5;
+	required bool bMonster = 6; 
+};
+
+message ArenaChallengeInfo
+{
+	repeated ArenaPlayer szChallengeList = 1;
+};
+
+enum ArenaAppendState
+{
+	en_ArenaAppendState_Change = 1;		//换一批
+	en_ArenaAppendState_Reset  = 2;		//重置
+	en_ArenaAppendState_BuyOnce = 3; 
+};
+
+message ArenaAppendInfo
+{
+	required ArenaAppendState state = 1;
+	optional int32 iCurRemaindTimes = 2;
+	optional int32 iTotalTimes = 3;
+	optional int32 iRemaindSecond = 4;
+	optional int32 iCost = 5;
+};
+
+message CMD_OPEN_ARENA_SC
+{
+	required int32 iSelfRank = 1; // 0 表示无排名
+	required int32 iFightValue = 2; // 战力
+	required ArenaChallengeInfo challengeInfo = 3;
+	//required int32 iLeftChallengeCount = 4;
+	optional bool bCanGetAward = 4; // 是否可以领奖
+	required ArenaAppendInfo appendInfo = 5;
+};
+
+
+message ArenaAwardItem
+{
+	required uint32 dwTime = 1;
+	required int32 iRank = 2;
+	required int32 iHonorAward = 3;
+	required int32 iSilverAward = 4;
+	required bool bCanGetNow = 5;
+	optional int32 iLeftSecond = 6;
+	required string strUUID = 7;
+	optional int32 iGold = 8;
+};
+
+message CMD_QUERY_ARENA_AWARD_SC
+{
+	repeated ArenaAwardItem szArenaAwardList = 1;
+};
+
+message CMD_GET_ARENA_AWARD_CS
+{
+	required string strUUID = 1;
+};
+
+message CMD_GET_ARENA_AWARD_SC
+{
+	required string strUUID = 1;
+	optional bool bCanGetAward = 2;
+};
+
+message ArenaRankItem
+{
+	required string strName = 1;
+	required int32 iLevel = 2;
+	required int32 iFightValue = 3;
+};
+
+message CMD_QUERY_ARENA_RANK_SC
+{
+	repeated ArenaRankItem szRankList = 1; // 最多显示前50个
+};
+
+enum ArenaRankChgType
+{
+	en_RankChgType_Keep = 0;
+	en_RankChgType_Up = 1;
+	en_RankChgType_Down = 3;
+};
+
+message ArenaLogItem
+{
+	required string strAttName = 1;
+	required string strTarget = 2;
+	required bool bAttackerWin = 3;
+	required int32 iRankChgType = 4; // ArenaRankChgType 名次变化类型
+	optional int32 iRank = 5;
+	required string strUUID = 6;
+};
+
+message CMD_QUERY_ARENA_LOG_SC
+{
+	repeated ArenaLogItem szLogItemList = 1;
+};
+
+
+message CMD_ARENA_FIGHT_CS
+{
+	required int32 iRank = 1;
+};
+/*
+message CMD_ADD_ARENACHALLENGE_SC
+{
+	required int32 iLeftChallengeCount = 1;
+};*/
+
+message RankNodeInfo
+{
+	required int32 iMainHeroId = 1;	 //主英雄ID，排行列表
+	required int32 iActorHonor = 2;  //荣誉
+	required string strActorName = 3; //名字
+};
+
+message CampBattlePlayerDetail
+{
+	required int32 iTopDoubleHitTimes = 1;     //最高连杀次数 
+	required int32 iCurDoubleHitTimes = 2;     //当前连击数
+	required int32 iSumWinTimes = 3;               //胜利场数
+	required int32 iSumFailedTimes = 4;            //失败场数
+	required int32 iSumHonor = 5;                  //累积荣誉
+	required int32 iSumSilverCount = 6; 			//累积银币
+};
+
+message RemaindTime
+{
+	required bool bIsStarted = 1;	//是否已经开启，true- 已经开启，倒计时是离结束的时间，false-准备倒计时 
+	required int32 iRemaindSecond = 2; //剩余时间 （秒）
+	
+};
+
+message CMD_CAMPBATTLE_OPEN_SC
+{
+	repeated RankNodeInfo szLeftRankList = 1;	//左边列表 
+	repeated RankNodeInfo szRightRankList = 2;	//右边列表
+	required CampBattlePlayerDetail playerDetail = 3; //玩家基本信息
+	required RemaindTime remaindTime = 4; 
+};
+
+enum CampBattleResoultType
+{
+	en_CampBattleResoultType_DoubleHit = 0;	//连击
+	en_CampBattleResoultType_Win = 1;	//击败
+	en_CampBattleResoultType_WinEnd = 2; //终结
+};
+
+message CampBattleReport
+{
+	required string strWinActorName = 2;				//胜利方名字
+	required string strFailedActorName = 3;				//失败方名字
+	required int32 iBattleResoultType = 4; 				//CampBattleResoultType
+	optional int32 iCurDoubleHitTimes = 5; 				//如果是连击，需要标记连击次数，和终结连击次数
+	required int32 iRewardSilver = 6;		   			//获奖银币奖励
+	required int32 iRewardHonor = 7;		   			//获奖的荣誉值奖励
+	required int32 iWinerCampId = 8;					//1.左边阵营，2 右边阵营
+};
+
+message CMD_CAMPBATTLE_BATTLE_LOG_SC
+{	
+	repeated CampBattleReport szBattleReport = 1;
+}
+message CMD_CAMPBATTLE_REFREASH_RANKLIST_SC
+{
+	repeated RankNodeInfo szLeftRankList = 1;	//左边列表 
+	repeated RankNodeInfo szRightRankList = 2;	//右边列表
+};
+
+message CMD_CAMPBATTLE_REFREASH_ACTORDETAIL_SC
+{
+	required CampBattlePlayerDetail playerDetail = 8;   //玩家基本信息 ,与玩家相关有数据
+};
+
+message CMD_CAMPBATTLE_REFREASH_TIME_SC
+{
+	required RemaindTime remaindTime = 1; 
+};
+
+message CMD_CMAPBATTLE_SYSTEM_CLOSE_SC
+{
+	required int32 iTopDoubleHitCount = 1;	//最高连杀次数
+	required int32 iWinTimes = 2;			//赢的次数
+	required int32 iFailedTimes = 3;		//输的次数
+	required int32 iRewardHonor  =  4 ;		//获得的荣誉值
+	required int32 iRewardSilver = 5;		//获得的银币
+	
+};
+
+enum PhyStrengthType
+{
+	en_PhyStrengthType_None = 0;
+	en_PhyStrengthType_Have = 1;
+	en_PhyStrengthType_HaveGet = 2;
+};
+
+message FriendNodeInfo
+{
+	required int32 iVisibleHeroID = 1;
+	required string strFriendName = 2;
+	required int32 iFriendLevel = 3;
+	required bool  bIsOnLine = 4;   //玩家是否在线
+	optional int32 iGetType = 5;    //PhyStrengthType
+	optional bool  iHaveGive = 6;   // true ，已经赠送
+};
+
+message FriendPhyStrengthDetail
+{
+	required int32 iGetTimes = 1; 
+	required int32 iGiveTimes = 2;
+	required int32 iTopGetTimes = 3;
+	required int32 iTopGiveTimes = 4;
+	required int32 iFrendCountLimit = 5;			//好友人数上限
+};
+
+message CMD_FRIENDSYSTEM_QUERY_SC
+{
+	required bool bIsHaveRequest = 1;
+	optional FriendPhyStrengthDetail detail = 2;
+	repeated FriendNodeInfo szFriendList = 3;
+};
+
+message CMD_FRIENDSYSTEM_QUERY_FRIENDINFO_CS
+{
+	required string strName = 1;//玩家名字 
+};
+
+message	CMD_FRIENDSYSTEM_DELETE_FRIEND_CS
+{
+	required string strName = 1;
+};
+
+message CMD_FRIENDSYSTEM_SEARCH_FRIEND_SC
+{
+	repeated FriendNodeInfo szSearchResoultList = 1;
+};
+
+message CMD_FRIENDSYSTEM_ADDORDELET_REQUESTFRIEND_CS
+{
+	required bool bAgree = 1 ;    //true --添加朋友， false -- 觉得请求 
+	required string stName = 2;
+};
+
+message CMD_FRIENDSYSTEM_QUERY_FRIENDLIST_SC
+{
+	required FriendPhyStrengthDetail detail = 1;
+	repeated FriendNodeInfo szFriendList = 2;
+};
+
+message CMD_FRIENDSYSTEM_QUERY_REQUESTLIST_SC
+{
+	repeated FriendNodeInfo szFriendList = 1;
+};
+
+message CMD_FRIENDSYSTEM_GIVE_PHYSTRENGTH_CS
+{
+	required string stName = 1;
+};
+
+message CMD_FRIENDSYSTEM_GIVE_PHYSTRENGTH_SC
+{
+	required FriendPhyStrengthDetail detail = 1;
+};
+
+message CMD_FRIENDSYSTEM_GET_PHYSTENGTH_CS
+{
+	required string stName = 1;
+};
+
+message CMD_FRIENDSYSTEM_GET_PHYSTENGTH_SC
+{
+	required FriendPhyStrengthDetail detail = 1;
+};
+
+message CMD_FRIENDSYSTEM_REQUEST_CS
+{
+	required string strName = 1;
+};
+
+message CMD_USENAME_FINED_ACTOR_INFO_CS
+{
+	required string strActorName = 1;
+};
+
+message CMD_USEPBPKROLE_FINED_ACTOR_INFO_CS
+{
+	required string strActorName = 1;
+	required PBPkRole roleKey = 2;
+};
+
+message ActorInfoDetail
+{
+	required string strActorName = 1;
+	required int32 iActorLevel = 2;
+	required int32 iAreanRank = 3; //竞技场排名
+	optional string strBelongLegionName = 4;
+	required int32 iTotalFightStrength = 5;
+	repeated HeroBaseData szHeroList = 6;
+	required int32 iHeadId = 7;
+};
+message CMD_FINED_ACTOR_INFO_SC
+{
+	required ActorInfoDetail detail = 1;
+};
+
+message CMD_ATT_COMEUP_SC
+{	
+	required bool bIsComeUp = 1;  //true 上浮 ,false 关闭上浮
+};
+
+enum marQueueType
+{
+	en_marQueue_HeroLevelStep = 1; // 英雄升阶
+	en_marQueue_GodAnimalLevelStep = 2; // 神兽升阶
+	en_marQueue_WorldBossKill = 3; // 世界BOSS击杀
+	en_marQueue_ArenaTopOne = 4; // 竞技场第一名
+	en_marQueue_LegionShop = 5; // 军团商店抽到3星英雄
+	en_marQueue_FightSoul = 6; // 武魂召唤获得金色
+	en_marQueue_CampKill = 7; // 阵营战连杀
+	en_GMOnline_Send = 8;
+};
+
+message CMD_MARQUEE_SC
+{
+	required int32 marqueeID = 1;  //跑马灯ID
+	repeated string szStrMessage = 2;	//内容
+}
+
+message CMD_HERO_SANGONG_CS
+{
+	required uint32 dwObjectID = 1;
+};
+
+message CMD_HERO_SANGONG_SC
+{
+	required uint32 dwObjectID = 1;
+	required int32 iRebackHeroExp = 2;
+};
+
+message CMD_QUERY_ACTORINFO_SC
+{
+	required int32 iPhyResumeCD = 1;
+	required int32 iFullPhyResumeCD = 2;
+	optional string strLegionName = 3;
+};
+
+message CMD_NOTIFY_GUIDE_SC
+{
+	required int32 iGuideID = 1;
+};
+
+message CMD_GUIDE_FINISH_CS
+{
+	required int32 iGuideID = 1;
+};
+
+enum TaskState
+{
+	en_Task_OPen = 1;
+	en_Task_Finish = 2;
+	en_Task_HaveReward = 3;
+};
+
+message TaskDetail
+{
+	required int32 iTaskId = 1;
+	required int32 iTaskType = 2;
+	required int32 iTaskOver = 3;	//当前完成量  (完成量 == 总量时，可领取奖励)	
+	required int32 iTaskTotal = 4;	//总量  
+	required int32 iTaskState = 5;
+};
+
+enum enTaskType
+{
+	enTaskType_MainLine = 1; 	//主线
+	enTaskType_DayHave  = 2;	//日常
+	enTaskType_BranchLine = 3;	//支线
+	enTaskType_MainLineAndBranchLine = 4;
+};
+
+message CMD_TASK_QUERY_TASKINFO_CS
+{
+	required enTaskType type = 1;
+};
+
+message MonthCardInfo
+{
+	required bool bMonthCardHaveOver = 1;  
+	required bool bTodayHaveGet = 2;
+	required int32 iRemaindTimes = 3;
+};
+
+message CMD_TASK_QUERY_TASKINFO_SC
+{
+	required enTaskType type = 1;
+	repeated TaskDetail szTaskDetail = 2; 
+	required bool bVigorHaveGet = 3;  //体力已经领取
+	required MonthCardInfo monthcardInfo = 4;
+};
+
+message CMD_TASK_GET_REWARD_CS
+{
+	required int32 iTaskId = 1; //任务ID
+	required enTaskType type = 2;
+};
+
+
+message CMD_FIGHT_USEACTORSKILL_CS
+{
+	required int32 iActionIndex = 1;
+	required int32 iResultSetIndex = 2;
+	required bool bPost = 3; // 是否执行这个Result后吃药
+	required int32 iActorSkillID = 4;
+};
+
+
+message CMD_FIGHT_USEACTORSKILL_SC
+{
+	required bool bUseSuccess = 1;
+}
+
+message GodAnimalSoulUnit
+{
+	required int32 iAnimalSoulID = 1;
+	required PropItem  price = 2;
+};
+
+//这里只会下发能买的兽魂
+message CMD_GODANIMAL_ANIMALSOUL_QUERY_SC
+{
+	repeated GodAnimalSoulUnit szUnit = 1;
+};
+
+message CMD_GODANIMAL_ANIMALSOUL_ACTIVE_CS
+{
+	required int32 iAnimalSoulID = 1;
+};
+message	CMD_GODANIMAL_ANIMALSOUL_SELL_CS
+{
+	required int32 iAnimalSoulID = 1;
+};
+
+
+message CMD_NEWPASS_SECTION_SC
+{
+	required int32 iPassedSectionID = 1;
+};
+
+message CMD_HEROSYSTEM_SELLHERO_CS
+{
+	required int32 iHeroID = 1;
+	required int32 iSoulCount = 2;
+};
+
+enum EquipSellType
+{
+	en_EquipSellType_NULL = 0; // 不可出售
+	en_EquipSellType_Silver = 1; // 银币
+	en_EquipSellType_Gold = 2; // 金币
+};
+
+
+
+enum EquipContainerType
+{
+	en_EquipContainer_ActorBag = 0;  // 玩家装备背包
+	en_EquipContainer_HeroWear = 1;  // 英雄装备栏
+};
+
+
+enum EquipPos
+{
+	en_EquipPos_Weap = 0; // 武器
+	en_EquipPos_Clothes = 1; // 衣服
+	en_EquipPos_ShouShi = 2; // 首饰
+	en_EquipPos_Qiwu = 3; // 奇物
+	en_EquipPos_Shoes = 4; // 鞋子
+	en_EquipPos_Miji = 5; // 秘籍
+	en_EquipPos_Reserve = 6; // 保留
+};
+
+enum COVERHEROVIEM
+{
+	enOpenCovert = 1; //英雄转换
+	enOpenSell = 2;		//出卖英雄
+};
+
+
+message EquipInfo
+{
+	required uint32 dwObjectID = 1;
+	required int32 iItemID = 2;
+	required int32 iPos = 3;
+	repeated PropItem szBasePropList = 4; 		// 基础属性列表
+	repeated PropItem szSpecialPropList = 5; 	// 特殊属性列表
+	repeated PropItem xilianPropList = 6;		// 洗练属性列表
+	optional int32 iSuitID = 7; // 套装ID
+	optional int32 iSellMoney = 8; // 售价(铜币)
+	optional int32 iEquipLevel = 9;
+	optional PropItem equipRandomProp = 10; // 装备随机属性
+};
+
+message EquipSuitState
+{
+	required int32 iSuitID = 1;     // 套装ID
+	required sint32 iActiveCount = 2; // 激活数量
+};
+
+message CMD_HERO_COVERT_OPEN_SC
+{
+	required COVERHEROVIEM iOpenId = 1;
+};
+
+message CMD_EQUIP_BAG_SC
+{
+	repeated EquipInfo szEquipList = 1;
+};
+
+
+message CMD_EQUIP_SUITSTATE_UPDATE_SC
+{
+	required uint32 dwObjectID = 1;
+	repeated EquipSuitState szsuitState = 2;
+};
+
+message CMD_QUERY_HEROEQUIP_CS
+{
+	required uint32 dwHeroObjectID = 1;
+};
+
+message CMD_QUERY_HEROEQUIP_SC
+{
+	required uint32 dwHeroObjectID = 1;
+	repeated EquipInfo szEquipList = 2;
+	repeated EquipSuitState szSuitStateList = 3;
+};
+
+
+// 单个装备变化
+message EquipChgItem
+{
+	required int32 iPos = 1;  // 位置
+	required bool bDel = 2;   // 是否删除
+	optional EquipInfo equipData = 3; // 如果不是删除，则更新数据
+};
+
+message CMD_EQUIP_MOVE_CS
+{
+	required uint32 dwSrcObjectID = 1;  // 拖动SRC 对象ObjectID(玩家或者英雄ObjectID)
+	required uint32 dwDstObjectID = 2;  // 拖动目标对象ObjectID(玩家或者英雄ObjectID)
+	required sint32 iSrcPos = 3;     // Src位置
+	required sint32 iDstPos = 4;     // 目标位置
+};
+
+// 装备位置变化
+message CMD_EQUIPCONTAINER_CHG_SC
+{
+	required uint32 dwObjectID = 1;
+	repeated EquipChgItem szChgList = 3;
+};
+
+// 按照位置出售
+message CMD_EQUIP_SELLBYPOS_CS
+{
+	required int32 iEquipPos = 1; // 出售位置
+};
+
+// 按照品质出售
+message CMD_EQUIP_SELLBYQUALITY_CS
+{
+	required bool bSellGreen = 1; 	//卖绿色
+	required bool bSellBlue = 2;	//卖蓝色
+	required bool bSellPurple = 3; 	//卖紫色
+};
+
+message CMD_EQUIP_COMBINE_CS
+{
+	required uint32 dwSrcObjectID = 1;
+	required int32 iSrcEquipPos = 2;
+};
+
+message CMD_QUERY_EQUIPDESC_BYID_CS
+{
+	required int32 iEquipID = 1;
+};
+
+message CMD_QUERY_EQUIPDESC_BYID_SC
+{
+	required EquipInfo equipData = 1;
+};
+
+message CMD_QUERY_EQUIPSOURCE_CS
+{
+	required int32 iEquipID = 1;
+};
+
+message EquipSource
+{
+	required int32 iSectionID = 1;
+	required int32 iSceneID = 2;
+	required bool bOpened = 3;
+};
+
+message CMD_QUERY_EQUIPSOURCE_SC
+{
+	required int32 iEquipID = 1;
+	repeated EquipSource szEquipSource = 2;
+	optional string strSpecialSource = 3;
+};
+
+message CMD_DELETE_HEROS_SC
+{
+	repeated int32 szHeroObjecetId = 1;
+};
+
+
+message CMD_EQUIP_QUERYENHANCE_CS
+{
+	required uint32 dwHeroObjectID = 1;
+	required int32 iEquipPos = 2;
+};
+
+
+message CMD_EQUIP_QUERYENHANCE_SC
+{
+	required uint32 dwHeroObjectID = 1;
+	required int32 iEquipPos = 2; 
+	required int32 iCurLevel = 3;
+	required int32 iNextLevel = 4;
+	repeated PropItem szCurPropList = 5;
+	repeated PropItem szNextPropList = 6;
+	required int32 iCostSilver = 7;
+};
+
+message CMD_EQUIP_ENHANCE_CS
+{
+	required uint32 dwHeroObjectID = 1;
+	required int32 iEquipPos = 2;
+}
+// 下行，通知强化成功
+message CMD_EQUIP_ENHANCE_SC
+{
+	required bool bSuccess = 1;
+	optional int32 iAddLevel = 2; // 升级级数 +2、+3
+}
+
+// 上行提交出售碎片ID和数量，下行只有CMD下发
+message CMD_EQUIP_CHIPSELL_CS
+{
+	required int32 iEquipCipID = 1;
+	required int32 iCount = 2;
+};
+
+// 上行提供要合成的碎片ID, 下行只下发CMD
+message CMD_EQUIP_CHIPCOMBINE_CS
+{
+	required int32 iEquipChipID = 1;
+};
+
+message CMD_DUNGEON_SAODANG_CS
+{
+	required int32 iSceneID = 1;
+};
+
+message CMD_DUNGEON_SAODANG_SC
+{
+	required int32 iSceneID = 1;
+	required FightAwardResult awardInfo = 2;
+	required int32 iHeroGetExp = 3;
+	repeated HeroExpAwardDetail szHeroAward = 4;
+	optional bool bCanFP = 5; // 是否可以翻牌
+	optional int32 iCostGold = 6; // 本次翻牌消耗元宝
+	required int32 iExtraExp = 7;
+};
+
+enum enMailType
+{
+	enMailType_Com = 1;
+	enMailType_DaySend = 2;
+};
+
+message MailDetail
+{
+	required string strUUID = 1;
+	required string strMailTitle = 2;
+	required string strMailSender = 3;
+	required uint32 dwSendTime = 4;
+	required string strContent = 5;
+	required int32 iState = 6;
+	optional FightAwardResult awardInfo = 7;
+};
+
+enum MailState
+{
+	en_MailState_UnRead = 0;     // 未读
+	en_MailState_Readed = 1;     // 正常已读
+};
+
+
+message MailShotDesc
+{
+	required string strUUID = 1;
+	required string strMailTitle = 2;
+	required string strMailSender = 3;
+	required uint32 dwSendTime = 4;
+	required int32 iState = 5;
+};
+
+message CMD_QUERY_MAILLIST_SC
+{
+	repeated MailShotDesc szMailIndexList = 1;
+};
+
+message CMD_QUERY_MAILDESC_CS
+{
+	required string strUUID = 1;
+};
+
+message CMD_GET_MAILAWARD_CS
+{
+	required string strUUID = 1;
+};
+
+message CMD_GET_MAILAWARD_SC
+{
+	required string strUUID = 1;
+};
+
+message CMD_QUERY_MAILDESC_SC
+{
+	required MailDetail mailData = 1;
+};
+
+message CMD_DREAMLAND_QUERY_SCENEINFO_CS
+{
+	required int32 iSectionID = 1;    //章节ID
+};
+
+message CMD_DREAMLAND_OPEN_REQSECTON_SC
+{
+	required int32 iOPenCount = 1;    //已经开启的章节个数
+	required int32 unLockSectionID = 2; //未锁定的章节  （没有锁定的章节 == -1）
+	required int32 iResetTimes = 3;		//可重置次数
+};
+
+enum enDreamLandSceneState
+{
+	en_State_NOOPEN = 1;
+	en_State_OPEN = 2;
+	en_State_FINISH = 3;
+};
+
+message SceneDetail
+{
+	required int32 iSceneIndex = 1; //关卡在章节中索引 
+	required int32 iSceneId = 2; //关卡Id
+	required int32 iSceneState = 3; //关卡状态  enDreamLandSceneState
+	required bool bHaveGetReward = 4;  //是否已经开宝箱
+};
+
+message CMD_DREAMLAND_QUERY_SCENEINFO_SC
+{
+	repeated SceneDetail szSceneDetail = 1; 
+};
+
+message DreamLandFormation
+{
+	required int32 dwObjcetId = 1; 
+	required int32 iPos = 2;
+};
+
+message DreamLandHeroInfo
+{
+	required int32 dwObjcetId = 1; 
+	required int32 iBlootPresent = 2;
+};
+
+message CMD_DREAMLAND_GETACTOR_FORMATION_INFO_SC
+{
+	repeated DreamLandFormation szDreamLandFormation = 1; //阵型信息
+	required int32 remaindTime = 2;	//剩余上阵次数
+	repeated DreamLandHeroInfo szHaveBattleHeroInfo = 3;
+};
+
+message CMD_DREAMLAND_REQUEST_OPENBOX_CS
+{
+	required int32 iSectionID = 1;	//章节ID
+	required int32 iSceneId = 2;	//场景ID
+};
+
+message DreamRewardHero
+{
+	required int32 iHeroId = 1;
+	required int32 iHeroSoulId = 2;
+	required int32 iCount = 3;  //武魂数量
+	
+};
+
+message CMD_DREAMLAND_REQUEST_OPENBOX_SC
+{
+	required FightAwardResult awardResoult = 1; //所有的奖励
+	//required DreamRewardHero awardHero = 2;
+};
+
+message CMD_DREAMLAND_QUERY_BOX_CS
+{
+	required int32 iSectionID = 1;	//章节ID
+	required int32 iSceneId = 2;	//场景ID
+};
+
+message CMD_DREAMLAND_QUERY_BOX_SC
+{
+	required FightAwardResult awardResoult = 1; 		//这里的奖励是玩家能看到的普通奖励
+	required bool bHaveMagic = 2;						//是否有神秘礼物
+};
+
+message CMD_DREAMLAND_FORMATION_CHG_CS
+{
+	repeated DreamLandFormation szFormationList = 1;
+};
+
+message CMD_DREAMLAND_REQUEST_FIGHT_CS
+{
+	required int32 iSectionID = 1;	//章节ID
+	required int32 iSceneId = 2;	//场景ID
+};
+
+message CMD_DREAMLAND_QUERY_SCENEFORMATION_CS
+{
+	required int32 iSectionID = 1;	//章节ID
+	required int32 iSceneId = 2;	//场景ID
+};
+
+message DreamLandFormationItem
+{
+	required int32 iPos = 1;
+	required int32 iBaseId = 2;
+	required int32 iLevelStep = 3;
+	required int32 iLevel = 4;
+	optional int32 iHp = 5;
+	optional int32 iMaxHP = 6;
+	required bool bIsGodAnimal = 7;
+	required int32 iQuality = 8;
+};
+
+message CMD_DREAMLAND_QUERY_SCENEFORMATION_SC
+{
+	required string strActorName = 1;
+	repeated DreamLandFormationItem szFormationItem = 2;
+	required int32 iTotalFightVaule = 3;
+	required int32 iActorHead = 4;
+	required int32 iActorLevel = 5;
+	optional string strLegionName = 6;
+};
+
+message HeroLevelStepState
+{
+	required int32 iLevelStep = 1;
+	required int32 iHPGrow = 2;
+	required int32 iAttGrow = 3;
+	optional int32 iDefGrow = 4;
+};
+
+message CMD_HERO_LEVELSTEPUP_SC
+{
+	required uint32 dwHeroObjectID = 1;
+	required HeroLevelStepState oldState = 2;
+	required HeroLevelStepState newState = 3;
+	required int32 iHPAddValue = 4;
+	required int32 iAttAddValue = 5;
+	optional int32 iDefAddValue = 6;
+};
+
+message HeroSoulChg
+{
+	required int32 iHeroID = 1;
+	required sint32 iChgCount = 2;
+	required int32 iCurCount = 3;
+};
+
+message CMD_HERO_SOULCHG_SC
+{
+	repeated HeroSoulChg szChgList = 1;
+};
+
+message CMD_HERO_TALLENT_LEVELUP_CS
+{
+	required uint32 dwHeroObjectID = 1;
+	required int32 iTallentID = 2;
+};
+
+
+message CMD_HERO_TALLENT_UPDATE_SC
+{
+	required HeroTallent tallentData = 1;
+	optional uint32 dwObjectID = 2;
+};
+
+message CMD_ITEM_SELLITEM_CS
+{
+	required int32 iItemBaseId = 1;	//物品的基础ID
+	required int32 iItemCount = 2;	//物品价格
+};
+
+message GodAnimalLevelStepState
+{
+	required int32 iGodAnimalLevelStep = 1; //等阶
+	required int32 iHpGrow = 2;	//生命成长
+	required int32 iAttGrow = 3;//攻击成长
+};
+
+message CMD_GODANIMAL_EXELEVELSTEPUP_SC
+{
+	required uint32 dwNewGodAnimalObjectId = 1;	
+	required GodAnimalLevelStepState oldState = 2;
+	required GodAnimalLevelStepState newState = 3;
+	required int32 iHPAddValue = 4;
+	required int32 iAttAddValue = 5;
+};
+
+message CMD_COMMON_GETHERO_SC
+{
+	required int32 iHeroBaseId = 1;	//英雄ID
+	required int32 iGetHeroSoul = 2;	//额外获得英雄魂魄	
+	required int32 iHeroOldStep = 3;	
+	required int32 iHeroNewStep	= 4;
+};
+
+message CMD_CHG_ACTOR_HEAD_CS
+{
+	required enHeadType enHeadType = 1;
+	required int32 iHeadId = 2;
+};
+
+message CMD_EQUIP_RONGLIAN_CS
+{
+	repeated int32 equipPosList	= 1;	// 装备背包位置数组
+};
+
+message CMD_EQUIP_RONGLIAN_SC
+{
+	required int32 retCode = 1;			// 结果(0为成功, 其他为错误码)
+	optional EquipInfo equipData = 2; 	// 新生成装备数据
+};
+
+message CMD_EQUIP_XILIAN_DATA_SC
+{
+	required uint32 objId = 1;				// 装备id
+	repeated PropItem propList = 2;			// 属性列表
+};
+
+message CMD_EQUIP_XILIAN_GEN_CS
+{
+	required uint32 cobjid = 1;			// 容器id(在背包里上行角色id, 在将领身上，上行将领id)
+	required int32 pos = 2;				// 装备位置
+	repeated int32 lockPosList	= 3;	// 锁定位置数组(如设置0,1,2 表示锁定前3个位置.)
+};
+
+message CMD_EQUIP_XILIAN_GEN_SC
+{
+	required int32		retCode 	= 1;	// 结果(0为成功, 其他为错误码)
+	required uint32		objId		= 2;	// 对应object id
+	repeated PropItem	propList	= 3;	// 洗炼属性列表
+};
+
+message CMD_EQUIP_XILIAN_REPLACE_CS
+{
+	required uint32 cobjid = 1;			// 容器id(在背包里上行角色id, 在将领身上，上行将领id)
+	required int32 pos = 2;				// 装备位置
+};
+
+message CMD_EQUIP_XILIAN_REPLACE_SC
+{
+	required int32	retCode = 1;	// 结果(0为成功, 其他为错误码)
+};
+
+message CMD_EQUIP_XILIAN_TRANSFER_CS
+{
+	required uint32 srcCObjId	= 1;	// 源容器id(在背包里上行角色id, 在将领身上，上行将领id)
+	required uint32 dstCObjId	= 2;	// 目标容器id(在背包里上行角色id, 在将领身上，上行将领id)
+	required int32 srcPos		= 3;	// 源装备位置
+	required int32 dstPos		= 4;	// 目标装备位置
+};
+
+message CMD_EQUIP_XILIAN_BUYLOCK_CS
+{
+	required uint32 count	= 1;	// 购买数量
+};
+
+message CMD_EQUIP_XILIAN_BUYLOCK_SC
+{
+	required int32 retCode = 1;		// 结果(0表示成功)
+};
+
+message CMD_EQUIP_XILIAN_TRANSFER_SC
+{
+	required int32 retCode = 1;		// 结果(0表示成功)
+}
+
+enum ManorResType
+{
+	en_ManorResType_NONE = 0;
+	en_ManorResType_Silver = 1;
+	en_ManorResType_HEROEXP = 2;
+	en_ManorResType_TIEJIANGPU = 3;
+	en_ManorResType_WUHUNDIAN = 4;
+};
+message ManorResDetail
+{
+	required int32 iResId = 1;
+	required int32 iResLevel = 2;
+	required bool bResInBuild = 3;
+	optional int32 iRemainSecond = 4;
+	optional bool bCanHarvest = 5;   //武魂殿，铜雀台解析\
+	required ManorResType iResType = 6;
+};
+
+message CMD_MANOR_QUERY_SC
+{
+	repeated ManorResDetail szManorSilverResDetail = 1;  	//铜矿信息
+	repeated ManorResDetail szManorHeroExpResDetail =2;		//修为矿信息
+	required int32 iSilverProductSpeed = 3;			//铜矿生产速度
+	required int32 iHeroExpProductSpeed = 4;		//修为矿生产速度
+	required int32 iSilverTotalProduct = 5;			//铜矿总产出
+	required int32 iHeroExpTotalProduct = 6;		//修为矿总产出
+	required ManorResDetail TieJiangPuDetail = 7;	//铁匠铺可收取
+	required ManorResDetail WuHunDianDetail = 8;	//武魂殿可收取
+	required int32 iNowBulidTeams = 9;				//当前修建的建筑队
+	required int32 iTotalBuildTeams = 10;			//总的修建队
+	required int32 iCurSilverPutOut = 11;			//铜矿当前产出
+	required int32 iCurHeroExpPutOut = 12;			//修为矿当前产出
+	required int32 iCurCanHavestTimes = 13;			//当前可收次数
+	required int32 iTotalHavestTimes = 14;			//总的可收获次数
+	required int32 iRemaindProtectSecond = 16;				//剩余保护时间
+	required int32 iSearchCost = 17;				//搜索消耗
+	
+ };
+
+message CMD_MANOR_RES_USE_GOLD_LEVELUP_CS		  //服务器重新将领地详情push出来 CMD_MANOR_QUERY_SC 
+{
+	required int32 iResId = 1;
+	required ManorResType iResType = 2;
+};
+
+message CMD_MANOR_RES_COMMON_LEVELUP_CS
+{
+	required int32 iResId = 1;
+	required ManorResType iResType = 2;
+};
+
+message MonerHeroSoulDetail
+{
+	required int32 iHeroSoulId = 1; //heroID <==> iHeroSoulId
+	required bool bHeroIsWuXieKeJi = 2;
+	required int32 iHeroSoulCount = 3;	  //总的数量
+	required int32 iHeroHaveSoulLootCount = 4; 	//掠夺了的数量
+};
+
+message ManorHeroSoulBox
+{
+	required bool bIsOpen = 1;  //true 解析英雄，false解析格子开方
+	optional int32 iBoxOpenLevel = 2;
+	optional MonerHeroSoulDetail detail = 3;
+	required int32 iBoxIndex = 4;
+};
+
+message CMD_MANOR_WUHUNDIAN_QUERY_SC
+{
+	required bool bIsBulid = 1; 					//true==正在建造
+	optional int32 iBulidRemainSecond = 2; 		 	//bIsBulid==true，解析
+	repeated ManorHeroSoulBox szManorHeroSoulBox = 3;
+	required bool bIsProduct = 4; 					//正在祭练
+	optional int32 iRefreshCost = 5;				//bIsProduct == false，解析
+	optional int32 iProductReaminSecond = 6; 		//bIsProduct == true，解析
+	optional int32 iRemianRefreshTimes = 7;			//剩余刷新次数
+	optional int32 iTotalRemainRefreshTimes = 8;	//总的刷新次数
+	required int32 iLevelID = 9;
+};
+
+message CMD_MANOR_WUHUNDIAN_WUXIEKEJIE_CS 			//武魂殿无懈可击
+{
+	required int32 iBoxIndex = 1;  //要无懈可击对应格子的Index
+};
+
+message ManorTieJiangPuItemDetail
+{
+	required int32 iItemId = 1;		//铁匠铺物品ID
+	required bool bItemIsWuXieKeJi = 2;
+	//required bool bItemBeLoot = 3;
+	//required PropItem addLifeAtt = 4; //附加属性
+	required int32 iItemCount = 3;	  //总的数量
+	required int32 iItemHaveLootCount = 4; 	//掠夺了的数量
+	
+};
+
+message ManorTieJiangPuItemBox
+{
+	required bool bIsOpen = 1; //这个盒子是否已经打开  
+	optional ManorTieJiangPuItemDetail itemDetail = 2;
+	required int32 iBoxIndex = 3;
+};
+
+message CMD_MANOR_TIEJIANGPU_QUERY_SC		//铁匠铺查看
+{
+	required bool bIsBulid = 1; 									//true==正在建造
+	optional int32 iBulidRemainSecond = 2; 		 					//bIsBulid==true，解析
+	repeated ManorTieJiangPuItemBox szManorTieJiangPuItemBox = 3; 	//
+	required bool bIsProduct = 4; 					//正在祭练
+	optional int32 iRefreshCost = 5;				//bIsProduct == false，解析
+	optional int32 iProductReaminSecond = 6; 		//bIsProduct == true，解析
+	optional int32 iRemianRefreshTimes = 7;			//剩余刷新次数
+	optional int32 iTotalRemainRefreshTimes = 8;	//总的刷新次数
+	required int32 iLevelID = 9;
+};
+
+message	CMD_MANOR_TIEJIANGPU_WUXIEKEJI_CS    //铁匠铺物品设置无懈可击
+{
+	required int32 iBoxIndex = 1;
+};
+
+message ManorLootLog
+{
+	required PBPkRole attacker = 1;
+	required int32 bAttackerWin = 2;
+	required string strAttackerName = 3; // 掠夺者名字
+	optional FightAwardResult award = 4;
+};
+
+message CMD_MANOR_QUERY_LOG_SC
+{
+	repeated ManorLootLog szManorLootLog = 1;
+};
+
+message CMD_MANOR_REVENGE_CS //报复
+{
+	required PBPkRole enemy = 1;
+};	
+				
+//CMD_MANOR_PUBLISH = 17317;					//悬赏发布
+message BeLootActorInfo
+{
+	required string strActorName = 1;
+	required int32 iActorLevel = 2;
+	required int32 iFightValue = 3;
+	required int32 iHeadID = 4;
+	required string legionName = 5;
+};
+
+message ManorEnemyHeroFormation
+{
+	required int32 iPos = 1;
+	required int32 iBaseId = 2;
+	required int32 iLevelStep = 3;
+	required int32 iLevel = 4;
+	required int32 iquality = 5;
+};
+
+message OtherManorResDetail
+{
+	required int32 iResId = 1;
+	required int32 iResLevel = 2;
+};
+
+message CMD_MANOR_REQUEST_LOOT_SC//获取掠夺对象信息
+{
+	required BeLootActorInfo beLootActorInfo = 1;
+	required int32 iCanLootSilver = 2;
+	required int32 iCanLootHeroExp = 3;
+	repeated ManorEnemyHeroFormation szEnemyHeroFormation = 4;
+	required int32 iRefreshCost = 5;
+	required int32 iLootCostVigor = 6; //掠夺消耗精力
+	required PBPkRole enemy = 7;
+	repeated OtherManorResDetail silverRes = 8;
+	repeated OtherManorResDetail heroExpRes = 9;
+	required OtherManorResDetail tieJiangyPu = 10;
+	required OtherManorResDetail wuHunDian = 11;
+};
+
+message CMD_MANOR_REQUEST_LOOT_BATTLE_CS
+{
+	required PBPkRole enemy = 1;
+};
+
+
+
+
+message CMD_HERO_CALLHERO_CS
+{
+	required int32 iHeorID = 1;
+};
+
+
+message CMD_HERO_CALLHERO_SC
+{
+	required int32 iHeroID = 1;
+	required uint32 dwNewHeroID = 2;
+};
+
+
+message CMD_HERO_EQUIP_FAVORITE_CS
+{
+	required uint32 dwHeroObjectID = 1;
+	required int32 iItemID = 2;
+	required int32 iPos = 3;
+};
+
+
+message CMD_HERO_EQUIP_FAVORITE_SC
+{
+	required uint32 dwHeroObjectID = 1;
+	required bool bResult = 2;
+	required int32 iItemID = 3;
+	required int32 iPos = 4;
+};
+
+
+message CMD_HERO_COMBINE_FAVORITE_CS
+{
+	required int32 iItemID = 1;
+};
+
+message CMD_HERO_COMBINE_FAVORITE_SC
+{
+	required bool bResult = 1;
+	required int32 iItemID = 2;
+};
+
+
+message CMD_HERO_QUALITY_UP_CS
+{
+	required uint32 dwHeroObjectID = 1;
+};
+
+
+message CMD_HERO_QUALITY_UP_SC
+{
+	required uint32 dwHeroObjectID = 1;
+	repeated PropItem szPropAddValueList = 2;
+};
+
+enum RandomType
+{
+	en_RandType_None = 0;
+	en_RandType_Token_RandOne = 1; 	//令牌抽一次
+	en_RandType_Token_RandTen = 2;	//令牌10连抽
+	en_RandType_Gold_RandOne = 3;	//元宝抽取一次
+	en_RandType_Gold_RandTen = 4;	//元宝10连抽
+	en_RandType_VIP_RandOne = 5;	//VIP抽一次
+	en_RandType_VIP_RandTen = 6;	//VIP 抽10次
+};
+
+message CMD_SHOPSYSTEM_RANDITEMORHERO_CS
+{
+	required RandomType enType = 1;
+};
+
+enum enRandReturnType
+{
+	enRandReturnType_None = 0;
+	enRandReturnType_Hero = 1;
+	enRandReturnType_Item = 2; 
+	enRandReturnType_HeroSoul = 3;
+};
+
+message RandReturnUnit
+{
+	required enRandReturnType enType = 1;
+	required int32 id = 2;
+	required int32 iCount = 3;  //武魂数量
+	optional int32 iLevelUp = 4;  //等阶（英雄解析）
+	optional int32 iHeroId = 5;
+};
+
+message CMD_SHOPSYSTEM_RANDITEMORHERO_SC
+{
+	repeated RandReturnUnit  szReturn = 1;
+};
+
+message HonerGoodDetail
+{
+	required int32 iGoodId = 1;
+	required bool bIsSale = 2;
+	required int32 iIndex = 3;
+};
+
+message	CMD_SHOPSYSTEM_HONORCONVERT_QUERY_SC
+{
+	repeated HonerGoodDetail szGoodList = 1;
+	required bool bIsToday = 2;
+	required int32 iUpdateMoment = 3;
+};
+
+message CMD_SHOPSYSTEM_HONORCONVERT_CONVERT_CS
+{
+	required int32 iIndex = 1;
+};
+
+message CMD_QUERY_SANGONG_CS
+{
+	required uint32 dwHeroObjectID = 1;
+};
+
+
+message CMD_QUERY_SANGONG_SC
+{
+	required uint32 dwHeroObjectID = 1;
+	required int32 iSilver = 2;
+};
+
+message CMD_CHAT_CHANNEL_QUERY_SC
+{
+	required int32 iRemaindTimes =1;
+	optional int32 iTotalTimes = 2;
+	optional int32 iCost = 3;
+};
+
+//
+enum CoinTreeShakeType
+{
+	enCoinTreeShakeType_One = 1;
+	enCoinTreeShakeType_Ten = 2;
+};
+
+message CMD_COINTREE_SHAKE_QUERY_CS
+{
+	required CoinTreeShakeType enType = 1;
+};
+
+message CMD_COINTREE_SHAKE_QUERY_SC
+{
+	required CoinTreeDetail  detail = 1;
+	optional int32 iCanShakeTimes = 2;  // enCoinTreeShakeType_Ten
+};
+
+message CoinTreeShakeResoult
+{
+	required int32 iCost = 1;
+	required int32 iGet = 2;	
+	required int32 iKnock = 3;	//暴击
+};
+
+message CoinTreeDetail
+{
+	required CoinTreeShakeType enType = 1;
+	optional int32 iRemaindShakeTimes = 2;
+	optional int32 iTotalShakeTimes = 3;
+	required int32 iCost = 4;
+	required int32 iGet = 5;
+};
+
+message	CMD_COINTREE_SHAKE_SC
+{
+	required CoinTreeDetail detail = 1;
+	repeated CoinTreeShakeResoult szShakeResoult = 2;
+};
+message	CMD_COINTREE_SHAKE_CS
+{
+	required CoinTreeShakeType enType = 1;
+};
+
+message CMD_MANOR_TIEJIANGPU_LEVELUP_SC
+{
+	required int32 iNeedActorLevel = 1;
+};
+
+message CMD_MANOR_WUHUNDIAN_LEVELUP_SC
+{	
+	required int32 iNeedActorLevel = 1;
+};
+
+message CMD_MANOR_RES_COMMON_LEVELUP_SC
+{
+	required int32 iNeedActorLevel = 1;
+};
+
+message CMD_SEND_COVERT_CODE_CS
+{
+	required string strCovertCode = 1;
+};
+
+message CMD_SEND_COVERT_CODE_SC
+{
+	required FightAwardResult  converResoult = 1;
+};
+
+
+message CMD_QUERY_CANSAVEMONEY_SC
+{
+	required int32 iZoneID = 1;  // 充值的区域ID
+};
+
+message CMD_TBT_GETUUID_SC
+{
+	required string strUUId = 1;
+};
+
+message CMD_LEGION_APPOINT_CS
+{
+	required string strLegionMemName = 1; 
+	required bool bIsAppoint = 2;		//true == 任命 false== 解除
+};
+
+message	CMD_LEGION_QUERY_WORSHIP_SC
+{
+	required int32 iRemainWorshipTimes = 1;
+	required int32 iTotalWorshipTimes = 2;
+	required int32 iCanGetWorshipReward = 3;
+	required int32 iActorContribute = 4;
+};
+
+enum enWorshipType
+{
+	enWorshipType_Free = 1;
+	enWorshipType_UseSilver = 2;
+	enWorshipType_UseGold = 3;
+}
+
+message CMD_LEGION_WORSHIP_MEMBER_CS
+{
+	required string strMemberName = 1;
+	required uint32 worshipType = 2; 
+};
+
+message CMD_LEAVE_LEGION_SC
+{
+	required int32 iGetContribute = 1;
+};
+
+message CMD_SHOPSYSTEM_QUERY_SC
+{
+	required bool bTokenHaveFreeTimes = 1;  //false == 免费次数已经用完
+	optional bool bHaveTime = 2;	// true 有倒计时
+	optional uint32 iSecond = 3;
+	optional int32 iTotalFreeTimes = 4;
+	optional int32 iRemaindFreeTimes = 5;
+	required bool bGoldCanFree = 6;
+	optional uint32 iRemainSecond = 7;   
+};
+
+message CMD_PAYMENT_FIRST_PAY_SC
+{
+	required FightAwardResult resoult = 1;
+};
+
+message CMD_OPERATESYSTEM_QUERY_CHECKIN_SC
+{
+	required int32 iHaveCheckInCount = 1;  //已经累积签到个数
+	optional bool bLastCanClick = 2;   
+	optional int32 iHaveClickTimes = 3;
+};
+
+message CMD_OPERATESYSTEM_CHECKIN_CS
+{
+	required int32 iWillCheckInID = 1;
+};
+
+message CMD_OPERATESYSTEM_CHECKIN_SC
+{
+	repeated PropItem szAwardPropList = 1;
+	repeated FightAwardItem szAwardItemList = 2;
+	repeated DreamRewardHero szAwardHeroList = 3;
+};
+
+message CMD_PAYMENT_QUERY_SC
+{
+	repeated int32 iId = 1;
+	required int32 iMonthCardRemaind = 2;
+};
+
+message CMD_PAYMENT_FIRST_QUERY_SC
+{
+	required FightAwardResult resoult = 1;
+	required bool bCanGet = 2;
+};
+
+message CMD_NOTICE_LEGOIN_MEMBER_OUTLEGION_SC
+{
+	required int32 iNoticeType = 1;    //1 == 玩家被踢出军团，2 == 军团解散
+};
+	
+message ProtectDetail
+{
+	required int32 iProtectId = 1;  
+	optional int32 iRemaindSecond = 3;
+};
+
+message CMD_MANORSYSTEM_QUERY_PROTECT_SC
+{
+	repeated ProtectDetail szProtectDetail = 1;
+};
+
+
+message CMD_MANORSYTEM_BUY_PROTECT_CS
+{
+	required int32 iProtectId = 1;  
+};
+
+message GrowupUnitDetail
+{
+	required int32 iId = 1;
+	required int32 iGoalLevel = 2 ;  //玩家等级>= iGoalLevel 表明已经达成，可以领奖
+	required int32 iAward = 3;   	//元宝奖励
+};
+
+message CMD_QUERY_GROWUP_DETAIL_SC
+{
+	required bool bIsBuy  = 1;
+	repeated GrowupUnitDetail szGrowUpDetail = 2;
+}; 
+
+message CMD_GET_GROWUP_REWARD_CS
+{
+	required int32 iId = 1;
+};
+
+message AccountUnit
+{
+	optional FightAwardResult award = 1; 
+	required int32 iGoal = 2;
+	required int32 iId = 3;
+};
+
+message CMD_QUERY_ACCOUNT_PAYMENT_DETAIL_SC
+{ 
+	required int32 iActorAccPayment = 1;
+	repeated AccountUnit  szAccountList = 2;
+};
+
+message CMD_QUERY_DAY_PAYMENT_DETAIL_SC
+{
+	required int32 			paied		= 1;	// 累计支付
+	repeated AccountUnit 	rewardList	= 2;	// 奖励列表
+	repeated int32			fetched		= 3;	// 已领取的奖励id(rewardId)
+};
+
+message CMD_GET_DAY_PAYMENT_REWARD_CS
+{
+	required int32 rewardId				= 1;	// 奖励id
+};
+
+message CMD_GET_DAY_PAYMENT_REWARD_SC
+{
+	required FightAwardResult  reward 	=1;
+};
+
+message CMD_GET_ACCOUNT_PAYMENT_REWARD_CS
+{
+	required int32 iId = 1;
+};
+
+message CMD_GET_ACCOUNT_PAYMENT_REWARD_SC
+{
+	required FightAwardResult  reward =1;
+};
+
+enum enSpecialActiveId
+{
+	enSpecialActiveId_GrowUpID = 1;
+	enSpecialActiveId_AccPayMent = 2;
+	enSpecialActiveId_PhoneStream = 3;
+	enSpecialActiveId_AccLogin = 4;
+	enSpecialActiveId_DayPayment = 5;
+};
+message CMD_QUERY_OPERATE_ACTIVE_SC
+{
+	repeated  int32 szOpenActive = 1;
+};
+
+message CMD_OPERATE_TELPHONE_STREAM_CS
+{
+	required string strTelPhoneNum = 1;
+};
+
+
+message CMD_QUERY_ACCOUNT_LOGIN_IN_SC
+{
+	repeated  int32 szAccount = 1;		//剩余要展示的登陆天数 
+	required int32 iAccLoginCount = 2;  //累积登陆天数
+};
+
+message CMD_GET_ACCOUNT_REWARD_CS
+{
+	required  int32 iAccountTimes = 1;   //累积登陆天数
+};
+
+message CMD_GET_ACCOUNT_REWARD_SC
+{
+	required FightAwardResult  reward =1; //奖励返回
+};
+
+message CMD_VIVO_ALOGIN_CS
+{
+	required string strToken = 1;  //客户端token
+};
+
+message CMD_VIVO_ALOGIN_SC
+{
+	required string struid = 1;  //玩家唯一标示
+};
+
+message CMD_VIVO_BUY_GOOD_CS
+{
+	required int32 iPrice = 1;   //充值表第二个参数
+};
+
+message CMD_VIVO_BUY_GOOD_SC
+{
+	required int32 iPrice = 1;		  //返回客户端请求充值表第二个参数
+	required string orderNumber = 2;  //交易流水号
+	required string accessKey = 3;
+	required string appId = 4;
+};
+
+
+message CMD_IOS_BUY_GOODS_CS
+{
+	required int32 iPrice = 1;		// 充值表第二个参数
+	required string receipt = 2;	// IOS的付费凭证
+};
+
+message CMD_IOS_BUY_GOODS_SC
+{
+	required int32 	iPrice = 1;		// 充值表第二个参数
+	required string receipt = 2;	// IOS付费凭证
+	required int32	errorCode =3;	// 0 表示成功, 否则返回错误编码
+};
+

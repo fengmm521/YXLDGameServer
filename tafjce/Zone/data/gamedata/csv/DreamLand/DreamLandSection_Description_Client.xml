@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<DreamLandSection>
+  <DataRes xmlName="m_ID" excelName="章节ID" DataType="ID"/>
+  <DataRes xmlName="m_name" excelName="名称" DataType="String"/>
+</DreamLandSection>
+
+</client>

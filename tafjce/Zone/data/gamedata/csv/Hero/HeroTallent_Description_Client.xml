@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<HeroTallent>
+  <DataRes xmlName="m_ID" excelName="前端ID" DataType="ID"/>
+  <DataRes xmlName="m_name" excelName="名称" DataType="String"/>
+  <DataRes xmlName="m_Info" excelName="描述" DataType="String"/>
+  <DataRes xmlName="m_level" excelName="等级" DataType="short"/>
+  <DataRes xmlName="m_quality" excelName="品质" DataType="byte"/>
+  <DataRes xmlName="m_material" excelName="升级材料" DataType="string"/>
+  <DataRes xmlName="m_sliver" excelName="升级铜币" DataType="int"/>
+  <DataRes xmlName="m_levelstep" excelName="升级等阶" DataType="short"/>
+  <DataRes xmlName="m_curskillinfo" excelName="当前效果描述" DataType="string"/>
+  <DataRes xmlName="m_nextskillinfo" excelName="下级效果描述" DataType="string"/>
+  <DataRes xmlName="m_icon" excelName="图标" DataType="int"/>
+  <DataRes xmlName="m_playerlimit" excelName="主公等级要求" DataType="short"/>
+   <DataRes xmlName="m_skillInfoShow" excelName="技能升级效果" DataType="string"/>
+</HeroTallent>
+
+</client>

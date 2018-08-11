@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<EquipSuit>
+  <DataRes xmlName="m_ID" excelName="套装ID" DataType="ID"/>
+  <DataRes xmlName="m_name" excelName="套装名称" DataType="String"/>
+  <DataRes xmlName="m_equipList" excelName="套装列表" DataType="String"/>
+  <DataRes xmlName="m_att1" excelName="2件属性描述" DataType="String"/>
+  <DataRes xmlName="m_att2" excelName="3件属性描述" DataType="String"/>
+  <DataRes xmlName="m_att3" excelName="4件属性描述" DataType="String"/>
+</EquipSuit>
+
+</client>

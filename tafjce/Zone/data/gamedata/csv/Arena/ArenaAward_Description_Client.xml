@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<ArenaAward>
+  <DataRes xmlName="m_ID" excelName="ID" DataType="ID"/>
+  <DataRes xmlName="m_Ranking" excelName="名次" DataType="string"/>
+  <DataRes xmlName="m_honor" excelName="荣誉" DataType="int"/>
+  <DataRes xmlName="m_Copper" excelName="铜钱" DataType="int"/>
+  <DataRes xmlName="m_wing" excelName="元宝" DataType="int"/>
+</ArenaAward>
+
+</client>

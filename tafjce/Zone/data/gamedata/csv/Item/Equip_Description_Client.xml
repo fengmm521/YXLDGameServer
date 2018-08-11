@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<Equip>
+  <DataRes xmlName="m_ID" excelName="道具ID" DataType="ID"/>
+  <DataRes xmlName="m_name" excelName="名称" DataType="String"/>
+  <DataRes xmlName="m_quality" excelName="品质" DataType="byte"/>
+  <DataRes xmlName="m_step" excelName="等阶" DataType="byte"/>
+  <DataRes xmlName="m_lvlLimit" excelName="等级限制" DataType="short"/>
+  <DataRes xmlName="m_equipPos" excelName="装备部位" DataType="byte"/>
+  <DataRes xmlName="m_icon" excelName="图标" DataType="int"/>
+  <DataRes xmlName="m_sellType" excelName="装备出售类型" DataType="byte"/>
+  <DataRes xmlName="m_sellCount" excelName="装备出售价格" DataType="int"/>
+  <DataRes xmlName="m_drop" excelName="掉落地点" DataType="String"/>
+  <DataRes xmlName="m_zhiyeLimit" excelName="职业限制" DataType="int"/>
+  <DataRes xmlName="m_attinfo" excelName="展示属性" DataType="String"/>
+  <DataRes xmlName="m_desc" excelName="装备描述" DataType="String"/>
+  <DataRes xmlName="m_score" excelName="装备评分" DataType="int"/>
+</Equip>
+
+</client>

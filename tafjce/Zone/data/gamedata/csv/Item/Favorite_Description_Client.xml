@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<FavoriteCombine>
+  <DataRes xmlName="m_ID" excelName="喜好品ID" DataType="ID"/>
+  <DataRes xmlName="m_favoriteOne" excelName="消耗材料1" DataType="int"/>
+  <DataRes xmlName="m_favoriteOneNeed" excelName="消耗材料1数量" DataType="int"/>
+  <DataRes xmlName="m_favoriteTwo" excelName="消耗材料2" DataType="int"/>
+  <DataRes xmlName="m_favoriteTwoNeed" excelName="消耗材料2数量" DataType="int"/>
+  <DataRes xmlName="m_favoriteThree" excelName="消耗材料3" DataType="int"/>
+  <DataRes xmlName="m_favoriteThreeNeed" excelName="消耗材料3数量" DataType="int"/>
+  <DataRes xmlName="m_favoriteFour" excelName="消耗材料4" DataType="int"/>
+  <DataRes xmlName="m_favoriteFourNeed" excelName="消耗材料4数量" DataType="int"/>
+  <DataRes xmlName="m_favoriteCount" excelName="材料种类" DataType="int"/>
+  <DataRes xmlName="m_cost" excelName="消耗铜币" DataType="int"/>
+</FavoriteCombine>
+
+</client>

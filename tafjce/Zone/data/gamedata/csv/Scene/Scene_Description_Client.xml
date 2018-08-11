@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<Scene>
+	<DataRes xmlName="m_ID" excelName="ID" DataType="ID"/>	
+	<DataRes xmlName="m_name" excelName="关卡名" DataType="String"/>
+	<DataRes xmlName="m_path" excelName="地图路径" DataType="String"/>
+	<DataRes xmlName="m_icon" excelName="关卡图片" DataType="int"/>
+	<DataRes xmlName="m_desc" excelName="关卡描述" DataType="String"/>
+	<DataRes xmlName="m_drop" excelName="掉落" DataType="String"/>
+	<DataRes xmlName="m_monster" excelName="关卡怪物" DataType="String"/>
+</Scene>
+
+</client>

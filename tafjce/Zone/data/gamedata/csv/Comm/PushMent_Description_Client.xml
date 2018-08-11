@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<PushMent>
+  <DataRes xmlName="m_ID" excelName="推送ID" DataType="ID"/>
+  <DataRes xmlName="m_Title" excelName="标题" DataType="String"/>
+  <DataRes xmlName="m_info" excelName="描述" DataType="String"/>
+  <DataRes xmlName="m_time" excelName="时间" DataType="String"/>
+</PushMent>
+
+</client>

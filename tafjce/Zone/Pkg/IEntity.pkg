@@ -1,0 +1,20 @@
+class IObject
+{
+public:
+	virtual Int32 getProperty(int key, Int32 nDef ) = 0;
+	virtual const char* getProperty(int key, const char* pDef ) = 0;
+	virtual float getProperty(int key, float fDef ) = 0;
+	virtual Int64 getInt64Property(int key, Int64 nDef ) = 0;
+	virtual void setProperty(int key, Int32 nValue) = 0;
+	virtual void setProperty(int key, const char* strValue) = 0;
+	virtual void setProperty(int key, float fValue) = 0;
+	virtual void setInt64Property(int key, Int64 nValue) = 0;
+};
+
+class IEntity:public IObject
+{
+public:
+
+	virtual Uint32 getHandle() = 0;
+};
+

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<OperateActive>
+  <DataRes xmlName="m_ID" excelName="活动ID" DataType="ID"/>
+  <DataRes xmlName="m_activityIcon" excelName="活动图标" DataType="String"/>
+  <DataRes xmlName="m_activityName" excelName="活动名称" DataType="String"/>
+  <DataRes xmlName="m_activityDes" excelName="活动描述" DataType="String"/>
+  <DataRes xmlName="m_activityInfo" excelName="活动详情" DataType="String"/>
+  <DataRes xmlName="m_activityUpIcon" excelName="活动上标" DataType="String"/>
+  <DataRes xmlName="m_activityType" excelName="活动类型" DataType="int"/>
+</OperateActive>
+
+</client>

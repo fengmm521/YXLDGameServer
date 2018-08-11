@@ -1,0 +1,16 @@
+$cfile "../Src/LuaWrapper/LuaWrapperPch.h"
+$cfile "../Src/LuaWrapper/CommWrapper.h"
+
+typedef int       					Int32;
+typedef long            Int64;
+typedef long            INT64;
+typedef unsigned long   DWORD64;
+typedef unsigned int       	DWORD;
+typedef unsigned short      WORD; 
+typedef unsigned char       BYTE;
+typedef unsigned char       UCHAR;
+typedef unsigned int		Uint32;
+
+$pfile "EventArgs.pkg"
+$pfile "IEntity.pkg"
+$pfile "EntityProperty.pkg"

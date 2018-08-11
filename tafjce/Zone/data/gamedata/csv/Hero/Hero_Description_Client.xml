@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<Hero>
+  <DataRes xmlName="m_ID" excelName="ID" DataType="ID"/>
+  <DataRes xmlName="m_name" excelName="名称" DataType="String"/>
+  <DataRes xmlName="m_desc" excelName="英雄描述" DataType="String"/>
+  <DataRes xmlName="m_icon" excelName="英雄头像" DataType="int"/>
+  <DataRes xmlName="m_img1" excelName="英雄形像1" DataType="short"/>
+  <DataRes xmlName="m_img2" excelName="英雄形像2" DataType="short"/>
+  <DataRes xmlName="m_animName" excelName="动画名" DataType="String"/>
+  <DataRes xmlName="m_animScale" excelName="动画缩放" DataType="int"/>
+  <DataRes xmlName="m_heroType" excelName="英雄类型" DataType="int"/>
+  <DataRes xmlName="m_skillId" excelName="初始技能" DataType="int"/>
+  <DataRes xmlName="m_attckability" excelName="攻击能力" DataType="int"/>
+  <DataRes xmlName="m_defenseability" excelName="防御能力" DataType="int"/>
+  <DataRes xmlName="m_lifeability" excelName="生命能力" DataType="int"/>
+  <DataRes xmlName="m_herotrait" excelName="英雄特点" DataType="string"/>
+  <DataRes xmlName="m_heroSoulInfo" excelName="魂魄描述" DataType="string"/>
+  <DataRes xmlName="m_heroSoulItemId" excelName="英雄魂魄物品ID" DataType="int"/>
+  <DataRes xmlName="m_heroNeedSoulNumber" excelName="召唤所需魂魄" DataType="int"/>
+  <DataRes xmlName="m_heroInitStar" excelName="初始星级" DataType="int"/>
+  <DataRes xmlName="m_heroInitQuality" excelName="初始品质" DataType="int"/>
+  <DataRes xmlName="m_heroPositioning" excelName="英雄定位" DataType="string"/>
+  <DataRes xmlName="m_heroSummondCost" excelName="召唤所需铜币" DataType="int"/>
+  <DataRes xmlName="m_heroTallent" excelName="天赋技能列表" DataType="string"/>
+</Hero>
+
+</client>

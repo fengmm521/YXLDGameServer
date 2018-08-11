@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<SkillClientEffect>
+  <DataRes xmlName="m_ID" excelName="ID" DataType="ID"/>
+  <DataRes xmlName="m_ationType" excelName="施法动作类型" DataType="byte"/>
+  <DataRes xmlName="m_attEffectType" excelName="施法特效类型" DataType="byte"/>
+  <DataRes xmlName="m_attEffectName" excelName="施法特效" DataType="String"/>
+  <DataRes xmlName="m_gasSound" excelName="聚气音效" DataType="String"/>
+  <DataRes xmlName="m_attSound" excelName="施法音效" DataType="String"/>
+  <DataRes xmlName="m_attTime" excelName="施法时间" DataType="short"/>
+  <DataRes xmlName="m_bulletType" excelName="子弹类型" DataType="byte"/>
+  <DataRes xmlName="m_bulletName" excelName="子弹特效" DataType="String"/>
+  <DataRes xmlName="m_bulletSpeed" excelName="子弹飞行速度" DataType="short"/>
+  <DataRes xmlName="m_targetEffectType" excelName="受击特效类型" DataType="byte"/>
+  <DataRes xmlName="m_targetEffectName" excelName="受击特效" DataType="String"/>
+  <DataRes xmlName="m_targetSound" excelName="受击音效" DataType="String"/>
+  <DataRes xmlName="m_sceneEffect" excelName="屏幕特殊效果" DataType="byte"/>
+</SkillClientEffect>
+
+</client>

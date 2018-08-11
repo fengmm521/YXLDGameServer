@@ -1,0 +1,305 @@
+diaochanBul	 is name OK
+gongjianshouBul1	 is name OK
+shangguanBul1	 is name OK
+sunwuBul2	 is name OK
+zhugeliangBul2	 is name OK
+simayiBul2	 is name OK
+shangyangBul2	 is name OK
+zhangliangBul2	 is name OK
+direnjieBul2	 is name OK
+shangguanBul2	 is name OK
+xishiBul2	 is name OK
+diaochanBul	 is name OK
+zhenhuanBul2	 is name OK
+ximenqingBul	 is name OK
+zhangsfBul2	 is name OK
+linchongBul2	 is name OK
+wangchongyangBul2	 is name OK
+liubeiBul2	 is name OK
+chengjisihanBul2	 is name OK
+zhuyuanzhangBul2	 is name OK
+caocaoBul2	 is name OK
+lishiminBul2	 is name OK
+wuzetianBul2	 is name OK
+zhugeliangBul2	 is name OK
+zhenhuanBul1	 is name OK
+direnjieBul1	 is name OK
+zhangliangBul1	 is name OK
+shangyangBul1	 is name OK
+zhugeliangBul1	 is name OK
+wangchongyangBul1	 is name OK
+wangchongyangBul1	 is name OK
+simayiBul1	 is name OK
+diexianBul	 is name OK
+gongjianshouBul2	 is name OK
+caocaoBul1	 is name OK
+liubeiBul1	 is name OK
+xiaolongnvBul	 is name OK
+chengjisihanBul1	 is name OK
+jiuweitianhuBul	 is name OK
+lishiminBul1	 is name OK
+linchongBul1	 is name OK
+qingluanBul	 is name OK
+hanbaBul	 is name OK
+wuzetianBul1	 is name OK
+bingqinlinBul	 is name OK
+cikeBul2	 is name OK
+wushiBul2	 is name OK
+zhangliangBul2	 is name OK
+wushiBul1	 is name OK
+zhuyuanzhangBul1	 is name OK
+qinshihuangBul1	 is name OK
+baihuBul	 is name OK
+zhuqueBul	 is name OK
+lvbuBul3	 is name OK
+zhaoyunBul3	 is name OK
+huamulanBul3	 is name OK
+zhugeliangBul3	 is name OK
+shangyangBul3	 is name OK
+zhangliangBul3	 is name OK
+direnjieBul3	 is name OK
+shangguanBul3	 is name OK
+jingkeBul3	 is name OK
+diaocanBul3	 is name OK
+zhenhuanBul3	 is name OK
+xiaoqiaoBul3	 is name OK
+ximenqingBul3	 is name OK
+zhangsfBul3	 is name OK
+lvdongbinBul3	 is name OK
+caocaoBul1	 is name OK
+tangbohuBul3	 is name OK
+linchongBul3	 is name OK
+wangchongyangBul3	 is name OK
+liubeiBul3	 is name OK
+chengjisihanBul3	 is name OK
+zhuyuanzhangBul3	 is name OK
+lishiminBul3	 is name OK
+wuzetianBul3	 is name OK
+diaochanAim	 is name OK
+diaochanAim	 is name OK
+diaochanAim	 is name OK
+gongjianshouAim1	 is name OK
+shangguanAim1	 is name OK
+yuefeiAim2	 is name OK
+guanyuAim2	 is name OK
+simayiAim2	 is name OK
+shangyangAim2	 is name OK
+zhangliangAim2	 is name OK
+direnjieAim2	 is name OK
+shangguanAim2	 is name OK
+jingkeAim2	 is name OK
+xishiAim2	 is name OK
+diaochanAim	 is name OK
+zhenhuanAim2	 is name OK
+xiaoqiaoAim2	 is name OK
+ximenqingAim	 is name OK
+zhangsfAim2	 is name OK
+lvdongbinAim2	 is name OK
+tangbohuAim2	 is name OK
+linchongAim2	 is name OK
+wangchongyangAim2	 is name OK
+liubeiAim2	 is name OK
+chengjisihanAim2	 is name OK
+zhuyuanzhangAim2	 is name OK
+caocaoAim2	 is name OK
+lishiminAim2	 is name OK
+wuzetianAim2	 is name OK
+qinshihuangAim2	 is name OK
+Effaddbuff	 is name OK
+zhenhuanAim1	 is name OK
+xishiAim1	 is name OK
+zhenhuanAim1	 is name OK
+direnjieAim1	 is name OK
+zhangliangAim1	 is name OK
+shangyangAim1	 is name OK
+zhugeliangAim1	 is name OK
+wangchongyangAim1	 is name OK
+wangchongyangAim1	 is name OK
+simayiAim1	 is name OK
+tangbohuAim1	 is name OK
+gongjianshouAim2	 is name OK
+caocaoAim1	 is name OK
+liubeiAim1	 is name OK
+xiaolongnvAim1	 is name OK
+guanyuAim1	 is name OK
+chengjisihanAim1	 is name OK
+jiuweitianhuAim	 is name OK
+lishiminAim1	 is name OK
+linchongAim1	 is name OK
+qingluanAim	 is name OK
+hanbaAim2	 is name OK
+wuzetianAim1	 is name OK
+bingqinlinAim	 is name OK
+guanyuAim2	 is name OK
+cikeAim2	 is name OK
+wushiAim2	 is name OK
+zhangliangAim2	 is name OK
+wushiAim1	 is name OK
+qinshihuangAim1	 is name OK
+lingyuAim2	 is name OK
+baihuAim	 is name OK
+zhuqueAim	 is name OK
+diaochanAim	 is name OK
+lingyuAim1	 is name OK
+xiaolongnvAim1	 is name OK
+hanbaAim1	 is name OK
+jiuweitianhuAim1	 is name OK
+qingluanAim1	 is name OK
+baihuAim1	 is name OK
+zhuqueAim1	 is name OK
+bingqinlinAim1	 is name OK
+caocaoAim1	 is name OK
+guanyuAim1	 is name OK
+zhaoyunAim3	 is name OK
+huamulanAim3	 is name OK
+simayiAim3	 is name OK
+shangyangAim3	 is name OK
+zhangliangAim3	 is name OK
+direnjieAim3	 is name OK
+shangguanAim3	 is name OK
+jingkeAim3	 is name OK
+diaocanAim3	 is name OK
+zhenhuanAim3	 is name OK
+xiaoqiaoAim3	 is name OK
+ximenqingAim3	 is name OK
+zhangsfAim3	 is name OK
+lvdongbinAim3	 is name OK
+caocaoAim1	 is name OK
+tangbohuAim3	 is name OK
+linchongAim3	 is name OK
+wangchongyangAim3	 is name OK
+liubeiAim3	 is name OK
+chengjisihanAim3	 is name OK
+zhuyuanzhangAim3	 is name OK
+lishiminAim3	 is name OK
+wuzetianAim3	 is name OK
+qinshihuangAim3	 is name OK
+The Effect is "diaochanBul" and the bulletKind is not 1 and 2 in line 4
+The Effect and bulletKind is OK in line 5
+The Effect and bulletKind is OK in line 6
+The Effect and bulletKind is OK in line 7
+The Effect and bulletKind is OK in line 8
+The Effect and bulletKind is OK in line 9
+The Effect and bulletKind is OK in line 10
+The Effect and bulletKind is OK in line 11
+The Effect and bulletKind is OK in line 12
+The Effect and bulletKind is OK in line 13
+The Effect and bulletKind is OK in line 14
+The Effect and bulletKind is OK in line 15
+The Effect and bulletKind is OK in line 16
+The Effect and bulletKind is OK in line 17
+The Effect and bulletKind is OK in line 18
+The Effect and bulletKind is OK in line 19
+The Effect and bulletKind is OK in line 20
+The Effect and bulletKind is OK in line 21
+The Effect and bulletKind is OK in line 22
+The Effect and bulletKind is OK in line 23
+The Effect and bulletKind is OK in line 24
+The Effect and bulletKind is OK in line 25
+The Effect and bulletKind is OK in line 26
+The Effect and bulletKind is OK in line 27
+The Effect and bulletKind is OK in line 28
+The Effect and bulletKind is OK in line 29
+The Effect and bulletKind is OK in line 30
+The Effect and bulletKind is OK in line 31
+The Effect and bulletKind is OK in line 32
+The Effect and bulletKind is OK in line 33
+The Effect and bulletKind is OK in line 34
+The Effect and bulletKind is OK in line 35
+The Effect and bulletKind is OK in line 36
+The Effect and bulletKind is OK in line 37
+The Effect and bulletKind is OK in line 38
+The Effect and bulletKind is OK in line 39
+The Effect is "wuzetianBul2" and the bulletKind is not 1 and 2 in line 40
+The Effect and bulletKind is OK in line 41
+The Effect and bulletKind is OK in line 42
+The Effect and bulletKind is OK in line 43
+The Effect and bulletKind is OK in line 44
+The Effect and bulletKind is OK in line 45
+The Effect and bulletKind is OK in line 46
+The Effect and bulletKind is OK in line 47
+The Effect and bulletKind is OK in line 48
+The Effect and bulletKind is OK in line 49
+The Effect and bulletKind is OK in line 50
+The Effect and bulletKind is OK in line 51
+The Effect and bulletKind is OK in line 52
+The Effect and bulletKind is OK in line 53
+The Effect and bulletKind is OK in line 54
+The Effect and bulletKind is OK in line 55
+The Effect and bulletKind is OK in line 56
+The Effect and bulletKind is OK in line 57
+The Effect and bulletKind is OK in line 58
+The Effect and bulletKind is OK in line 59
+The Effect and bulletKind is OK in line 60
+The Effect and bulletKind is OK in line 61
+The Effect and bulletKind is OK in line 62
+The Effect and bulletKind is OK in line 63
+The Effect and bulletKind is OK in line 64
+The Effect and bulletKind is OK in line 65
+The Effect and bulletKind is OK in line 66
+The Effect and bulletKind is OK in line 67
+The Effect and bulletKind is OK in line 68
+The Effect and bulletKind is OK in line 69
+The Effect and bulletKind is OK in line 70
+The Effect and bulletKind is OK in line 71
+The Effect and bulletKind is OK in line 72
+The Effect and bulletKind is OK in line 73
+The Effect and bulletKind is OK in line 74
+The Effect and bulletKind is OK in line 75
+The Effect and bulletKind is OK in line 76
+The Effect and bulletKind is OK in line 77
+The Effect and bulletKind is OK in line 78
+The Effect and bulletKind is OK in line 79
+The Effect and bulletKind is OK in line 80
+The Effect is nil and the bulletKind is not 0 in line 81
+The Effect and bulletKind is OK in line 82
+The Effect and bulletKind is OK in line 83
+The Effect and bulletKind is OK in line 84
+The Effect and bulletKind is OK in line 85
+The Effect and bulletKind is OK in line 86
+The Effect and bulletKind is OK in line 87
+The Effect and bulletKind is OK in line 88
+The Effect and bulletKind is OK in line 89
+The Effect and bulletKind is OK in line 90
+The Effect and bulletKind is OK in line 91
+The Effect and bulletKind is OK in line 92
+The Effect and bulletKind is OK in line 93
+The Effect and bulletKind is OK in line 94
+The Effect and bulletKind is OK in line 95
+The Effect and bulletKind is OK in line 96
+The Effect and bulletKind is OK in line 97
+The Effect and bulletKind is OK in line 98
+The Effect and bulletKind is OK in line 99
+The Effect and bulletKind is OK in line 100
+The Effect and bulletKind is OK in line 101
+The Effect and bulletKind is OK in line 102
+The Effect and bulletKind is OK in line 103
+The Effect and bulletKind is OK in line 104
+The Effect and bulletKind is OK in line 105
+The Effect and bulletKind is OK in line 106
+The Effect and bulletKind is OK in line 107
+The Effect and bulletKind is OK in line 108
+The Effect and bulletKind is OK in line 109
+The Effect and bulletKind is OK in line 110
+The Effect and bulletKind is OK in line 111
+The Effect and bulletKind is OK in line 112
+The Effect and bulletKind is OK in line 113
+The Effect and bulletKind is OK in line 114
+The Effect and bulletKind is OK in line 115
+The Effect and bulletKind is OK in line 116
+The Effect and bulletKind is OK in line 117
+The Effect and bulletKind is OK in line 118
+The Effect and bulletKind is OK in line 119
+The Effect and bulletKind is OK in line 120
+The Effect and bulletKind is OK in line 121
+The Effect and bulletKind is OK in line 122
+The Effect and bulletKind is OK in line 123
+The Effect and bulletKind is OK in line 124
+The Effect and bulletKind is OK in line 125
+The Effect and bulletKind is OK in line 126
+The Effect and bulletKind is OK in line 127
+The Effect and bulletKind is OK in line 128
+==============END===============
+The Effect is "diaochanBul" and the bulletKind is not 1 and 2 in line 4
+The Effect is "wuzetianBul2" and the bulletKind is not 1 and 2 in line 40
+The Effect is nil and the bulletKind is not 0 in line 81

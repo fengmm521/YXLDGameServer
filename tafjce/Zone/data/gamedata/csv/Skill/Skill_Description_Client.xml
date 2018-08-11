@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<Skill>
+  <DataRes xmlName="m_ID" excelName="技能ID" DataType="ID"/>
+  <DataRes xmlName="m_quality" excelName="技能品质" DataType="byte"/>
+  <DataRes xmlName="m_openlevelstep" excelName="开启等阶" DataType="int"/>
+  <DataRes xmlName="m_name" excelName="技能名" DataType="String"/>
+  <DataRes xmlName="m_name1" excelName="技能名一" DataType="String"/>
+  <DataRes xmlName="m_name2" excelName="技能名二" DataType="String"/>
+  <DataRes xmlName="m_desc" excelName="技能简述" DataType="String"/>
+  <DataRes xmlName="m_fullDesc" excelName="技能描述" DataType="String"/>
+  <DataRes xmlName="m_type" excelName="技能类型" DataType="byte"/>
+  <DataRes xmlName="m_rangeType" excelName="是否近战技能" DataType="byte"/>
+  <DataRes xmlName="m_bMultiDamage" excelName="多段攻击" DataType="byte"/>
+  <DataRes xmlName="m_icon" excelName="图标资源ID" DataType="short"/>
+  <DataRes xmlName="m_skillEffect" excelName="技能特效" DataType="short"/>
+</Skill>
+
+</client>

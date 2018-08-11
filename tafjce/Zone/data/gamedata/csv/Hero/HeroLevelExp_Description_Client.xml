@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<HeroLevelExp>
+  <DataRes xmlName="m_ID" excelName="等级" DataType="ID"/>
+  <DataRes xmlName="m_needxiuwei" excelName="修为" DataType="int"/>
+</HeroLevelExp>
+
+</client>

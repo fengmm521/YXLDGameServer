@@ -1,0 +1,5 @@
+$cfile "../Include/Property/PropertyComm.h"
+enum
+{
+
+};

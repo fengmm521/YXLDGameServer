@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<LevelStepGrow>
+  <DataRes xmlName="m_ID" excelName="ID" DataType="ID"/>
+  <DataRes xmlName="m_CostNumber" excelName="消耗魂魄数量" DataType="int"/>
+  <DataRes xmlName="m_needSliver" excelName="需要铜币" DataType="int"/>
+  <DataRes xmlName="m_quality" excelName="英雄品质" DataType="byte"/>
+  <DataRes xmlName="m_step" excelName="英雄阶段" DataType="int"/>
+</LevelStepGrow>
+
+</client>

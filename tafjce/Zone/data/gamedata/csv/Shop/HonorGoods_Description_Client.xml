@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<HonorGoods>
+  <DataRes xmlName="m_ID" excelName="商品ID" DataType="ID"/>
+  <DataRes xmlName="m_type" excelName="商品类型" DataType="String"/>
+  <DataRes xmlName="m_goodID" excelName="ID" DataType="int"/>
+  <DataRes xmlName="m_count" excelName="商品数量" DataType="int"/>
+  <DataRes xmlName="m_price" excelName="商品价格" DataType="int"/>
+  <DataRes xmlName="m_costType" excelName="消耗类型" DataType="int"/>
+  <DataRes xmlName="m_desc" excelName="描述" DataType="String"/>
+</HonorGoods>
+
+</client>

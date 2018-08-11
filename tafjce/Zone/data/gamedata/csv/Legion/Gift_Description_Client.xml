@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<Gift>
+  <DataRes xmlName="m_ID" excelName="ID" DataType="int"/>
+  <DataRes xmlName="m_title" excelName="标题" DataType="string"/>
+  <DataRes xmlName="m_reward" excelName="奖励展示" DataType="string"/>
+</Gift>
+
+</client>

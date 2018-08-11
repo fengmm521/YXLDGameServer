@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<LegionContribute>
+  <DataRes xmlName="m_ID" excelName="ID" DataType="ID"/>
+  <DataRes xmlName="m_silver" excelName="银币" DataType="int"/>
+  <DataRes xmlName="m_gold" excelName="金币" DataType="int"/>
+  <DataRes xmlName="m_contribution" excelName="贡献" DataType="int"/>
+</LegionContribute>
+
+</client>

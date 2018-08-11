@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<CreateName>
+  <DataRes xmlName="m_ID" excelName="ID" DataType="ID"/>
+  <DataRes xmlName="m_name1" excelName="随机姓" DataType="String"/>
+  <DataRes xmlName="m_name2" excelName="随机符号" DataType="String"/>
+  <DataRes xmlName="m_name3" excelName="随机名" DataType="String"/>
+</CreateName>
+
+</client>

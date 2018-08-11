@@ -1,0 +1,295 @@
+import "GameServer.proto";
+
+package GSProto;
+
+//从GameServer移动过来的协议
+message Cmd_Sc_QueryGodAnimalLevelStep
+{
+	required uint32 dwObjectID = 1;
+	required bool bTouchMaxLv = 2;
+	required GoldAnimalLevelStepInfo curInfo = 3; // 当前等阶详情
+	optional GoldAnimalLevelStepInfo nextInfo = 4; // 下一等阶详情(如果已经达到最大等阶，不填充)
+	repeated ConsumeItem szConsumeItem = 5; // 消耗物品列表
+	required int32 iLevelStepSilverCost = 6;	//升阶铜币消耗
+};
+
+message Cmd_Cs_QueryGodAnimalInherit
+{
+	required uint32 dwAccepObjectID = 1;
+	optional uint32 dwPasserObjectID = 2;
+};
+
+message Cmd_Sc_QueryGodAnimalInherit
+{
+	required GoldAnimalDetail acceptPreDetail = 1;
+	optional GoldAnimalDetail passerDetail = 2;
+	optional GoldAnimalDetail acceptPostDetail = 3;
+	optional int32 iInheritSilverCost = 4;//传承消耗
+};
+
+message Cmd_Cs_ExeGodAnimalInherit
+{
+	required uint32 dwPasserObjectID = 1;
+	required uint32 dwAccepObjectID = 2;
+};
+
+message Cmd_Sc_ExeGodAnimalInherit
+{
+	required GoldAnimalDetail passerDetail = 1;
+	required GoldAnimalDetail acceptDetail = 2;
+};
+
+message Cmd_Cs_QueryGodAnimalDetai
+{
+	required uint32 dwGodAnimalObjectID = 1;
+};
+
+message Cmd_Sc_QueryGodAnimalDetai
+{
+	required GoldAnimalDetail detail = 1;
+};
+
+message CMD_GODANIMAL_DETAIL_BYID_CS
+{
+	required int32 iGodAnimalID = 1;
+};
+
+message CMD_GODANIMAL_DETAIL_BYID_SC
+{
+	required int32 iGodAnimalID = 1;
+	required GoldAnimalDetail detail = 2;
+};
+
+message Cmd_Cs_GodAnimalTrain
+{
+	required uint32 dwObjectID = 1;
+};
+
+message Cmd_Sc_GodAnimalUpdate
+{
+	required GoldAnimalRoleBase updateInfo = 1;
+};
+
+message Cmd_Cs_QueryGodAnimalLevelStep
+{
+	required uint32 dwObjectID = 1;
+};
+
+message Cmd_Sc_GoldAnimalList
+{
+	required uint32 dwActiveObjectID = 1; // 出战的神兽
+	repeated GoldAnimalRoleBase szGodAnimalList = 2; //神兽基础信息列表
+};
+
+
+enum GameServerCMD_Ext
+{
+	// 普通商城
+	CMD_NORMALSHOP_QUERY    = 20001;	// 查询普通商城
+	CMD_NORMALSHOP_REFRESH	= 20002;	// 刷新普通商城
+	CMD_NORMALSHOP_BUY		= 20003;	// 普通商城购买	
+	
+	CMD_QUERY_LEGION_CAMPBATTLE = 18301 ; // 打开领地
+	CMD_LEGION_CAMPBATTLE_REPORT = 18302; // 宣战
+	CMD_LEGION_CAMPBATTLE_JOIN = 18303;   //
+	CMD_LEGION_CAMPBATTLE_ENTER = 18304;  //进入战场
+	CMD_LEGION_CAMPBATTLE_BATTLE = 18305; //对战，
+	CMD_QUERY_CAMPBATTLE_LASTFIGHT_LOG = 18306;// 查看上届战报
+	CMD_QUERY_CUR_FIGHT_CONDITION = 18307; //查看当前战况
+	CMD_QUERY_CAMPBATTLE_INFO = 18308; //打开单个领地查看详情
+	CMD_QUERY_CAMPBATTLE_LASTFIGHT_SIMPLELOG = 18309; //上届战报-战场
+	CMD_QUERY_CAMPBATTLE_LASTFIGHT_DETAIL_LOG = 18310;//上届战报-战场-详细
+	CMD_QUERY_CUR_FIGHT_LEGION_LOG = 18311;//
+};
+
+
+message CMD_NORMALSHOP_QUERY_SC
+{
+	repeated HonerGoodDetail goodsList = 1;
+	required int32 untilNextRefreshSeconds = 2;	// 距离下次刷新的时间(单位:秒)
+};
+
+message CMD_NORMALSHOP_BUY_CS
+{
+	required int32 index = 1;
+};
+
+enum enCampState
+{	
+	enStateNULL = 0;
+	enStateBeforReport = 1;
+	enStateInReport = 2;
+	enStateInBattle = 3;
+	enStateAfterBattle = 4;
+	enStateNoBattle = 5;  //并非宣战日期
+};
+
+message CampUnit
+{
+	required int32 iId = 1;
+	required string strOwerName = 2;
+	optional bool bCanReport = 3;       //能宣战
+	optional bool bCanBattle = 4;		//已经宣战可以战斗
+};
+
+message CMD_QUERY_LEGION_CAMPBATTLE_SC // 查询领地
+{
+	repeated CampUnit szCampList = 1;
+	required int32 istatus = 2;  //CampUnit
+	optional int32 iRemaidSecond = 3;
+	optional int32 iHaveReportId = 4;
+};
+
+message CMD_QUERY_CAMPBATTLE_INFO_CS
+{
+	required int32 iId = 1;
+};
+
+message LegionUnit
+{
+	required string strName = 1;		//军团名字
+	required int32 iHaveCampCount = 2; //占领军团数
+	required  int32 iAddPercent = 3;   //额外提示百分比
+	required int32 iLegionIcon = 4;
+};
+
+message CMD_QUERY_CAMPBATTLE_INFO_SC
+{
+	required LegionUnit guardLegion = 1;
+	repeated LegionUnit szAttackList = 2;
+	required int32 iId = 3;
+	required int32 iCanGetSilver = 4;
+	required int32 iReportCost = 5;
+	//required bool bCanReport = 6;  //是否可宣战
+};
+
+// 宣战
+message CMD_LEGION_CAMPBATTLE_REPORT_CS  //成功后返回 CMD_QUERY_CAMPBATTLE_INFO_SC
+{
+	required int32 iId = 1;
+};
+
+message VSUnit
+{
+	required string strLegionName = 1;
+	required int32 iStarCount = 2;  //星星数
+	required int32 iLegionIcon = 3;
+};
+
+message VSLegion
+{
+	required VSUnit guardUnit =1;
+	required VSUnit attUnit = 2;
+	optional int32 iCampId = 3;
+	optional int32 iBattleId = 4;  //战场ID
+};
+
+message VSLegionMemDetail
+{
+	
+	required int32 iHeadId = 1;
+	required int32 iLevel = 2;
+	required string strName = 3;
+	required int32 iFightValue = 4;
+	required bool bICanFight = 5;
+	required bool bIICanFight = 6; 
+	required bool bIIICanFight = 7;
+	required bool bIsNpc = 8;
+};
+
+message CMD_LEGION_CAMPBATTLE_JOIN_CS   //点击界面按钮时返回
+{
+	required int32 iId = 1;
+};
+
+message CMD_LEGION_CAMPBATTLE_JOIN_SC
+{
+	required bool bIsGuard = 1;
+	repeated VSLegion szVSLegionList = 2;
+	optional VSLegion selfVsInfo = 3 ;   //词穷了，这个就是玩家所在军团是攻击方，没有选择战场的权利
+	repeated VSLegionMemDetail szMemberList = 4;
+	optional int32 iRemaindSecond = 5;
+};
+
+
+message CMD_LEGION_CAMPBATTLE_ENTER_CS
+{
+	required int32 iCampId = 1;
+	required string strVSLegionName = 2;  //要对战的军团的军团名  
+};
+
+
+message CMD_LEGION_CAMPBATTLE_BATTLE_CS
+{
+	required int32 iCampId = 1;
+	required int32 iBattleId = 2;
+	required string strMemName = 3;
+	required int32 iStar = 4;
+};
+
+message LastFightLogItem
+{
+	required int32 iCampId = 1 ;  //领地ID
+	required bool bIsGuard = 2;	  //是防守还是攻击
+	required bool bIsWin = 3;     //是否赢得胜利
+};
+
+message CMD_QUERY_CAMPBATTLE_LASTFIGHT_LOG_SC
+{
+	repeated LastFightLogItem szFightLogList = 1;
+};
+
+message CMD_QUERY_CAMPBATTLE_LASTFIGHT_SIMPLELOG_CS
+{
+	required int32 iCampId = 1 ;  //领地ID
+};
+
+message VSLegionBase
+{
+	repeated VSLegion szVSLegionList = 1;
+};
+
+message CMD_QUERY_CAMPBATTLE_LASTFIGHT_SIMPLELOG_SC
+{
+	required string strLegionName = 1;
+	required VSLegionBase vsLegionMsg = 2;
+};
+
+message CMD_QUERY_CAMPBATTLE_LASTFIGHT_DETAIL_LOG_CS
+{	
+	required int32 iCampId = 1 ;  //领地ID
+	required string strAttLegionName = 2 ;  //攻击方的名字
+};
+
+message FightRecord 
+{
+	required string strSelfName = 1;
+	required string strenemyLegionName = 2;
+	required string strenemyName = 3; 
+	required int32 iGetStarCount = 4; //输掉就是-1
+};
+
+message CMD_QUERY_CAMPBATTLE_LASTFIGHT_DETAIL_LOG_SC
+{
+	required VSLegion vsLegion = 1;
+	repeated FightRecord selfFightRecord  = 2;
+	repeated FightRecord enemyFightRecod = 3;
+};
+
+message CMD_QUERY_CUR_FIGHT_CONDITION_CS
+{
+	required int32 iCampId = 1;   //领地ID
+};
+
+message CMD_QUERY_CUR_FIGHT_CONDITION_SC
+{
+	repeated VSLegion szVSLegionList = 1;
+};
+message CMD_QUERY_CUR_FIGHT_LEGION_LOG_CS
+{
+	required int32 iCampId = 1 ;  //领地ID
+	required string strAttLegionName = 2 ;  //攻击方的名字
+};
+
+
+

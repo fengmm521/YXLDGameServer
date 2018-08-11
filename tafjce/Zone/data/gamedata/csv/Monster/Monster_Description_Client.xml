@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<client>
+<Version VersionNO="1"/>
+
+<Monster>
+  <DataRes xmlName="m_ID" excelName="怪物ID" DataType="ID"/>
+  <DataRes xmlName="m_name" excelName="显示名" DataType="String"/>
+  <DataRes xmlName="m_animName" excelName="资源" DataType="String"/>
+  <DataRes xmlName="m_animScale" excelName="放大比例" DataType="int"/>
+  <DataRes xmlName="m_icon" excelName="头像资源ID" DataType="int"/>
+  <DataRes xmlName="m_monterType" excelName="怪物类型" DataType="byte"/>
+</Monster>
+
+</client>

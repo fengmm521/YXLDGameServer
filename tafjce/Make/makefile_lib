@@ -1,0 +1,81 @@
+#============================================================
+# common makefile option
+#============================================================
+
+#=============================================================
+# edition type
+#-------------------------------------------------------------
+# DEBUG   : debug edition
+# RELEASE : release edition
+#=============================================================
+LIB_FILE = libcomm$(D).a
+ifeq ($(USER), ccx )
+BUILD = RELEASE
+else
+BUILD = DEBUG
+endif
+
+
+
+#=============================================================
+# file postfix setting
+#=============================================================
+
+ifeq ($(BUILD), DEBUG)
+D = D
+endif
+
+ifeq ($(BUILD), RELEASE)
+D =
+endif
+
+#=============================================================
+# environment setting
+#=============================================================
+
+PATH_ROOT    = /home/tafjce/ServerEngine
+PATH_INCLUDE = $(PATH_ROOT)/include
+PATH_DEF     = $(PATH_ROOT)/define
+PATH_LIB     = $(PATH_ROOT)/lib
+
+PATH_MYSQL_INCLUDE = /usr/include/mysql
+PATH_MYSQL_LIB     = /usr/lib/mysql
+
+INC_MYSQL = -I$(PATH_MYSQL_INCLUDE)
+LIB_MYSQL = -L$(PATH_MYSQL_LIB) -lmysqlclient -lz
+
+
+INC_COMM  = -I$(PATH_INCLUDE)
+LIB_COMM  = -L$(PATH_LIB) -lcomm$(D)
+INC_DEF   = -I$(PATH_DEF)
+
+#=============================================================
+# compile setting
+#=============================================================
+
+CC     = gcc
+CXX    = g++
+RANLIB = ranlib
+AR     = ar
+
+#=============================================================
+# compile option
+#=============================================================
+
+ifeq ($(BUILD), DEBUG)
+C_FLAGS = -Wall -g -D_DEBUG 
+CXX_FLAGS = -Wall -Woverloaded-virtual -g -D_DEBUG
+endif
+
+ifeq ($(BUILD), RELEASE)
+C_FLAGS = -Wall -g -DNDEBUG 
+CXX_FLAGS = -Wall -Woverloaded-virtual -g -DNDEBUG -D__cplusplus
+endif
+
+#=============================================================
+# work directory define
+#=============================================================
+
+#ifeq ($(BUILD), DEBUG)
+WORK_DIR =$(PATH_ROOT)
+#endif
