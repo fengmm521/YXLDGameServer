@@ -1,0 +1,95 @@
+// RouterServer proto
+
+package ServerEngine;
+
+message SCMessage
+{
+	required int32 iCmd = 1;
+	optional bytes strMsgBody = 2;
+};
+
+message CSMessage
+{
+	required int32 iCmd = 1;
+	optional bytes strMsgBody = 2;
+};
+
+enum enBusyStatus
+{
+	en_BusyStatus_Free = 0;  // 空闲
+	en_BusyStatus_Good = 1;  // 良好
+	en_BusyStatus_Hot = 2;   // 火爆
+	en_BusyStatus_Full = 3;  // 爆满
+	en_BusyStatus_End = 4;
+};
+
+// RS协议CMD
+enum RouterServerCMD
+{
+	RS_ROUTER_AUTH = 1000;  // RouterServer的权限认证协议
+	RS_ROUTER_WORLDLIST = 1001; // 获取服务器列表
+	RS_ROUTER_ALOGIN = 1002; // 打通登录协议
+	RS_ROUTER_ERROR = 1003; // 错误协议
+	RS_ROUTER_VERSION = 1004; // 查询最新版本信息
+};
+
+// RS认证错误码
+enum RSAuthCode
+{
+	RS_AUTU_OK = 0;  // 认证成功
+	RS_AUTU_PASSWD = 1; // 密码错误
+};
+
+// 客户端发给服务器的第一个包.
+message CS_RS_Version
+{
+	optional string codeVersion = 1;	// 客户端代码版本.
+};
+
+message CS_RS_Auth
+{
+	required string strAccount = 1;
+	required bytes strMd5Passwd = 2;
+};
+
+message SC_RS_Auth
+{
+	required string strAccount = 1;
+	required int32 iRetCode = 2;
+};
+
+message RSWorld
+{
+	required int32 iWorldID = 1;
+	required string strWorldName = 2;
+	required int32 iAtt = 3;
+	required int32 iOnlineStatus = 4;
+	required int32 iBusyStatus = 5;
+	optional bool bHaveRole = 6; // 是否有角色
+};
+
+message SC_RS_WorldList
+{
+	repeated RSWorld worldList = 1; 
+};
+
+
+message RS_ROUTER_VERSION_SC
+{
+	required string strUrlDir = 1;  // URL目录
+	required string strVersion = 2; // 最新版本
+	optional string strMinVersion = 3; // 支持的最低版本号
+	optional bool noResUpdate = 4; // 是否禁止资源更新
+};
+
+message SC_RS_Error
+{
+	optional string strErrorMsg = 1;
+};
+
+message CS_RS_ALogin
+{
+	required int32 iWorldID = 1;
+	required bytes strTransMsg = 2;
+};
+

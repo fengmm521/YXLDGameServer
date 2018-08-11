@@ -1,0 +1,1 @@
+LoadFile( "Scene/SceneMgr.lua" );

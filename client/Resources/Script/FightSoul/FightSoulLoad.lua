@@ -1,0 +1,1 @@
+LoadFile( "FightSoul/FightSoul.lua" )

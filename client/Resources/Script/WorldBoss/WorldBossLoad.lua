@@ -1,0 +1,1 @@
+LoadFile( "WorldBoss/WorldBoss.lua" )

@@ -1,0 +1,1 @@
+LoadFile( "CashCow/CashCow.lua" );

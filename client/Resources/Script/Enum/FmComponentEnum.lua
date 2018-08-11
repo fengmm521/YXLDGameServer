@@ -1,0 +1,10 @@
+EComponentId_DataSync=1
+EComponentId_EntityRender=2
+EComponentId_FightSoulBags=3
+EComponentId_Bags=4
+EComponentId_EquipBags=5
+EComponentId_Materail=6
+EComponentId_InnatesKill=7
+EComponentId_HeroSoul=8
+EComponentId_HeroFavorite=9
+
